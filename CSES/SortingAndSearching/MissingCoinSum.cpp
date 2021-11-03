@@ -18,7 +18,8 @@ using namespace std;
         ios_base::sync_with_stdio(false); \
         cin.tie(nullptr);                 \
     }
-// #define fix(prec) { cout << setprecision(prec) << fixed; }
+#define fix(prec) \
+    { cout << setprecision(prec) << fixed; }
 #define mp make_pair
 #define ff first
 #define ss second
@@ -46,15 +47,7 @@ using namespace std;
         cout << '\n';                              \
     }
 #define sz(x) ((long long)x.size())
-
-template <typename X, typename Y>
-X &remin(X &x, const Y &y) { return x = (y < x) ? y : x; }
-template <typename X, typename Y>
-X &remax(X &x, const Y &y) { return x = (x < y) ? y : x; }
-template <typename X, typename Y>
-bool ckmin(X &x, const Y &y) { return (y < x) ? (x = y, 1) : 0; }
-template <typename X, typename Y>
-bool ckmax(X &x, const Y &y) { return (x < y) ? (x = y, 1) : 0; }
+#define endl '\n'
 
 typedef long long ll;
 typedef long double ld;
@@ -80,6 +73,21 @@ typedef vector<pi> vpi;
 typedef vector<pl> vpl;
 typedef vector<pd> vpd;
 
+template <typename X, typename Y>
+X &remin(X &x, const Y &y) { return x = (y < x) ? y : x; }
+template <typename X, typename Y>
+X &remax(X &x, const Y &y) { return x = (x < y) ? y : x; }
+template <typename X, typename Y>
+bool ckmin(X &x, const Y &y) { return (y < x) ? (x = y, 1) : 0; }
+template <typename X, typename Y>
+bool ckmax(X &x, const Y &y) { return (x < y) ? (x = y, 1) : 0; }
+
+mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+// mt19937 rng(61378913);
+/* usage - just do rng() */
+
+/* shuffle(permutation.begin(), permutation.end(), rng); */
+
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
 const ll INF = 1e18 + 7;
@@ -88,46 +96,54 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// ll n, m, k, q, l, r, t, tmp, x, y, z, ans, res, cnt;
-// string s, str;
 const ll tasz = 1e6 + 7;
 ll a[tasz];
-ll b[tasz];
-ll c[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
-#include <bits/extc++.h>
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
+// You have n coins with positive integer values. What is the smallest sum you cannot create using a subset of the coins?
 
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
+// Input
 
+// The first input line has an integer n: the number of coins.
+
+// The second line has n integers x1,x2,…,xn: the value of each coin.
+
+// Output
+
+// Print one integer: the smallest coin sum.
+
+// Constraints
+// 1≤n≤2⋅105
+// 1≤xi≤109
+// Example
+
+// Input:
+// 5
+// 2 9 1 2 7
+
+// Output:
+// 6
 
 void solve() {
-    __gnu_pbds::gp_hash_table<ll, ll, custom_hash> h({}, {}, {}, {}, {1 << 16});
-    ll n, x;
-    cin >> n >> x;
-    // unordered_map<ll, ll> m;
+    ll n;
+    cin >> n;
+    ll sum=0;
     f0r(i, n) {
         cin >> a[i];
-        h[a[i]] = i + 1;
+        sum+=a[i];
     }
-    f0r(i, n) {
-        if (h[x - a[i]] != 0 && h[x - a[i]] != i + 1) {
-            cout << i + 1 << " " << h[x - a[i]] << '\n';
+    sort(a, a + n);
+    ll target = 1;
+    f0r(i,n) {
+        if(a[i]<=target) {
+            target+=a[i];
+        } else {
+            cout << target << endl;
             return;
         }
     }
-    cout << "IMPOSSIBLE\n";
+    cout<<target<<'\n';
 }
 
 int main() {
@@ -138,7 +154,7 @@ int main() {
 
     vamos;
 
-    // fix(15);
+    fix(15);
 
     int T = 1;
     // cin >> T;

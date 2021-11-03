@@ -32,3 +32,23 @@
 *.app
 
 *.vscode
+in
+out
+a
+b
+c
+d
+e
+e1
+e2
+f
+f1
+f2
+g
+h
+i
+j
+t_out
+gen.cpp
+validate.cpp
+stress.cpp
