@@ -72,47 +72,87 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// You are given an array that contains each number between 1…n exactly once. Your task is to collect the numbers from 1 to n in increasing order.
+// C. Sum of Cubes
+// time limit per test2 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// You are given a positive integer x. Check whether the number x is representable as the sum of the cubes of two positive integers.
 
-// On each round, you go through the array from left to right and collect as many numbers as possible. What will be the total number of rounds?
+// Formally, you need to check if there are two integers a and b (1≤a,b) such that a3+b3=x.
+
+// For example, if x=35, then the numbers a=2 and b=3 are suitable (23+33=8+27=35). If x=4, then no pair of numbers a and b is suitable.
 
 // Input
+// The first line contains one integer t (1≤t≤100) — the number of test cases. Then t test cases follow.
 
-// The first line has an integer n: the array size.
+// Each test case contains one integer x (1≤x≤1012).
 
-// The next line has n integers x1,x2,…,xn: the numbers in the array.
+// Please note, that the input for some test cases won't fit into 32-bit integer type, so you should use at least 64-bit integer type in your programming language.
 
 // Output
+// For each test case, output on a separate line:
 
-// Print one integer: the number of rounds.
+// "YES" if x is representable as the sum of the cubes of two positive integers.
+// "NO" otherwise.
+// You can output "YES" and "NO" in any case (for example, the strings yEs, yes, Yes and YES will be recognized as positive).
 
-// Constraints
-// 1≤n≤2⋅105
 // Example
+// inputCopy
+// 7
+// 1
+// 2
+// 4
+// 34
+// 35
+// 16
+// 703657519796
+// outputCopy
+// NO
+// YES
+// NO
+// NO
+// YES
+// YES
+// YES
+// Note
+// The number 1 is not representable as the sum of two cubes.
 
-// Input:
-// 5
-// 4 2 1 5 3
+// The number 2 is represented as 13+13.
 
-// Output:
-// 3
+// The number 4 is not representable as the sum of two cubes.
 
+// The number 34 is not representable as the sum of two cubes.
 
+// The number 35 is represented as 23+33.
 
-const ll tasz = 1e6 + 7;
-ll a[tasz];
-ll idx[tasz];
-// ll c[tasz];
+// The number 16 is represented as 23+23.
+
+// The number 703657519796 is represented as 57793+79933.
+
 
 
 
 
 void solve() {
-    ll n, t, ans = 1;
+    ll n;
     cin >> n;
-    f0r(i, n) cin >> t, t--, idx[t] = i;
-    f1r(j, 1, n - 1)  if (idx[j-1] > idx[j]) ans++;
-    cout<<ans<<endl;
+    ll i = 1;
+    ll j = cbrt(n);
+    while (i <= j) {
+        ll a = i * i * i;
+        ll b = j * j * j;
+        if (a + b == n) {
+            cout << "YES" << endl;
+            return;
+        }
+        if (a + b < n) {
+            i++;
+        } else {
+            j--;
+        }
+    }
+    cout<<"NO"<<endl;
 }
 
 
@@ -127,7 +167,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

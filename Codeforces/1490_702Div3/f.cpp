@@ -72,47 +72,69 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// You are given an array that contains each number between 1…n exactly once. Your task is to collect the numbers from 1 to n in increasing order.
+// F. Equalize the Array
+// time limit per test2 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// Polycarp was gifted an array a of length n. Polycarp considers an array beautiful if there exists a number C, such that each number in the array occurs either zero or C times. Polycarp wants to remove some elements from the array a to make it beautiful.
 
-// On each round, you go through the array from left to right and collect as many numbers as possible. What will be the total number of rounds?
+// For example, if n=6 and a=[1,3,2,1,4,2], then the following options are possible to make the array a array beautiful:
+
+// Polycarp removes elements at positions 2 and 5, array a becomes equal to [1,2,1,2];
+// Polycarp removes elements at positions 1 and 6, array a becomes equal to [3,2,1,4];
+// Polycarp removes elements at positions 1,2 and 6, array a becomes equal to [2,1,4];
+// Help Polycarp determine the minimum number of elements to remove from the array a to make it beautiful.
 
 // Input
+// The first line contains one integer t (1≤t≤104) — the number of test cases. Then t test cases follow.
 
-// The first line has an integer n: the array size.
+// The first line of each test case consists of one integer n (1≤n≤2⋅105) — the length of the array a.
 
-// The next line has n integers x1,x2,…,xn: the numbers in the array.
+// The second line of each test case contains n integers a1,a2,…,an (1≤ai≤109) — array a.
+
+// It is guaranteed that the sum of n over all test cases does not exceed 2⋅105.
 
 // Output
+// For each test case, output one integer — the minimum number of elements that Polycarp has to remove from the array a to make it beautiful.
 
-// Print one integer: the number of rounds.
-
-// Constraints
-// 1≤n≤2⋅105
 // Example
-
-// Input:
-// 5
-// 4 2 1 5 3
-
-// Output:
+// inputCopy
 // 3
+// 6
+// 1 3 2 1 4 2
+// 4
+// 100 100 4 100
+// 8
+// 1 2 3 3 3 2 6 6
+// outputCopy
+// 2
+// 1
+// 2
+
 
 
 
 const ll tasz = 1e6 + 7;
 ll a[tasz];
-ll idx[tasz];
-// ll c[tasz];
 
 
 
 
 void solve() {
-    ll n, t, ans = 1;
+    ll n;
     cin >> n;
-    f0r(i, n) cin >> t, t--, idx[t] = i;
-    f1r(j, 1, n - 1)  if (idx[j-1] > idx[j]) ans++;
-    cout<<ans<<endl;
+    f0r(i, n) cin >> a[i];
+    map<ll, ll> m;
+    f0r(i, n) m[a[i]]++;
+    vl f;
+    for(auto i:m)
+        f.pb(i.ss);
+    sort(all(f));
+    ll s = sz(f);
+    ll area = 0, tot = 0;
+    f0r(i, s) tot += f[i], ckmax(area, f[i] * (s - i));
+    cout << tot - area << '\n';
 }
 
 
@@ -127,7 +149,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

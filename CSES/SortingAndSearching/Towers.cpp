@@ -72,47 +72,54 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// You are given an array that contains each number between 1…n exactly once. Your task is to collect the numbers from 1 to n in increasing order.
+// You are given n cubes in a certain order, and your task is to build towers using them. Whenever two cubes are one on top of the other, the upper cube must be smaller than the lower cube.
 
-// On each round, you go through the array from left to right and collect as many numbers as possible. What will be the total number of rounds?
+// You must process the cubes in the given order. You can always either place the cube on top of an existing tower, or begin a new tower. What is the minimum possible number of towers?
 
 // Input
 
-// The first line has an integer n: the array size.
+// The first input line contains an integer n: the number of cubes.
 
-// The next line has n integers x1,x2,…,xn: the numbers in the array.
+// The next line contains n integers k1,k2,…,kn: the sizes of the cubes.
 
 // Output
 
-// Print one integer: the number of rounds.
+// Print one integer: the minimum number of towers.
 
 // Constraints
 // 1≤n≤2⋅105
+// 1≤ki≤109
 // Example
 
 // Input:
 // 5
-// 4 2 1 5 3
+// 3 8 2 1 5
 
 // Output:
-// 3
+// 2
+
 
 
 
 const ll tasz = 1e6 + 7;
-ll a[tasz];
-ll idx[tasz];
-// ll c[tasz];
+
+
 
 
 
 
 void solve() {
-    ll n, t, ans = 1;
+    ll n,a;
+    vl tow;
     cin >> n;
-    f0r(i, n) cin >> t, t--, idx[t] = i;
-    f1r(j, 1, n - 1)  if (idx[j-1] > idx[j]) ans++;
-    cout<<ans<<endl;
+    f0r(i, n){
+        cin >> a; 
+        auto it = upper_bound(all(tow), a);
+        if (it == tow.end()) tow.pb(a);
+        else
+            *it = a;
+    }
+    cout<<sz(tow)<<endl;
 }
 
 

@@ -50,5 +50,5 @@ i
 j
 t_out
 gen.cpp
-validate.cpp
-stress.cpp
+validator.cpp
+stress.bat
