@@ -72,55 +72,12 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// You are given a playlist of a radio station since its establishment. The playlist has a total of n songs.
-
-// What is the longest sequence of successive songs where each song is unique?
-
-// Input
-
-// The first input line contains an integer n: the number of songs.
-
-// The next line has n integers k1,k2,…,kn: the id number of each song.
-
-// Output
-
-// Print the length of the longest sequence of unique songs.
-
-// Constraints
-// 1≤n≤2⋅105
-// 1≤ki≤109
-// Example
-
-// Input:
-// 8
-// 1 2 1 3 2 7 4 2
-
-// Output:
-// 5
-
-
-#include <bits/extc++.h>
-using namespace __gnu_pbds;
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
-
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
 
 
 
 
 const ll tasz = 1e6 + 7;
-ll a[tasz];
+ll dp[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
@@ -128,19 +85,17 @@ ll a[tasz];
 
 
 void solve() {
-    ll n;
-    gp_hash_table<ll, vl, custom_hash> m;
-    f0r(i,n) cin >> a[i], m[a[i]].pb(i);
-    vl ers;
-    for(auto i:m) if(sz(i.ss) == 1) ers.pb(i.ff);
-    f0r(i,sz(ers)) m.erase(ers[i]);
-    
-    for(auto i:m) {
-        f0r(j,sz(i.ss)){
-
-
-        }
+    ll n, x;
+    cin >> n >> x;
+    vl coins(n);
+    f0r(i, n) cin >> coins[i];
+    dp[0] = 0;
+    f1r(i,1,x){
+        dp[i] = INF;
+        for(auto j:coins)
+            if (i - j >= 0) ckmin(dp[i], dp[i - j] + 1);
     }
+    cout << (dp[x] < INF ? dp[x] : -1) << '\n';
 }
 
 
