@@ -77,6 +77,7 @@ const ll MOD = 1e9 + 7;
 
 
 const ll tasz = 1e6 + 7;
+ll a[tasz];
 ll dp[tasz];
 // ll b[tasz];
 // ll c[tasz];
@@ -85,14 +86,15 @@ ll dp[tasz];
 
 
 void solve() {
-    ll n;
-    cin >> n;
+    ll n, x;
+    cin >> n >> x;
+    f0r(i, n) cin >> a[i];
     dp[0] = 1;
-    f0r(i, n + 1) {
-        f1r(j, 1, 6) if (i - j >= 0) dp[i] += dp[i - j];
+    f1r(i,1,x){
+        f0r(j, n) if (i - a[j] >= 0) dp[i] += dp[i - a[j]];
         dp[i] %= MOD;
     }
-    cout << dp[n]<< endl;
+    cout << dp[x] << endl;
 }
 
 

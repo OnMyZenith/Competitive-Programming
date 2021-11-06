@@ -72,27 +72,77 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
+// B. Combinatorics Homework
+// time limit per test2 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// You are given four integer values a, b, c and m.
+
+// Check if there exists a string that contains:
+
+// a letters 'A';
+// b letters 'B';
+// c letters 'C';
+// no other letters;
+// exactly m pairs of adjacent equal letters (exactly m such positions i that the i-th letter is equal to the (i+1)-th one).
+// Input
+// The first line contains a single integer t (1≤t≤104) — the number of testcases.
+
+// Each of the next t lines contains the description of the testcase — four integers a, b, c and m (1≤a,b,c≤108; 0≤m≤108).
+
+// Output
+// For each testcase print "YES" if there exists a string that satisfies all the requirements. Print "NO" if there are no such strings.
+
+// You may print every letter in any case you want (so, for example, the strings yEs, yes, Yes and YES will all be recognized as positive answer).
+
+// Example
+// inputCopy
+// 3
+// 2 2 1 0
+// 1 1 1 1
+// 1 2 3 2
+// outputCopy
+// YES
+// NO
+// YES
+// Note
+// In the first testcase strings "ABCAB" or "BCABA" satisfy the requirements. There exist other possible strings.
+
+// In the second testcase there's no way to put adjacent equal letters if there's no letter that appears at least twice.
+
+// In the third testcase string "CABBCC" satisfies the requirements. There exist other possible strings.
+
 
 
 
 
 const ll tasz = 1e6 + 7;
-ll dp[tasz];
-// ll b[tasz];
-// ll c[tasz];
 
 
 
 
 void solve() {
-    ll n;
-    cin >> n;
-    dp[0] = 1;
-    f0r(i, n + 1) {
-        f1r(j, 1, 6) if (i - j >= 0) dp[i] += dp[i - j];
-        dp[i] %= MOD;
+    ll a[3], m;
+    cin>>a[0]>>a[1]>>a[2]>>m;
+    ll mx = a[0] + a[1] + a[2] -3;
+    if (m > mx) {
+        cout<<"NO"<<endl;
+        return;
     }
-    cout << dp[n]<< endl;
+    sort(a,a+3);
+    ll mn;
+    if(a[2] -1 >=a[0]+a[1]){
+        mn = a[2] - a[1] - a[0] - 1;
+    }else{
+        ll x = a[1] + a[0] - a[2];
+        mn =x/2 -a[0];
+    }
+    if (m < mn) {
+        cout<<"NO"<<endl;
+        return;
+    }
+    cout<<"YES"<<endl;
 }
 
 
@@ -107,7 +157,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

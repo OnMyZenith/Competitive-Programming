@@ -72,14 +72,82 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
+// D. The Strongest Build
+// time limit per test3 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// Ivan is playing yet another roguelike computer game. He controls a single hero in the game. The hero has n equipment slots. There is a list of ci items for the i-th slot, the j-th of them increases the hero strength by ai,j. The items for each slot are pairwise distinct and are listed in the increasing order of their strength increase. So, ai,1<ai,2<⋯<ai,ci.
 
+// For each slot Ivan chooses exactly one item. Let the chosen item for the i-th slot be the bi-th item in the corresponding list. The sequence of choices [b1,b2,…,bn] is called a build.
+
+// The strength of a build is the sum of the strength increases of the items in it. Some builds are banned from the game. There is a list of m pairwise distinct banned builds. It's guaranteed that there's at least one build that's not banned.
+
+// What is the build with the maximum strength that is not banned from the game? If there are multiple builds with maximum strength, print any of them.
+
+// Input
+// The first line contains a single integer n (1≤n≤10) — the number of equipment slots.
+
+// The i-th of the next n lines contains the description of the items for the i-th slot. First, one integer ci (1≤ci≤2⋅105) — the number of items for the i-th slot. Then ci integers ai,1,ai,2,…,ai,ci (1≤ai,1<ai,2<⋯<ai,ci≤108).
+
+// The sum of ci doesn't exceed 2⋅105.
+
+// The next line contains a single integer m (0≤m≤105) — the number of banned builds.
+
+// Each of the next m lines contains a description of a banned build — a sequence of n integers b1,b2,…,bn (1≤bi≤ci).
+
+// The builds are pairwise distinct, and there's at least one build that's not banned.
+
+// Output
+// Print the build with the maximum strength that is not banned from the game. If there are multiple builds with maximum strength, print any of them.
+
+// Examples
+// inputCopy
+// 3
+// 3 1 2 3
+// 2 1 5
+// 3 2 4 6
+// 2
+// 3 2 3
+// 3 2 2
+// outputCopy
+// 2 2 3 
+// inputCopy
+// 3
+// 3 1 2 3
+// 2 1 5
+// 3 2 4 6
+// 2
+// 3 2 3
+// 2 2 3
+// outputCopy
+// 1 2 3
+// inputCopy
+// 3
+// 3 1 2 3
+// 2 1 5
+// 3 2 4 6
+// 2
+// 3 2 3
+// 2 2 3
+// outputCopy
+// 3 2 2
+// inputCopy
+// 4
+// 1 10
+// 1 4
+// 1 7
+// 1 3
+// 0
+// outputCopy
+// 1 1 1 1 
 
 
 
 const ll tasz = 1e6 + 7;
-ll dp[tasz];
-// ll b[tasz];
-// ll c[tasz];
+// ll a[tasz];
+ll b[tasz];
+ll c[tasz];
 
 
 
@@ -87,12 +155,24 @@ ll dp[tasz];
 void solve() {
     ll n;
     cin >> n;
-    dp[0] = 1;
-    f0r(i, n + 1) {
-        f1r(j, 1, 6) if (i - j >= 0) dp[i] += dp[i - j];
-        dp[i] %= MOD;
+    vvl a(n);
+    f0r(i, n) {
+        cin >> c[i];
+        vl tmp(c[i]);
+        f0r(j,c[i]) {
+            cin >> tmp[j];
+        }
+        a[i] = tmp;
     }
-    cout << dp[n]<< endl;
+    ll m;
+    cin >> m;
+    vvl b(m);
+    f0r(i, m){
+        vl tmp(n);
+        f0r(j, n) cin>>tmp[j];
+        b[i] = tmp;
+    }
+    
 }
 
 
@@ -107,7 +187,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 
