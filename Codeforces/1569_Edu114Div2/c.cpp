@@ -90,42 +90,94 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
 const ll INF = 1e18 + 7;
-const ll MOD = 1e9 + 7;
+// const ll MOD = 1e9 + 7;
 // const ll INF = 1e9 + 7;
-// const ll MOD = 998244353;
+const ll MOD = 998244353;
 // ll MOD;
 
+// C. Jury Meeting
+// time limit per test2 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// n people gathered to hold a jury meeting of the upcoming competition, the i-th member of the jury came up with ai tasks, which they want to share with each other.
+
+// First, the jury decides on the order which they will follow while describing the tasks. Let that be a permutation p of numbers from 1 to n (an array of size n where each integer from 1 to n occurs exactly once).
+
+// Then the discussion goes as follows:
+
+// If a jury member p1 has some tasks left to tell, then they tell one task to others. Otherwise, they are skipped.
+// If a jury member p2 has some tasks left to tell, then they tell one task to others. Otherwise, they are skipped.
+// ...
+// If a jury member pn has some tasks left to tell, then they tell one task to others. Otherwise, they are skipped.
+// If there are still members with tasks left, then the process repeats from the start. Otherwise, the discussion ends.
+// A permutation p is nice if none of the jury members tell two or more of their own tasks in a row.
+
+// Count the number of nice permutations. The answer may be really large, so print it modulo 998244353.
+
+// Input
+// The first line contains a single integer t (1≤t≤104) — the number of test cases.
+
+// The first line of the test case contains a single integer n (2≤n≤2⋅105) — number of jury members.
+
+// The second line contains n integers a1,a2,…,an (1≤ai≤109) — the number of problems that the i-th member of the jury came up with.
+
+// The sum of n over all test cases does not exceed 2⋅105.
+
+// Output
+// For each test case, print one integer — the number of nice permutations, taken modulo 998244353.
+
+// Example
+// inputCopy
+// 4
+// 2
+// 1 2
+// 3
+// 5 5 5
+// 4
+// 1 3 3 7
+// 6
+// 3 4 2 1 3 3
+// outputCopy
+// 1
+// 6
+// 0
+// 540
+
 const ll tasz = 1e6 + 7;
-ll a[101];
-ll dp[tasz][101];
+ll a[tasz];
+
+ll factorial(ll n) {
+    if (n == 0)
+        return 1;
+    return (n * factorial(n - 1)) % MOD;
+}
 
 void solve() {
-    ll n, x;
-    cin >> n >> x;
-    f0r(i, n) cin >> a[i + 1]; // a[0] = 0
-    sort(a, a + n + 1);
-    dp[0][0] = 1;
-    f1r(i, 1, x){
-        f1r(j,1, n) {
-            if (i - a[j] < 0) break;
-            f0r(k, j + 1){
-                dp[i][j] += dp[i - a[j]][k];
-                dp[i][j] %= MOD;
-            }
-        }
-    }
-    f0r(i, x){
-        f1r(j,1, n) {
-            if (i - a[j] < 0) break;
-            f0r(k, j + 1){
-                dp[i + a[j]][j] += dp[i][k];
-                dp[i][j] %= MOD;
-            }
-        }
-    }
+    ll n;
+    cin >> n;
+    ai(a, n);
     ll ans = 0;
-    f0r(i, n + 1) ans += dp[x][i];
-    cout << ans % MOD << endl;
+    sort(a, a + n);
+    if (a[n - 1] == a[n - 2]) {
+        cout << factorial(n) << endl;
+        return;
+    }
+    if (a[n - 1] > a[n - 2] + 1) {
+        cout << 0 << endl;
+        return;
+    }
+    ll cnt = equal_range(a, a + n, a[n - 2]).ss - equal_range(a, a + n, a[n - 2]).ff;
+    ans = 1;
+    ll tmp = n;
+    while(tmp){
+        if (tmp == cnt + 1) ans *= cnt;
+        else
+            ans *= tmp;
+        tmp--;
+        ans %= MOD;
+    }
+    cout << ans << endl;
 }
 
 int main() {
@@ -139,7 +191,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

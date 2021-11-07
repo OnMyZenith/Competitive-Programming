@@ -79,37 +79,43 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// B. Update Files
-// time limit per test2 seconds
+// B. Diameter of Graph
+// time limit per test1 second
 // memory limit per test256 megabytes
 // inputstandard input
 // outputstandard output
-// Berland State University has received a new update for the operating system. Initially it is installed only on the 1-st computer.
+// CQXYM wants to create a connected undirected graph with n nodes and m edges, and the diameter of the graph must be strictly less than k−1. Also, CQXYM doesn't want a graph that contains self-loops or multiple edges (i.e. each edge connects two different vertices and between each pair of vertices there is at most one edge).
 
-// Update files should be copied to all n computers. The computers are not connected to the internet, so the only way to transfer update files from one computer to another is to copy them using a patch cable (a cable connecting two computers directly). Only one patch cable can be connected to a computer at a time. Thus, from any computer where the update files are installed, they can be copied to some other computer in exactly one hour.
+// The diameter of a graph is the maximum distance between any two nodes.
 
-// Your task is to find the minimum number of hours required to copy the update files to all n computers if there are only k patch cables in Berland State University.
+// The distance between two nodes is the minimum number of the edges on the path which endpoints are the two nodes.
+
+// CQXYM wonders whether it is possible to create such a graph.
 
 // Input
-// The first line contains a single integer t (1≤t≤105) — the number of test cases.
+// The input consists of multiple test cases.
 
-// Each test case consists of a single line that contains two integers n and k (1≤k≤n≤1018) — the number of computers and the number of patch cables.
+// The first line contains an integer t(1≤t≤105) — the number of test cases. The description of the test cases follows.
+
+// Only one line of each test case contains three integers n(1≤n≤109), m, k (0≤m,k≤109).
 
 // Output
-// For each test case print one integer — the minimum number of hours required to copy the update files to all n computers.
+// For each test case, print YES if it is possible to create the graph, or print NO if it is impossible. You can print each letter in any case (upper or lower).
 
 // Example
 // inputCopy
-// 4
-// 8 3
-// 6 6
-// 7 1
-// 1 1
+// 5
+// 1 0 3
+// 4 5 3
+// 4 6 3
+// 5 4 1
+// 2 1 1
 // outputCopy
-// 4
-// 3
-// 6
-// 0
+// YES
+// NO
+// YES
+// NO
+// NO
 
 
 
@@ -119,14 +125,40 @@ const ll tasz = 1e6 + 7;
 
 
 void solve() {
-    ll n, k;
-    cin >> n >> k;
-    ll curr = 1, ans = 0;
-    while(curr<=k&&curr<n)
-        curr *= 2, ans++;
-    if(curr<n)
-        ans+=ceil((ld)(n-curr)/k);
-    cout << ans << '\n';
+    ll n, m, k;
+    cin >> n >> m >> k;
+
+    if(k<2||m>(n*(n-1)/2)||m<n-1){
+        cout << "NO\n";
+        return;
+    }
+    if(k==2){
+        if(n==1&&m==0){
+            cout << "YES\n";
+            return;
+        }else{
+            cout << "NO\n";
+            return;
+        }
+    }
+    if(k==3){
+        if(m==(n*(n-1)/2)){
+            cout << "YES\n";
+            return;
+        }else {
+            cout << "NO\n";
+            return;
+        }
+    }if(k>3){
+        if(m>=n-1){
+            cout << "YES\n";
+            return;
+        }else {
+            cout << "NO\n";
+            return;
+        }
+    }
+
 }
 
 

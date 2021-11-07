@@ -1,14 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// #pragma GCC optimize("Ofast")
-// #pragma GCC target("avx,avx2,fma")
-
-// #pragma GCC optimize ("O3")
-// #pragma GCC target ("sse4")
-
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+// #pragma GCC optimization ("O3")
+// #pragma GCC optimization ("unroll-loops")
+// #pragma optimization_level 3
+// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -27,10 +24,6 @@ using namespace std;
 #define ao(a, n) {for (int ele = 0; ele < (n); ele++) { if (ele) cout << " "; cout << a[ele]; } cout << '\n';}
 #define aout(a, lb, rb) {for (int ele = (lb); ele <= (rb); ele++) { if (ele > (lb)) cout << " "; cout << a[ele]; } cout << '\n';}
 #define sz(x) ((long long) x.size())
-#define trav(a,x) for (auto& a : x)
-#define lb lower_bound
-#define ub upper_bound
-#define eq equal_range
 #define endl '\n'
 
 
@@ -79,37 +72,62 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// B. Update Files
+
+// B. Chess Tournament
 // time limit per test2 seconds
 // memory limit per test256 megabytes
 // inputstandard input
 // outputstandard output
-// Berland State University has received a new update for the operating system. Initially it is installed only on the 1-st computer.
+// A chess tournament will be held soon, where n chess players will take part. Every participant will play one game against every other participant. Each game ends in either a win for one player and a loss for another player, or a draw for both players.
 
-// Update files should be copied to all n computers. The computers are not connected to the internet, so the only way to transfer update files from one computer to another is to copy them using a patch cable (a cable connecting two computers directly). Only one patch cable can be connected to a computer at a time. Thus, from any computer where the update files are installed, they can be copied to some other computer in exactly one hour.
+// Each of the players has their own expectations about the tournament, they can be one of two types:
 
-// Your task is to find the minimum number of hours required to copy the update files to all n computers if there are only k patch cables in Berland State University.
+// a player wants not to lose any game (i. e. finish the tournament with zero losses);
+// a player wants to win at least one game.
+// You have to determine if there exists an outcome for all the matches such that all the players meet their expectations. If there are several possible outcomes, print any of them. If there are none, report that it's impossible.
 
 // Input
-// The first line contains a single integer t (1≤t≤105) — the number of test cases.
+// The first line contains a single integer t (1≤t≤200) — the number of test cases.
 
-// Each test case consists of a single line that contains two integers n and k (1≤k≤n≤1018) — the number of computers and the number of patch cables.
+// The first line of each test case contains one integer n (2≤n≤50) — the number of chess players.
+
+// The second line contains the string s (|s|=n; si∈{1,2}). If si=1, then the i-th player has expectations of the first type, otherwise of the second type.
 
 // Output
-// For each test case print one integer — the minimum number of hours required to copy the update files to all n computers.
+// For each test case, print the answer in the following format:
 
+// In the first line, print NO if it is impossible to meet the expectations of all players.
+
+// Otherwise, print YES, and the matrix of size n×n in the next n lines.
+
+// The matrix element in the i-th row and j-th column should be equal to:
+
+// +, if the i-th player won in a game against the j-th player;
+// -, if the i-th player lost in a game against the j-th player;
+// =, if the i-th and j-th players' game resulted in a draw;
+// X, if i=j.
 // Example
 // inputCopy
-// 4
-// 8 3
-// 6 6
-// 7 1
-// 1 1
-// outputCopy
-// 4
 // 3
-// 6
-// 0
+// 3
+// 111
+// 2
+// 21
+// 4
+// 2122
+// outputCopy
+// YES
+// X==
+// =X=
+// ==X
+// NO
+// YES
+// X--+
+// +X++
+// +-X-
+// --+X
+
+
 
 
 
@@ -119,14 +137,36 @@ const ll tasz = 1e6 + 7;
 
 
 void solve() {
-    ll n, k;
-    cin >> n >> k;
-    ll curr = 1, ans = 0;
-    while(curr<=k&&curr<n)
-        curr *= 2, ans++;
-    if(curr<n)
-        ans+=ceil((ld)(n-curr)/k);
-    cout << ans << '\n';
+    ll n;
+    cin >> n;
+    string s;
+    cin >> s;
+    vl v;
+    f0r(i,n){
+        if(s[i]=='2'){
+            v.pb(i);
+        }
+    }
+    if(sz(v)==0){
+        cout << "YES\n";
+        f0r(i,n) f0r(j,n) cout<<"=X"[i==j]<<(j==n-1?"\n":"");
+        return;
+    }
+    if(sz(v)<=2){
+        cout << "NO\n";
+        return;
+    }
+    string mat[n];
+    f0r(i,n)f0r(j,n)mat[i]+='=';
+    f0r(i,n)mat[i][i]='X';
+    mat[v[sz(v)-1]][v[0]]='+';
+    mat[v[0]][v[sz(v)-1]]='-';
+    f0r(i,sz(v)-1){
+        mat[v[i]][v[i+1]]='+';
+        mat[v[i+1]][v[i]]='-';
+    }
+    cout << "YES\n";
+    f0r(i,n)cout<<mat[i]<<'\n';
 }
 
 

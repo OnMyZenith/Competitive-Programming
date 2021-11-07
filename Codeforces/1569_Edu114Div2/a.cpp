@@ -1,14 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// #pragma GCC optimize("Ofast")
-// #pragma GCC target("avx,avx2,fma")
-
-// #pragma GCC optimize ("O3")
-// #pragma GCC target ("sse4")
-
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+// #pragma GCC optimization ("O3")
+// #pragma GCC optimization ("unroll-loops")
+// #pragma optimization_level 3
+// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -27,10 +24,6 @@ using namespace std;
 #define ao(a, n) {for (int ele = 0; ele < (n); ele++) { if (ele) cout << " "; cout << a[ele]; } cout << '\n';}
 #define aout(a, lb, rb) {for (int ele = (lb); ele <= (rb); ele++) { if (ele > (lb)) cout << " "; cout << a[ele]; } cout << '\n';}
 #define sz(x) ((long long) x.size())
-#define trav(a,x) for (auto& a : x)
-#define lb lower_bound
-#define ub upper_bound
-#define eq equal_range
 #define endl '\n'
 
 
@@ -79,37 +72,51 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// B. Update Files
+// A. Balanced Substring
 // time limit per test2 seconds
 // memory limit per test256 megabytes
 // inputstandard input
 // outputstandard output
-// Berland State University has received a new update for the operating system. Initially it is installed only on the 1-st computer.
+// You are given a string s, consisting of n letters, each letter is either 'a' or 'b'. The letters in the string are numbered from 1 to n.
 
-// Update files should be copied to all n computers. The computers are not connected to the internet, so the only way to transfer update files from one computer to another is to copy them using a patch cable (a cable connecting two computers directly). Only one patch cable can be connected to a computer at a time. Thus, from any computer where the update files are installed, they can be copied to some other computer in exactly one hour.
+// s[l;r] is a continuous substring of letters from index l to r of the string inclusive.
 
-// Your task is to find the minimum number of hours required to copy the update files to all n computers if there are only k patch cables in Berland State University.
+// A string is called balanced if the number of letters 'a' in it is equal to the number of letters 'b'. For example, strings "baba" and "aabbab" are balanced and strings "aaab" and "b" are not.
+
+// Find any non-empty balanced substring s[l;r] of string s. Print its l and r (1≤l≤r≤n). If there is no such substring, then print −1 −1.
 
 // Input
-// The first line contains a single integer t (1≤t≤105) — the number of test cases.
+// The first line contains a single integer t (1≤t≤1000) — the number of testcases.
 
-// Each test case consists of a single line that contains two integers n and k (1≤k≤n≤1018) — the number of computers and the number of patch cables.
+// Then the descriptions of t testcases follow.
+
+// The first line of the testcase contains a single integer n (1≤n≤50) — the length of the string.
+
+// The second line of the testcase contains a string s, consisting of n letters, each letter is either 'a' or 'b'.
 
 // Output
-// For each test case print one integer — the minimum number of hours required to copy the update files to all n computers.
+// For each testcase print two integers. If there exists a non-empty balanced substring s[l;r], then print l r (1≤l≤r≤n). Otherwise, print −1 −1.
 
 // Example
 // inputCopy
 // 4
-// 8 3
-// 6 6
-// 7 1
-// 1 1
-// outputCopy
-// 4
-// 3
+// 1
+// a
 // 6
-// 0
+// abbaba
+// 6
+// abbaba
+// 9
+// babbabbaa
+// outputCopy
+// -1 -1
+// 1 6
+// 3 6
+// 2 5
+// Note
+// In the first testcase there are no non-empty balanced subtrings.
+
+// In the second and third testcases there are multiple balanced substrings, including the entire string "abbaba" and substring "baba".
 
 
 
@@ -119,14 +126,29 @@ const ll tasz = 1e6 + 7;
 
 
 void solve() {
-    ll n, k;
-    cin >> n >> k;
-    ll curr = 1, ans = 0;
-    while(curr<=k&&curr<n)
-        curr *= 2, ans++;
-    if(curr<n)
-        ans+=ceil((ld)(n-curr)/k);
-    cout << ans << '\n';
+    ll n;
+    cin >> n;
+    string s;
+    cin >> s;
+    ll ans = -1;
+    f0r(i,n-1){
+        if(s[i] == 'a'){
+            if(s[i+1] == 'b'){
+                ans = i+1;
+                break;
+            }
+        }else if(s[i] == 'b'){
+            if(s[i+1] == 'a'){
+                ans = i+1;
+                break;
+            }
+        }
+    }if(ans==-1){
+        cout << -1 << " " << -1 << endl;
+    }
+    else{
+        cout << ans << " " << ans+1 << endl;
+    }
 }
 
 

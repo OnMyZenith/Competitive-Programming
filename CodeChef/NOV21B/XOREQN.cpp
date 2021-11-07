@@ -79,54 +79,34 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// B. Update Files
-// time limit per test2 seconds
-// memory limit per test256 megabytes
-// inputstandard input
-// outputstandard output
-// Berland State University has received a new update for the operating system. Initially it is installed only on the 1-st computer.
 
-// Update files should be copied to all n computers. The computers are not connected to the internet, so the only way to transfer update files from one computer to another is to copy them using a patch cable (a cable connecting two computers directly). Only one patch cable can be connected to a computer at a time. Thus, from any computer where the update files are installed, they can be copied to some other computer in exactly one hour.
-
-// Your task is to find the minimum number of hours required to copy the update files to all n computers if there are only k patch cables in Berland State University.
-
-// Input
-// The first line contains a single integer t (1≤t≤105) — the number of test cases.
-
-// Each test case consists of a single line that contains two integers n and k (1≤k≤n≤1018) — the number of computers and the number of patch cables.
-
-// Output
-// For each test case print one integer — the minimum number of hours required to copy the update files to all n computers.
-
-// Example
-// inputCopy
-// 4
-// 8 3
-// 6 6
-// 7 1
-// 1 1
-// outputCopy
-// 4
-// 3
-// 6
-// 0
 
 
 
 const ll tasz = 1e6 + 7;
+ll a[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
 
 
 
 void solve() {
-    ll n, k;
-    cin >> n >> k;
-    ll curr = 1, ans = 0;
-    while(curr<=k&&curr<n)
-        curr *= 2, ans++;
-    if(curr<n)
-        ans+=ceil((ld)(n-curr)/k);
-    cout << ans << '\n';
+    #warning: Switch to the Global larger array size after debugging
+    ll n;
+    cin >> n;
+    f0r(i, n) cin >> a[i];
+    ull x = 0;
+    f0r(i,62){
+        ull xr = 0;
+        f0r(j, n) xr ^= (a[j] + x);
+        if(xr&(1ULL<<i)) x+=1ULL<<i;
+    }
+    ull xr = 0;
+    f0r(j, n) xr ^= (a[j] + x);
+    if(xr==0) cout << x;
+    else cout << -1;
+    cout<< '\n';
 }
 
 
