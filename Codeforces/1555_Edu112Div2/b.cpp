@@ -79,65 +79,97 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// Consider a money system consisting of n coins. Each coin has a positive integer value. Your task is to calculate the number of distinct ordered ways you can produce a money sum x using the available coins.
+// B. Two Tables
+// time limit per test2 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// You have an axis-aligned rectangle room with width W and height H, so the lower left corner is in point (0,0) and the upper right corner is in (W,H).
 
-// For example, if the coins are {2,3,5} and the desired sum is 9, there are 3 ways:
-// 2+2+5
-// 3+3+3
-// 2+2+2+3
+// There is a rectangular table standing in this room. The sides of the table are parallel to the walls, the lower left corner is in (x1,y1), and the upper right corner in (x2,y2).
+
+// You want to place another rectangular table in this room with width w and height h with the width of the table parallel to the width of the room.
+
+// The problem is that sometimes there is not enough space to place the second table without intersecting with the first one (there are no problems with tables touching, though).
+
+// You can't rotate any of the tables, but you can move the first table inside the room.
+
+// Example of how you may move the first table.
+// What is the minimum distance you should move the first table to free enough space for the second one?
+
 // Input
+// The first line contains the single integer t (1≤t≤5000) — the number of the test cases.
 
-// The first input line has two integers n and x: the number of coins and the desired sum of money.
+// The first line of each test case contains two integers W and H (1≤W,H≤108) — the width and the height of the room.
 
-// The second line has n distinct integers c1,c2,…,cn: the value of each coin.
+// The second line contains four integers x1, y1, x2 and y2 (0≤x1<x2≤W; 0≤y1<y2≤H) — the coordinates of the corners of the first table.
+
+// The third line contains two integers w and h (1≤w≤W; 1≤h≤H) — the width and the height of the second table.
 
 // Output
+// For each test case, print the minimum distance you should move the first table, or −1 if there is no way to free enough space for the second table.
 
-// Print one integer: the number of ways modulo 109+7.
+// Your answer will be considered correct if its absolute or relative error doesn't exceed 10−6.
 
-// Constraints
-// 1≤n≤100
-// 1≤x≤106
-// 1≤ci≤106
 // Example
+// inputCopy
+// 5
+// 8 5
+// 2 1 7 4
+// 4 2
+// 5 4
+// 2 2 5 4
+// 3 3
+// 1 8
+// 0 3 1 6
+// 1 5
+// 8 1
+// 3 0 6 1
+// 5 1
+// 8 10
+// 4 5 7 8
+// 8 5
+// outputCopy
+// 1.000000000
+// -1
+// 2.000000000
+// 2.000000000
+// 0.000000000
+// Note
+// The configuration of the first test case is shown in the picture. But the movement of the first table is not optimal. One of the optimal movement, for example, is to move the table by (0,−1), so the lower left corner will move from (2,1) to (2,0). Then you can place the second table at (0,3)−(4,5).
 
-// Input:
-// 3 9
-// 2 3 5
+// In the second test case, there is no way to fit both tables in the room without intersecting.
 
-// Output:
-// 3
+// In the third test case, you can move the first table by (0,2), so the lower left corner will move from (0,3) to (0,5).
 
 
 
-const int tasz = 2e6;
-int a[101];
-int dp[tasz][101];
+const ll tasz = 1e6 + 7;
+// ll a[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
+
+
+
 
 void solve() {
-    int n, x;
-    cin >> n >> x;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    dp[0][0] = 1;
-    f0r(i, x + 1){
-        f0r(j, n - 1) {
-            if(j) dp[i][j] += dp[i][j - 1];
-            if (dp[i][j] >= MOD) dp[i][j] -= MOD;
-            if (i + a[j] <= x) (dp[i + a[j]][j] += dp[i][j]);
-        }
+    // #warning: Switch to the Global larger array size after debugging
+    ll W,H,x1,y1,x2,y2,w,h;
+    cin>>W>>H>>x1>>y1>>x2>>y2>>w>>h;
+    bool vPoss=false,hPoss=false;
+    if(h<=H-(y2-y1))vPoss=true;
+    if(w<=W-(x2-x1))hPoss=true;
+    if(!vPoss&&!hPoss) {
+        cout<<-1<<endl;
+        return;
     }
-    // f1r(j,1, n) {
-    //     f1r(i, 1, x){
-    //         if (i - a[j] > 0){
-    //             dp[i - a[j]][j] += dp[i - a[j]][j - 1];
-    //             dp[i][j] += dp[i - a[j]][j];
-    //         }
-    //     }
-    // }
-    // ll ans = 0;
-    // f0r(i, n + 1) ans += dp[x][i];
-    cout << dp[x][n] << endl;
+    ll m = -INF, n = -INF;
+    if(vPoss)m = max(H-y2,y1);
+    if(hPoss)n = max(W-x2,x1);
+    cout<<min(max(h-m,0LL),max(w-n,0LL))<<endl;
+
+
+
 }
 
 
@@ -149,10 +181,10 @@ int main() {
 
     vamos;
 
-    fix(15);
+    fix(9);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

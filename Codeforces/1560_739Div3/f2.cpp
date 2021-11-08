@@ -7,8 +7,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("sse4")
 
-// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -79,65 +79,69 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// Consider a money system consisting of n coins. Each coin has a positive integer value. Your task is to calculate the number of distinct ordered ways you can produce a money sum x using the available coins.
-
-// For example, if the coins are {2,3,5} and the desired sum is 9, there are 3 ways:
-// 2+2+5
-// 3+3+3
-// 2+2+2+3
-// Input
-
-// The first input line has two integers n and x: the number of coins and the desired sum of money.
-
-// The second line has n distinct integers c1,c2,…,cn: the value of each coin.
-
-// Output
-
-// Print one integer: the number of ways modulo 109+7.
-
-// Constraints
-// 1≤n≤100
-// 1≤x≤106
-// 1≤ci≤106
-// Example
-
-// Input:
-// 3 9
-// 2 3 5
-
-// Output:
-// 3
 
 
 
-const int tasz = 2e6;
-int a[101];
-int dp[tasz][101];
+
+const ll tasz = 1e6 + 7;
+ll a[tasz];
+// ll b[tasz];
+// ll c[tasz];
+
+
+// set<ll> v1, v2;
+vl v1, v2;
+
+ll num,cnt;
+
+bool usedJ, usedL;
+
+void makeDig(ll j,ll l){
+    bool prev_usedJ = usedJ, prev_usedL = usedL;
+    if(num>9&&usedL&&usedJ) v2.pb(num);
+    if (cnt > 10) return;
+    cnt++;
+    ll tmp = num;
+    
+    num = 10 * tmp + j;
+    usedJ = true;
+    makeDig(j, l);
+    usedJ = prev_usedJ;
+
+    num = 10 * tmp + l;
+    usedL = true;
+    makeDig(j, l);
+    usedL = prev_usedL;
+
+    num = tmp;
+    cnt--;
+}
 
 void solve() {
-    int n, x;
-    cin >> n >> x;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    dp[0][0] = 1;
-    f0r(i, x + 1){
-        f0r(j, n - 1) {
-            if(j) dp[i][j] += dp[i][j - 1];
-            if (dp[i][j] >= MOD) dp[i][j] -= MOD;
-            if (i + a[j] <= x) (dp[i + a[j]][j] += dp[i][j]);
+    // #warning: Switch to the Global larger array size after debugging
+    ll n, k;
+    cin >> n >> k;
+    string s = to_string(n);
+    set<char> used;
+    ll idx = -1;
+    f0r(i,sz(s)){
+        if (sz(used) == k){
+            idx = i;
+            break;
         }
+        used.insert(s[i]);
     }
-    // f1r(j,1, n) {
-    //     f1r(i, 1, x){
-    //         if (i - a[j] > 0){
-    //             dp[i - a[j]][j] += dp[i - a[j]][j - 1];
-    //             dp[i][j] += dp[i - a[j]][j];
-    //         }
-    //     }
-    // }
-    // ll ans = 0;
-    // f0r(i, n + 1) ans += dp[x][i];
-    cout << dp[x][n] << endl;
+    ll left = 0;
+    f1r(i,idx,sz(s)){
+        left = 10 * left + (s[i] - '0');
+    }
+    s = s.substr(0, idx + 1);
+    s += to_string(v1[lb(all(v1), left)-v1.begin()]);
+    cout << s << endl;
+    
+    // if (k == 1) cout << v1[lb(all(v1), n) - v1.begin()] << endl;
+    // // else cout << v2[lb(all(v2), n) - v2.begin()] << endl;
+    // else cout << min(v2[lb(all(v2), n) - v2.begin()], v1[lb(all(v1), n) - v1.begin()]) << endl;
 }
 
 
@@ -151,8 +155,27 @@ int main() {
 
     fix(15);
 
+    f1r(i,1,9){// no. of dig
+        f1r(j,1,9){// the dig
+            ll t = 0;
+            f0r(l,i){
+                t = t * 10 + j;
+            }
+            v1.pb(t);
+        }
+    }
+    f1r(i,1,9){// no. of dig
+        f1r(j,0,9){// the 1stdig
+            f1r(l,j+1,9){// the 2nd dig
+                makeDig(j, l);
+            }
+        }
+    }
+    v2.pb(INF);
+    v1.pb(1111111111);
+    sort(all(v2));
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

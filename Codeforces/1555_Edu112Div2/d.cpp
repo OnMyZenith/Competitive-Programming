@@ -7,8 +7,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("sse4")
 
-// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -79,65 +79,75 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// Consider a money system consisting of n coins. Each coin has a positive integer value. Your task is to calculate the number of distinct ordered ways you can produce a money sum x using the available coins.
+// D. Say No to Palindromes
+// time limit per test2 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// Let's call the string beautiful if it does not contain a substring of length at least 2, which is a palindrome. Recall that a palindrome is a string that reads the same way from the first character to the last and from the last character to the first. For example, the strings a, bab, acca, bcabcbacb are palindromes, but the strings ab, abbbaa, cccb are not.
 
-// For example, if the coins are {2,3,5} and the desired sum is 9, there are 3 ways:
-// 2+2+5
-// 3+3+3
-// 2+2+2+3
+// Let's define cost of a string as the minimum number of operations so that the string becomes beautiful, if in one operation it is allowed to change any character of the string to one of the first 3 letters of the Latin alphabet (in lowercase).
+
+// You are given a string s of length n, each character of the string is one of the first 3 letters of the Latin alphabet (in lowercase).
+
+// You have to answer m queries — calculate the cost of the substring of the string s from li-th to ri-th position, inclusive.
+
 // Input
+// The first line contains two integers n and m (1≤n,m≤2⋅105) — the length of the string s and the number of queries.
 
-// The first input line has two integers n and x: the number of coins and the desired sum of money.
+// The second line contains the string s, it consists of n characters, each character one of the first 3 Latin letters.
 
-// The second line has n distinct integers c1,c2,…,cn: the value of each coin.
+// The following m lines contain two integers li and ri (1≤li≤ri≤n) — parameters of the i-th query.
 
 // Output
+// For each query, print a single integer — the cost of the substring of the string s from li-th to ri-th position, inclusive.
 
-// Print one integer: the number of ways modulo 109+7.
-
-// Constraints
-// 1≤n≤100
-// 1≤x≤106
-// 1≤ci≤106
 // Example
+// inputCopy
+// 5 4
+// baacb
+// 1 3
+// 1 5
+// 4 5
+// 2 3
+// outputCopy
+// 1
+// 2
+// 0
+// 1
 
-// Input:
-// 3 9
-// 2 3 5
-
-// Output:
-// 3
 
 
+const ll tasz = 1e6 + 7;
+ll a[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
-const int tasz = 2e6;
-int a[101];
-int dp[tasz][101];
+
+
 
 void solve() {
-    int n, x;
-    cin >> n >> x;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    dp[0][0] = 1;
-    f0r(i, x + 1){
-        f0r(j, n - 1) {
-            if(j) dp[i][j] += dp[i][j - 1];
-            if (dp[i][j] >= MOD) dp[i][j] -= MOD;
-            if (i + a[j] <= x) (dp[i + a[j]][j] += dp[i][j]);
+    // #warning: Switch to the Global larger array size after debugging
+    ll n, m;
+    string s;
+    cin >> n >> m >> s;
+    f0r(i,m){
+        string t = s;
+        ll l, r;
+        cin >> l >> r;
+        l--, r--;
+        ll ans = 0;
+        while(l<r){ 
+            if(l+1<r){
+                if (s[l] == s[l + 1]) ans++;
+                else if (s[l] != s[l + 1] && s[l + 1] != s[l + 2] && s[l] == s[l + 2]) ans++;
+            } else if(s[l]==s[l+1]) {
+                ans++;
+            }
+            l++;
         }
+        cout << ans << endl;
     }
-    // f1r(j,1, n) {
-    //     f1r(i, 1, x){
-    //         if (i - a[j] > 0){
-    //             dp[i - a[j]][j] += dp[i - a[j]][j - 1];
-    //             dp[i][j] += dp[i - a[j]][j];
-    //         }
-    //     }
-    // }
-    // ll ans = 0;
-    // f0r(i, n + 1) ans += dp[x][i];
-    cout << dp[x][n] << endl;
 }
 
 

@@ -7,8 +7,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("sse4")
 
-// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -79,65 +79,94 @@ const ll MOD = 1e9 + 7;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// Consider a money system consisting of n coins. Each coin has a positive integer value. Your task is to calculate the number of distinct ordered ways you can produce a money sum x using the available coins.
+// C. Coin Rows
+// time limit per test2 seconds
+// memory limit per test256 megabytes
+// inputstandard input
+// outputstandard output
+// Alice and Bob are playing a game on a matrix, consisting of 2 rows and m columns. The cell in the i-th row in the j-th column contains ai,j coins in it.
 
-// For example, if the coins are {2,3,5} and the desired sum is 9, there are 3 ways:
-// 2+2+5
-// 3+3+3
-// 2+2+2+3
+// Initially, both Alice and Bob are standing in a cell (1,1). They are going to perform a sequence of moves to reach a cell (2,m).
+
+// The possible moves are:
+
+// Move right — from some cell (x,y) to (x,y+1);
+// Move down — from some cell (x,y) to (x+1,y).
+// First, Alice makes all her moves until she reaches (2,m). She collects the coins in all cells she visit (including the starting cell).
+
+// When Alice finishes, Bob starts his journey. He also performs the moves to reach (2,m) and collects the coins in all cells that he visited, but Alice didn't.
+
+// The score of the game is the total number of coins Bob collects.
+
+// Alice wants to minimize the score. Bob wants to maximize the score. What will the score of the game be if both players play optimally?
+
 // Input
+// The first line contains a single integer t (1≤t≤104) — the number of testcases.
 
-// The first input line has two integers n and x: the number of coins and the desired sum of money.
+// Then the descriptions of t testcases follow.
 
-// The second line has n distinct integers c1,c2,…,cn: the value of each coin.
+// The first line of the testcase contains a single integer m (1≤m≤105) — the number of columns of the matrix.
+
+// The i-th of the next 2 lines contain m integers ai,1,ai,2,…,ai,m (1≤ai,j≤104) — the number of coins in the cell in the i-th row in the j-th column of the matrix.
+
+// The sum of m over all testcases doesn't exceed 105.
 
 // Output
+// For each testcase print a single integer — the score of the game if both players play optimally.
 
-// Print one integer: the number of ways modulo 109+7.
-
-// Constraints
-// 1≤n≤100
-// 1≤x≤106
-// 1≤ci≤106
 // Example
-
-// Input:
-// 3 9
-// 2 3 5
-
-// Output:
+// inputCopy
 // 3
+// 3
+// 1 3 7
+// 3 5 1
+// 3
+// 1 3 9
+// 3 5 1
+// 1
+// 4
+// 7
+// outputCopy
+// 7
+// 8
+// 0
 
 
 
-const int tasz = 2e6;
-int a[101];
-int dp[tasz][101];
+const ll tasz = 1e6 + 7;
+ll a[2][tasz];
+ll t[tasz];
+ll b[tasz];
+
+
+
 
 void solve() {
-    int n, x;
-    cin >> n >> x;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    dp[0][0] = 1;
-    f0r(i, x + 1){
-        f0r(j, n - 1) {
-            if(j) dp[i][j] += dp[i][j - 1];
-            if (dp[i][j] >= MOD) dp[i][j] -= MOD;
-            if (i + a[j] <= x) (dp[i + a[j]][j] += dp[i][j]);
-        }
+    // #warning: Switch to the Global larger array size after debugging
+// ll a[2][4];
+// ll t[4];
+// ll b[4];
+    ll m;
+    cin >> m;
+    f0r(i, 2) f0r(j, m) cin >> a[i][j];
+    f0r(i, m+1) t[i] = 0;
+    f0r(i, m+1) b[i] = 0;
+
+    f1r(i,1, m-1) {
+        b[i]=a[1][i-1];
+        if(i>0)b[i]+=b[i-1];
     }
-    // f1r(j,1, n) {
-    //     f1r(i, 1, x){
-    //         if (i - a[j] > 0){
-    //             dp[i - a[j]][j] += dp[i - a[j]][j - 1];
-    //             dp[i][j] += dp[i - a[j]][j];
-    //         }
-    //     }
-    // }
-    // ll ans = 0;
-    // f0r(i, n + 1) ans += dp[x][i];
-    cout << dp[x][n] << endl;
+    f1rd(i,m-2,0){
+        t[i]=a[0][i+1];
+        if(i<m-1)t[i]+=t[i+1];
+    }
+    
+    ll sum = INF;
+    f0r(i, m) {
+        ckmin(sum, max(t[i] , b[i]));
+    }
+    cout<<sum<<endl;
+
 }
 
 
@@ -152,7 +181,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 
