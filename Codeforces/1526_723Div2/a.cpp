@@ -93,10 +93,13 @@ ll a[tasz];
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
+    ll n;
+    cin >> n;
+    f0r(i, 2*n) cin >> a[i];
+    sort(a, a + 2*n);
     
-
-
-
+    f0r(i,n) { cout<< a[i] <<" " << a[2*n-i-1] <<" "; }
+    cout<<endl;
 }
 
 

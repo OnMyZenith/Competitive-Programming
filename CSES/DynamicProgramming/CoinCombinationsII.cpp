@@ -110,36 +110,91 @@ const ll MOD = 1e9 + 7;
 
 
 
-const int tasz = 2e6;
-int a[101];
-int dp[tasz][101];
+// const int tasz = 2e6;
+// int coins[101];
+// int dp[tasz][101];
 
+// void solve() {
+//     int n, finalTarget;
+//     cin >> n >> finalTarget;
+//     f0r(i, n) cin >> coins[i];
+    
+//     dp[0][0] = 1;
+
+//     // f1r(j, 1, n) {
+//     //     f0r(i, finalTarget + 1){
+//     //         dp[i][j] += dp[i][j - 1];
+
+//     //         if (dp[i][j] >= MOD) 
+//     //             dp[i][j] -= MOD;
+            
+//     //         if (i + coins[j - 1] <= finalTarget)
+//     //             dp[i + coins[j - 1]][j] = dp[i][j];
+//     //     }
+//     // }
+//     // cout << dp[finalTarget][n] << endl;
+
+//     f1r(j, 1, n) {
+//         f0r(i, finalTarget + 1){
+//             dp[i][j] = dp[i][j - 1];
+            
+//             if(i - coins[j - 1]>=0)
+//                 dp[i][j] += dp[i - coins[j - 1]][j];
+
+//             if (dp[i][j] >= MOD) 
+//                 dp[i][j] -= MOD;
+//         }
+//     }
+
+//     cout << dp[finalTarget][n] << endl;
+// }
+
+// const int tasz = 1e6+007;
+// int coins[101];
+// int dp[101][tasz];
+// void solve() {
+//     int n, finalTarget;
+//     cin >> n >> finalTarget;
+//     for (int i = 0; i < n; i++) cin >> coins[i];
+//     dp[0][0] = 1;
+//     for (int c = 1; c <= n; c++) {
+//         for (int t = 0; t <= finalTarget; t++){
+//             dp[c][t] = dp[c - 1][t];
+            
+//             if(t - coins[c - 1]>=0)
+//                 dp[c][t] += dp[c][t - coins[c - 1]];
+
+//             if (dp[c][t] >= MOD) 
+//                 dp[c][t] -= MOD;
+//         }
+//     }
+//     cout << dp[n][finalTarget] << endl;
+
+// }
+
+
+const int tasz = 1e6+007;
+int coins[101];
+int dp[tasz];
 void solve() {
-    int n, x;
-    cin >> n >> x;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    dp[0][0] = 1;
-    f0r(i, x + 1){
-        f0r(j, n - 1) {
-            if(j) dp[i][j] += dp[i][j - 1];
-            if (dp[i][j] >= MOD) dp[i][j] -= MOD;
-            if (i + a[j] <= x) (dp[i + a[j]][j] += dp[i][j]);
+    int n, finalTarget;
+    cin >> n >> finalTarget;
+    for (int i = 0; i < n; i++) cin >> coins[i];
+    dp[0] = 1;
+    for (int c = 1; c <= n; c++) {
+        for (int t = 1; t <= finalTarget; t++){
+            // dp[c][t] = dp[c - 1][t];
+            
+            if(t - coins[c - 1]>=0)
+                dp[t] += dp[t - coins[c - 1]];
+
+            if (dp[t] >= MOD) 
+                dp[t] -= MOD;
         }
     }
-    // f1r(j,1, n) {
-    //     f1r(i, 1, x){
-    //         if (i - a[j] > 0){
-    //             dp[i - a[j]][j] += dp[i - a[j]][j - 1];
-    //             dp[i][j] += dp[i - a[j]][j];
-    //         }
-    //     }
-    // }
-    // ll ans = 0;
-    // f0r(i, n + 1) ans += dp[x][i];
-    cout << dp[x][n] << endl;
-}
+    cout << dp[finalTarget] << endl;
 
+}
 
 int main() {
 
