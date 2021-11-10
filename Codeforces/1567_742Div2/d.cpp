@@ -83,20 +83,30 @@ const ll MOD = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
+// const ll tasz = 1e6 + 007;
+// ll a[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
 
 
 
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
+    ll s, n;
+    cin >> s >> n;
 
+    ll t = n;
+    while(--n){
+        cout << "1 ";
+    }
+    cout << s - t + 1 << endl;
 
-
+    // ll el = 0;
+    // while(s){
+    //     el = (el + s / 10) * 11 + s % 10;
+    //     s /= 10;
+    // }
 }
 
 

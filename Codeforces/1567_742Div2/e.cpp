@@ -70,6 +70,25 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 /* usage - just do rng() */
 /* shuffle(permutation.begin(), permutation.end(), rng); */
 
+struct Tree {
+	typedef int T;
+	static constexpr T unit = INT_MIN;
+	T f(T a, T b) { return max(a, b); } // (any associative fn)
+	vector<T> s; int n;
+	Tree(int n = 0, T def = unit) : s(2*n, def), n(n) {}
+	void update(int pos, T val) {
+		for (s[pos += n] = val; pos /= 2;)
+			s[pos] = f(s[pos * 2], s[pos * 2 + 1]);
+	}
+	T query(int b, int e) { // query [b, e)
+		T ra = unit, rb = unit;
+		for (b += n, e += n; b < e; b /= 2, e /= 2) {
+			if (b % 2) ra = f(ra, s[b++]);
+			if (e % 2) rb = f(s[--e], rb);
+		}
+		return f(ra, rb);
+	}
+};
 
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
@@ -83,8 +102,8 @@ const ll MOD = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
+// const ll tasz = 1e6 + 007;
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
@@ -93,10 +112,27 @@ ll a[tasz];
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
+    int n, q;
+    cin >> n >> q;
+    vi v(n);
+    ai(v, n);
 
+    Tree t;
+    t.n = n;
+    t.s = v;
 
-
+    while(q--){
+        int tmp;
+        cin >> tmp;
+        ll x, y;
+        cin >> x >> y;
+        x--;
+        if(tmp==1){
+            t.update(x, y);
+        }else {
+            
+        }
+    }
 }
 
 
@@ -111,7 +147,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         solve();
 

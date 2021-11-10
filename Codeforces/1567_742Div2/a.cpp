@@ -93,10 +93,17 @@ ll a[tasz];
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
-
-
-
+    ll n;
+    cin >> n;
+    string s;
+    cin >> s;
+    f0r(i,sz(s)){
+        if (s[i] == 'U') cout << 'D';
+        else if(s[i] == 'D')cout << 'U';
+        else
+            cout << "LR", i++;
+    }
+    cout << endl;
 }
 
 

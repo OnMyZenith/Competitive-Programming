@@ -7,8 +7,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("sse4")
 
-// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -109,7 +109,9 @@ const ll MOD = 1e9 + 7;
 // 3
 
 
-
+//---------------------------------------------------
+// This Works doesn't work in Time Limit
+//---------------------------------------------------
 // const int tasz = 2e6;
 // int coins[101];
 // int dp[tasz][101];
@@ -120,19 +122,6 @@ const ll MOD = 1e9 + 7;
 //     f0r(i, n) cin >> coins[i];
     
 //     dp[0][0] = 1;
-
-//     // f1r(j, 1, n) {
-//     //     f0r(i, finalTarget + 1){
-//     //         dp[i][j] += dp[i][j - 1];
-
-//     //         if (dp[i][j] >= MOD) 
-//     //             dp[i][j] -= MOD;
-            
-//     //         if (i + coins[j - 1] <= finalTarget)
-//     //             dp[i + coins[j - 1]][j] = dp[i][j];
-//     //     }
-//     // }
-//     // cout << dp[finalTarget][n] << endl;
 
 //     f1r(j, 1, n) {
 //         f0r(i, finalTarget + 1){
@@ -149,6 +138,11 @@ const ll MOD = 1e9 + 7;
 //     cout << dp[finalTarget][n] << endl;
 // }
 
+//---------------------------------------------------
+// This Works barely in given time(maybe not supposed to)
+// using caching by flipping the dimensions and
+// accessing closer elements
+//---------------------------------------------------
 // const int tasz = 1e6+007;
 // int coins[101];
 // int dp[101][tasz];
@@ -172,29 +166,59 @@ const ll MOD = 1e9 + 7;
 
 // }
 
+//-------------------------------------------------
+//This Works perfectly in given time(Pull DP)
+//-------------------------------------------------
+// const int tasz = 1e6+007;
+// int coins[101];
+// int dp[tasz];
+// void solve() {
+//     int n, finalTarget;
+//     cin >> n >> finalTarget;
+//     for (int i = 0; i < n; i++) cin >> coins[i];
+//     dp[0] = 1;
+//     for (int c = 1; c <= n; c++) {
+//         for (int t = 1; t <= finalTarget; t++){
+//             // dp[c][t] = dp[c - 1][t];
+            
+//             if(t - coins[c - 1]>=0)
+//                 dp[t] += dp[t - coins[c - 1]];
 
+//             if (dp[t] >= MOD) 
+//                 dp[t] -= MOD;
+//         }
+//     }
+//     cout << dp[finalTarget] << endl;
+
+// }
+
+
+//-----------------------------------------------------------
+// (On the largest TC 1e6 time 100 = 1e8 operations)
+// Push DP gives MUCH FASTER(~100ms) solution because
+// reading d[t] over and over could be done
+// using caching(its closer to last), but writing requires real access
+// Made even faster using pragmas(~60ms on CSES, ~17ms on Local)
+//-----------------------------------------------------------
 const int tasz = 1e6+007;
 int coins[101];
 int dp[tasz];
-void solve() {
+
+void solve(){
     int n, finalTarget;
     cin >> n >> finalTarget;
     for (int i = 0; i < n; i++) cin >> coins[i];
     dp[0] = 1;
     for (int c = 1; c <= n; c++) {
-        for (int t = 1; t <= finalTarget; t++){
-            // dp[c][t] = dp[c - 1][t];
-            
-            if(t - coins[c - 1]>=0)
-                dp[t] += dp[t - coins[c - 1]];
-
-            if (dp[t] >= MOD) 
-                dp[t] -= MOD;
+        for (int t = 0; t + coins[c - 1] <= finalTarget; t++){            
+            dp[t + coins[c - 1]] += dp[t];
+            if (dp[t + coins[c - 1]] >= MOD) 
+                dp[t + coins[c - 1]] -= MOD;
         }
     }
-    cout << dp[finalTarget] << endl;
-
+    cout << dp[finalTarget] << '\n';
 }
+
 
 int main() {
 

@@ -96,86 +96,40 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
-const ll INF = 1e18 + 7;
-const ll MOD = 1e9 + 7;
-// const ll INF = 1e9 + 7;
+const ll INF = (ll)1e18 + 007;
+const ll MOD = 1e9 + 007;
+// const ll INF = 1e9 + 007;
 // const ll MOD = 998244353;
 // ll MOD;
 
-// C2. Potions (Hard Version)
-// time limit per test1 second
-// memory limit per test256 megabytes
-// inputstandard input
-// outputstandard output
-// This is the hard version of the problem. The only difference is that in this version n≤200000. You can make hacks only if both versions of the problem are solved.
-
-// There are n potions in a line, with potion 1 on the far left and potion n on the far right. Each potion will increase your health by ai when drunk. ai can be negative, meaning that potion will decrease will health.
-
-// You start with 0 health and you will walk from left to right, from first potion to the last one. At each potion, you may choose to drink it or ignore it. You must ensure that your health is always non-negative.
-
-// What is the largest number of potions you can drink?
-
-// Input
-// The first line contains a single integer n (1≤n≤200000) — the number of potions.
-
-// The next line contains n integers a1, a2, ... ,an (−109≤ai≤109) which represent the change in health after drinking that potion.
-
-// Output
-// Output a single integer, the maximum number of potions you can drink without your health becoming negative.
-
-// Example
-// inputCopy
-// 6
-// 4 -4 1 -3 1 -3
-// outputCopy
-// 5
-// Note
-// For the sample, you can drink 5 potions by taking potions 1, 3, 4, 5 and 6. It is not possible to drink all 6 potions because your health will go negative at some point
-
-const ll tasz = 1e6 + 7;
+// const ll tasz = 1e6 + 007;
 // ll a[tasz];
-// ll cnt[tasz];
-// ll posSUm[tasz];
-// ll sum[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
+ll cnt;
 
-#include <bits/extc++.h>
-using namespace __gnu_pbds;
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
+void f(ll n){
+    ll d = n % 10;
+    if (d == 9) cnt += 8 + n>10, f(n / 10);
+    else if((n/100)>0) {
+        cnt += n % 10, f(n / 10);
+    }else {
+        
     }
-
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
-
-// unordered_map<ll, ll, custom_hash> safe_map;
-gp_hash_table<pl, ll, custom_hash> ways_hlt_idx;
+}
 
 void solve() {
+    // #warning: Switch to the Global larger array size after debugging
     ll n;
     cin >> n;
-    vl a(n), cnt(n), posSUm(n), sum(n);
-    f0r(i, n) cin >> a[i], posSUm[i] = (i ? posSUm[i - 1] : 0) + a[i] > 0 ? a[i] : 0;
-
-    for (int k = 0; k < n; k++) {
-        ways_hlt_idx[{((a[k]>=0)?a[k]:0),k}]=(a[k]>=0);
-        // sum[k] = (a[k] < 0 ? 0 : a[k]);
-        for (int i = 0; i < k; i++) {
-            if (sum[i] + a[k] >= 0) {
-                if(ckmax(cnt[k], cnt[i] + 1)) sum[k] = sum[i] + a[k];
-            }
-        }
-    }
-    ll ans = 0;
-    f0r(i, n) ckmax(ans, cnt[i]);
-    cout << ans << endl;
+    cnt = 0;
+    // ll a, b, s = 0;
+    // while (a > 0 || b > 0) {
+    //     ll d = (a % 10 + b % 10);
+    //     // s += 10 * (d / 10);
+    //     s = s * 10 + 100 * (d / 10) + d % 10;
+    //     a /= 10, b /= 10;
+    // }
 }
 
 int main() {
@@ -189,7 +143,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

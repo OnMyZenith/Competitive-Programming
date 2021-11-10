@@ -84,19 +84,37 @@ const ll MOD = 1e9 + 007;
 
 
 const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
+// ll a[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
 
+ll cnt;
+bool ok[tasz];
+ll F[tasz];
 
+ll f(ll n){
+    F[n] = INF;
+    f0r(i,(ll)to_string(n).length()){
+        ll x = n - (to_string(n)[i] - '0');
+        if(x>=0&&x<n){
+            if (ok[x]) F[n] = min(F[x] + 1, F[n]);
+            else
+                F[n] = min(f(x) + 1, F[n]);
+        }
+    }
+    ok[n] = true;
+    return F[n];
+}
 
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
-
-
-
+    ll n;
+    cin >> n;
+    F[0] = 0;
+    ok[0] = true;
+    f(n);
+    cout << F[n] << endl;
 }
 
 
@@ -111,7 +129,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         solve();
 
