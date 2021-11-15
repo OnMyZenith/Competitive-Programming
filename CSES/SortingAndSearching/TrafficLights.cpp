@@ -1,11 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// #pragma GCC optimization ("O3")
-// #pragma GCC optimization ("unroll-loops")
-// #pragma optimization_level 3
-// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+// #pragma GCC optimize("Ofast")
+// #pragma GCC target("avx,avx2,fma")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -24,6 +27,10 @@ using namespace std;
 #define ao(a, n) {for (int ele = 0; ele < (n); ele++) { if (ele) cout << " "; cout << a[ele]; } cout << '\n';}
 #define aout(a, lb, rb) {for (int ele = (lb); ele <= (rb); ele++) { if (ele > (lb)) cout << " "; cout << a[ele]; } cout << '\n';}
 #define sz(x) ((long long) x.size())
+#define trav(a,x) for (auto& a : x)
+#define lb lower_bound
+#define ub upper_bound
+#define eq equal_range
 #define endl '\n'
 
 
@@ -66,31 +73,46 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
-const ll INF = 1e18 + 7;
-const ll MOD = 1e9 + 7;
-// const ll INF = 1e9 + 7;
-// const ll MOD = 998244353;
+const ll lINF = (ll)1e18 + 007;
+const int MOD = 1e9 + 007;
+const int iINF = 1e9 + 007;
+// const int MOD = 998244353;
 // ll MOD;
 
 
 
 
 
-const ll tasz = 1e6 + 7;
+const ll tasz = 1e6 + 007;
 ll a[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
 
 
 
 void solve() {
-    ll n, x;
+    // #warning: Switch to the Global larger array size after debugging
+    int x, n;
     cin >> x >> n;
-    set<pl> s = {{x, 0}};
-    f0r(i,x){
-        cin >> a[i];
-        
+    set<int> lims;
+    multiset<int> diff;
+    lims.insert(0);
+    lims.insert(x);
+    diff.insert(x);
+    f0r(i,n){
+        int p;
+        cin >> p;
+        auto r = lims.lb(p);
+        auto rv = *(r);
+        auto lv = *(--r);
+        r++;
+        diff.erase(diff.lb(rv - lv));
+        diff.insert(rv - p);
+        diff.insert(p - lv);
+        lims.insert(p);
+        cout << *diff.rbegin() << " ";
     }
-
 }
 
 
@@ -105,7 +127,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         solve();
 

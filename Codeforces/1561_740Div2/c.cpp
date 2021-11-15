@@ -110,20 +110,45 @@ const int iINF = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
-
+const int tasz = 1e6 + 007;
+int a[tasz];
+// int b[tasz];
+// int c[tasz];
 
 
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
-
-
-
+    int n;
+    cin >> n;
+    vvi cave(n);
+    vpi req;
+    vi sizCave;
+    f0r(i,n){
+        int t;
+        cin >> t;
+        sizCave.pb(t);
+        vi tmp(t);
+        f0r(j,t){
+            cin >> tmp[j];
+        }
+        cave.pb(tmp);
+        int mx = 0;
+        f0r(j,t){
+            remax(mx, tmp[j] - j);
+        }
+        req.pb({mx, i});
+    }
+    sort(all(req));
+    vi sum(n);
+    f1r(i,1,n-1){
+        sum[i] = sum[i-1] + sizCave[req[i - 1].ss];
+    }
+    int res = 0;
+    f0r(i,n){
+        remax(res, req[i].ff - sum[i]);
+    }
+    cout << res + 1 << '\n';
 }
 
 

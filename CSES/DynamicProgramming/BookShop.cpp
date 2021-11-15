@@ -1,6 +1,4 @@
-#include <bits/extc++.h>
-// #include <bits/stdc++.h>
-using namespace __gnu_pbds;
+#include <bits/stdc++.h>
 using namespace std;
 
 // #pragma GCC optimize("Ofast")
@@ -9,8 +7,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("sse4")
 
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -73,31 +71,6 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 /* shuffle(permutation.begin(), permutation.end(), rng); */
 
 
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
-
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
-
-typedef unordered_map<int, int, custom_hash> u_map;
-typedef gp_hash_table<int, int, custom_hash> gp_h_table;
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ord_set;
-
-// because comp fns require strict ordering less_equal will FLIP upper_bound and lower_bound for ord_multiset
-typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update> ord_multiset;
-// Also for some reason ord_multiset just gives an error on my compiler "msys64/mingw64/include/c++/10.3.0"
-// Works on CF servers tho, (G++17 9.2.0)
-
-
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
 const ll lINF = (ll)1e18 + 007;
@@ -110,20 +83,59 @@ const int iINF = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
+const ll tasz = 1e5 + 007;
+int c[1000];
+int p[1000];
+int pages[tasz];
+bool ok[tasz];
 
-
+bool taken[1000];
+int n, mx;
+int calcPages(int m){
+    if (ok[m]) return pages[m];
+    f0r(i,n){
+        if(m - c[i]>=0&&!taken[i]){
+            taken[i] = true;
+            int tmp = pages[m];
+            remax(pages[m], calcPages(m - c[i]) + p[i]);
+            pages[m] = tmp;
+            taken[i] = false;
+        }
+    }
+    ok[m] = true;
+    return pages[m];
+}
 
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
+    // int c[10];
+    // int p[10];
+    // vi pages(11);
 
+    // int n, mx;
+    cin >> n >> mx;
+    ai(c, n);
+    ai(p, n);
+    pages[0] = 0;
+    ok[0] = true;
 
+    cout << calcPages(mx) << endl;
 
+    // pages[0] = 0;
+    // f1r(i, 1,mx){
+    //     pages[i] = pages[i - 1];
+    //     for (int j = 1; j <= n; j++){ //Book No.
+    //         if (i - c[j - 1] >= 0) remax(pages[i], pages[i - c[j - 1]] + p[j - 1]);
+    //     }
+    // }
+    // f0r(i,mx+1){
+    //     i > 0 && remax(pages[i], pages[i - 1]);
+    //     for (int j = 1; j <= n; j++){ //Book No.
+    //         if (i + c[j - 1] <= mx) remax(pages[i + c[j - 1]], pages[i] + p[j - 1]);
+    //     }
+    // }
+    // cout << pages[mx] << endl;
 }
 
 
@@ -138,7 +150,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         solve();
 

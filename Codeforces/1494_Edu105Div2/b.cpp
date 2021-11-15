@@ -1,4 +1,6 @@
+/* Author: OnMyZenith - https://github.com/OnMyZenith */
 #include <bits/extc++.h>
+#include <chrono>
 // #include <bits/stdc++.h>
 using namespace __gnu_pbds;
 using namespace std;
@@ -9,14 +11,17 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("sse4")
 
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
 #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
-#define f0r(a, b) for (long long a = 0; a < (b); ++a)
-#define f1r(a, b, c) for (long long a = (b); a <= (c); ++a)
-#define f0rd(a, b) for (long long a = (b); a >= 0; --a)
-#define f1rd(a, b, c) for (long long a = (b); a >= (c); --a)
+#define f0r(a, b) for (int a = 0; a < (b); ++a)
+#define f1r(a, b, c) for (int a = (b); a <= (c); ++a)
+#define f0rd(a, b) for (int a = (b); a >= 0; --a)
+#define f1rd(a, b, c) for (int a = (b); a >= (c); --a)
 #define pb push_back
 #define vamos {ios_base::sync_with_stdio(false);cin.tie(nullptr);}
 #define fix(prec) {cout << setprecision(prec) << fixed;}
@@ -99,8 +104,8 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics
 
 
 const long double eps = 1e-7;
-const ld PI = 3.14159265358979323846;
-const ll lINF = (ll)1e18 + 007;
+const ld PI = 3.14159265358979323846L;
+const ll lINF = (ll)1e18L + 007;
 const int MOD = 1e9 + 007;
 const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
@@ -110,20 +115,75 @@ const int iINF = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
 
 
 
 
-void solve() {
+void solve(int TC) {
     // #warning: Switch to the Global larger array size after debugging
-    
+    ll n, u, d, l, r;
+    cin >> n >> u >> r >> d >> l;
+    if(d>n||r>n||l>n||u>n){
+        cout << "NO\n";
+        return;
+    }
+    if(l+r+d+u>4*n-2){
+        cout << "NO\n";
+        return;
+    }
+    if (u > d) swap(u, d);
+    if (l > r) swap(l, r);
+    if(d+r>=2*n){
+        cout << "NO\n";
+        return;
+    }
+    if(l+r+d>=3*n-1){
+        cout << "NO\n";
+        return;
+    }
+    if(u+r+d>=3*n-1){
+        cout << "NO\n";
+        return;
+    }
+    if(d==n&&u==n&&(l<2||r<2)){
+        cout << "NO\n";
+        return;
+    }
+    if(d==n&&(l<1||r<1)){
+        cout << "NO\n";
+        return;
+    }
+    if(l==n&&r==n&&(u<2||d<2)){
+        cout << "NO\n";
+        return;
+    }
+    if(r==n&&(u<1||d<1)){
+        cout << "NO\n";
+        return;
+    }
+    if(d==n-1&&u==n-1&&(l<1&&r<1)){
+        cout << "NO\n";
+        return;
+    }
+    // if(d==n-1&&(l<1||r<1){
+    //     cout << "NO\n";
+    //     return;
+    // }
+    if(l==n-1&&r==n-1&&(u<1&&d<1)){
+        cout << "NO\n";
+        return;
+    }
+    // if(r==n-1&&(u<1||d<1){
+    //     cout << "NO\n";
+    //     return;
+    // }
+    cout << "YES\n";
 
-
-
+    // cout << "Case #" << TC << ": "<< ans << '\n';
 }
 
 
@@ -137,10 +197,10 @@ int main() {
 
     fix(15);
 
-    int T = 1;
-    cin >> T;
-    while (T--)
-        solve();
+    int TT = 1;
+    cin >> TT;
+    f1r(TC,1,TT)
+        solve(TC);
 
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();

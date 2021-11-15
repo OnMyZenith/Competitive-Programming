@@ -120,10 +120,19 @@ ll a[tasz];
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
-
-
-
+    int n;
+    string s;
+    cin >> n >> s;
+    vi v1, v0;
+    int cnt0 = 0;
+    f0r(i, n) if (s[i] == '0') cnt0++;
+    f0r(i, cnt0) if (s[i] == '1') v1.pb(i);
+    f1r(i, cnt0, n - 1) if (s[i] == '0') v0.pb(i);
+    if(sz(v1) + sz(v0)) cout << 1 << '\n';
+    cout << sz(v1) + sz(v0) << " ";
+    f0r(i, sz(v1)) cout << v1[i] + 1<< " ";
+    f0r(i, sz(v0)) cout << v0[i] + 1<< " ";
+    cout << '\n';
 }
 
 

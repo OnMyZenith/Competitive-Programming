@@ -96,85 +96,80 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
-const ll lINF = 1e18 + 007;
+const ll lINF = (ll)1e18 + 007;
 const int MOD = 1e9 + 007;
 const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-const int tasz = 1e6 + 007;
-
-int mx(int n){
-    int ans = n%10;
-    while(n/=10)
-        remax(ans, n % 10);
-    return ans;
+const ll tasz = 1e6 + 007;
+// ll a[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
+int count(string s, char c)
+{
+    // Count variable
+    int res = 0;
+ 
+    for (int i=0;i<s.length();i++)
+ 
+        // checking character in string
+        if (s[i] == c)
+            res++;
+ 
+    return res;
 }
-
-//-----------------------------------------------------
-// It was in DP section
-// All DP sols give TLE -_-
-//-----------------------------------------------------
-//
-// Recursive DP
-//
-// int F[tasz];
-// bool ok[tasz];
-// int f(int n){
-//     F[n] = iINF;
-//     f0r(i,(int)to_string(n).length()){
-//         int x = n - (to_string(n)[i] - '0');
-//         if(x>=0&&x<n){
-//             if (ok[x]) F[n] = min(F[x] + 1, F[n]);
-//             else
-//                 F[n] = min(f(x) + 1, F[n]);
-//         }
-//     }
-//     ok[n] = true;
-//     return F[n];
-// }
-
-// void solve() {
-    // #warning: Switch to the Global larger array size after debugging
-    // int n;
-    // cin >> n;
-    // vi F(n + 1, iINF);
-    // F[0] = 0;
-    // ok[0] = true;
-    // cout << f(n) << endl;
-
-    // Push DP
-    //
-    // f0r(i, n) {
-    //     for (int j = 1; j <= 9 && i + j <= n; j++) {
-    //         if (to_string(i + j).find((char)j + '0') != string::npos)
-    //             F[i + j] = min(F[i + j], F[i] + 1);
-    //     }
-    // }
-
-    // Pull DP
-    //
-    // f1r(i, 1, n + 1) {
-    //     for (int j = 1; j <= 9 && i - j >= 0; j++) {
-    //         if (to_string(i).find((char)j + '0') != string::npos)
-    //             F[i] = min(F[i], F[i - j] + 1);
-    //     }
-    // }
-
-    // cout << F[n] << endl;
-// }
-
-
-int fin(int n){
-    if (n == 0) return 0;
-    return fin(n - mx(n)) + 1;
-}
-
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    int n;
-    cin >> n;
-    cout << fin(n) << endl;
+    ll k;
+    string s;
+    cin >> k >> s;
+    vl v = {1, 4, 6, 8, 9};
+    for (auto i : v) {
+        if (s.find(i + '0') != string::npos) {
+            cout << 1 << endl
+                 << i << endl;
+            return;
+        }
+    }
+    if (sz(s) > 1) {
+        vector<char> v1 = {'3', '7'};
+        for (auto i : v1) {
+            if (count(s,i)>=2) {
+                    cout << 2 << endl
+                         << to_string(i-'0')+to_string(i-'0')<< endl;
+                return;
+            }
+        }
+
+        v = {2, 5};
+        for (auto i : v) {
+            if (s.find(i + '0', 1) != string::npos) {
+                    cout << 2 << endl
+                         << s[0] + to_string(i) << endl;
+                return;
+            }
+        }
+        if (s[0] == '2') {
+            v = {7};
+            for (auto i : v) {
+                if (s.find(i + '0', 1) != string::npos) {
+                    cout << 2 << endl
+                         << '2' + to_string(i) << endl;
+                    return;
+                }
+            }
+        } else if (s[0] == '5') {
+            v = {7};
+            for (auto i : v) {
+                if (s.find(i + '0', 1) != string::npos) {
+                    cout << 2 << endl
+                         << '5' + to_string(i) << endl;
+                    return;
+                }
+            }
+        }
+    }
 }
 
 int main() {
@@ -188,7 +183,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    // cin >> T;
+    cin >> T;
     while (T--)
         solve();
 

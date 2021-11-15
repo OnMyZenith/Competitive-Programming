@@ -18,24 +18,45 @@ using namespace std;
 #define f0rd(a, b) for (long long a = (b); a >= 0; --a)
 #define f1rd(a, b, c) for (long long a = (b); a >= (c); --a)
 #define pb push_back
-#define vamos {ios_base::sync_with_stdio(false);cin.tie(nullptr);}
-#define fix(prec) {cout << setprecision(prec) << fixed;}
+#define vamos                             \
+    {                                     \
+        ios_base::sync_with_stdio(false); \
+        cin.tie(nullptr);                 \
+    }
+#define fix(prec) \
+    { cout << setprecision(prec) << fixed; }
 #define mp make_pair
 #define ff first
 #define ss second
 #define all(v) v.begin(), v.end()
-#define ai(a, n) for (int ele = 0; ele < n; ele++) cin >> a[ele];
-#define ain(a, lb, rb) for (int ele = lb; ele <= rb; ele++) cin >> a[ele];
-#define ao(a, n) {for (int ele = 0; ele < (n); ele++) { if (ele) cout << " "; cout << a[ele]; } cout << '\n';}
-#define aout(a, lb, rb) {for (int ele = (lb); ele <= (rb); ele++) { if (ele > (lb)) cout << " "; cout << a[ele]; } cout << '\n';}
-#define sz(x) ((long long) x.size())
-#define trav(a,x) for (auto& a : x)
+#define ai(a, n)                      \
+    for (int ele = 0; ele < n; ele++) \
+        cin >> a[ele];
+#define ain(a, lb, rb)                   \
+    for (int ele = lb; ele <= rb; ele++) \
+        cin >> a[ele];
+#define ao(a, n)                              \
+    {                                         \
+        for (int ele = 0; ele < (n); ele++) { \
+            if (ele) cout << " ";             \
+            cout << a[ele];                   \
+        }                                     \
+        cout << '\n';                         \
+    }
+#define aout(a, lb, rb)                            \
+    {                                              \
+        for (int ele = (lb); ele <= (rb); ele++) { \
+            if (ele > (lb)) cout << " ";           \
+            cout << a[ele];                        \
+        }                                          \
+        cout << '\n';                              \
+    }
+#define sz(x) ((long long)x.size())
+#define trav(a, x) for (auto &a : x)
 #define lb lower_bound
 #define ub upper_bound
 #define eq equal_range
 #define endl '\n'
-
-
 
 typedef long long ll;
 typedef long double ld;
@@ -61,17 +82,19 @@ typedef vector<pi> vpi;
 typedef vector<pl> vpl;
 typedef vector<pd> vpd;
 
-template<typename X, typename Y> X& remin(X& x, const Y& y) { return x = (y < x) ? y : x; }
-template<typename X, typename Y> X& remax(X& x, const Y& y) { return x = (x < y) ? y : x; }
-template<typename X, typename Y> bool ckmin(X& x, const Y& y) { return (y < x) ? (x=y,1):0; }
-template<typename X, typename Y> bool ckmax(X& x, const Y& y) { return (x < y) ? (x=y,1):0; }
-
+template <typename X, typename Y>
+X &remin(X &x, const Y &y) { return x = (y < x) ? y : x; }
+template <typename X, typename Y>
+X &remax(X &x, const Y &y) { return x = (x < y) ? y : x; }
+template <typename X, typename Y>
+bool ckmin(X &x, const Y &y) { return (y < x) ? (x = y, 1) : 0; }
+template <typename X, typename Y>
+bool ckmax(X &x, const Y &y) { return (x < y) ? (x = y, 1) : 0; }
 
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count());
 // mt19937 rng(61378913);
 /* usage - just do rng() */
 /* shuffle(permutation.begin(), permutation.end(), rng); */
-
 
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -97,7 +120,6 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics
 // Also for some reason ord_multiset just gives an error on my compiler "msys64/mingw64/include/c++/10.3.0"
 // Works on CF servers tho, (G++17 9.2.0)
 
-
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
 const ll lINF = (ll)1e18 + 007;
@@ -106,26 +128,39 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-
-
-
-
 const ll tasz = 1e6 + 007;
-ll a[tasz];
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
-
-
-
-
+void printDivisors(int n) {
+    for (int i = 1; i <= n; i++)
+        if (n % i == 0)
+            cout << i << " ";
+}
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
+    int n, l;
+    cin >> n;
+    vi f(30);
+    f0r(i, n) {
+        cin >> l;
+        int j = 0;
+        while (l) {
+            f[j] += l & 1;
+            l = l >> 1;
+            j++;
+        }
+    }
+    int gc = 0;
+    f0r(i, 30) gc = gcd(gc, f[i]);
+    if (gc == 0) {
+        f1r(i, 1, n) cout << i << " ";
+    } else {
+        printDivisors(gc);
+    }
 
-
-
+    cout << '\n';
 }
-
 
 int main() {
 
@@ -145,7 +180,7 @@ int main() {
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count()*1000 << " ms" << endl;
+    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
 #endif
 
     return 0;

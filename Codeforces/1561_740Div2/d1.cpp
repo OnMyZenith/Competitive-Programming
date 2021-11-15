@@ -9,8 +9,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("sse4")
 
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -111,19 +111,33 @@ const int iINF = 1e9 + 007;
 
 
 const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
 
-
-
+int dp[tasz];
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
+    int n, m;
+    cin >> n >> m;
+    dp[n] = 1;
+    f1rd(i,n,1){
+        // if (i + 1 <= n) dp[i] += dp[i + 1];
+        // if (i * 2 <= n) dp[i] += dp[i * 2];
+        // if (dp[i] >= m) dp[i] -= m;
 
+        for (int j = 1; i + j <= n; j++){//sub
+            dp[i] += dp[i + j];
+            if (dp[i] >= m) dp[i] -= m;
+        }
+        for (int j = 2; i*j <=n; j++){//mult
+            for (int k = 0; k < i&&i*j+k<=n; k++){
+                dp[i] += dp[i * j + k];
+                if (dp[i] >= m) dp[i] -= m;
+            }
+            // dp[i/j] += dp[i];
+        }
+    }
 
-
+    cout << dp[1] << endl;
 }
 
 
@@ -138,7 +152,7 @@ int main() {
     fix(15);
 
     int T = 1;
-    cin >> T;
+    // cin >> T;
     while (T--)
         solve();
 

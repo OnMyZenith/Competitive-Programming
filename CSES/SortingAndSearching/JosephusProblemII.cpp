@@ -120,12 +120,25 @@ ll a[tasz];
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
+    int n, k;
+    cin >> n >> k;
+    set<int> s;
+    f0r(i, n) s.insert(i + 1);
+    auto it = s.begin();
+    while (!s.empty()) {
+        int r = k % s.size();
+        while (r--) {
+            it++;
+            if (it == s.end()) it = s.begin();
+        }
+        cout << *it << " ";
+        it = s.erase(it);
+        if (it == s.end()) it = s.begin();
+    }
 
 
 
 }
-
 
 int main() {
 

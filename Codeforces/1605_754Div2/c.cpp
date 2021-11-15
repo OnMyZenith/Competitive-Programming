@@ -110,28 +110,56 @@ const int iINF = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
+// const ll tasz = 1e6 + 007;
+// ll a[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
 
 
 
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
+    int n;
+    string s;
+    cin >> n >> s;
+    f0r(i,n) {
+        if(i<n-1&&s[i]=='a'&&s[i+1]=='a'){
+            cout << 2 << '\n';
+            return;
+        }
+    }
+    f0r(i,n) {
 
+        if(i<n-2&&s[i]=='a'&&s[i+2]=='a'){
+            cout << 3 << '\n';
+            return;
+        }
 
+    }
+    f0r(i,n) {
 
+        if(i<n-3&&s[i]=='a'&&s[i+3]=='a'&&s[i+1]!=s[i+2]){
+            cout << 4 << '\n';
+            return;
+        }
+    }
+    f0r(i,n) {
+
+        if(i<n-6&&s[i]=='a'&&s[i+3]=='a'&&s[i+6]=='a'&&s[i+1]!=s[i+5]&&s[i+1]==s[i+2]&&s[i+4]==s[i+5]){
+            cout << 7 << '\n';
+            return;
+        }
+    }
+    cout << -1 << '\n';
 }
 
 
 int main() {
 
-#ifdef asr
-    auto begin = chrono::high_resolution_clock::now();
-#endif
+// #ifdef asr
+//     auto begin = chrono::high_resolution_clock::now();
+// #endif
 
     vamos;
 
@@ -142,11 +170,11 @@ int main() {
     while (T--)
         solve();
 
-#ifdef asr
-    auto end = chrono::high_resolution_clock::now();
-    cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count()*1000 << " ms" << endl;
-#endif
+// #ifdef asr
+//     auto end = chrono::high_resolution_clock::now();
+//     cout << setprecision(2) << fixed;
+//     cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count()*1000 << " ms" << endl;
+// #endif
 
     return 0;
 }

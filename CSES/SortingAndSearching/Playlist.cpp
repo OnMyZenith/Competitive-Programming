@@ -1,11 +1,15 @@
-#include <bits/stdc++.h>
+#include <bits/extc++.h>
+using namespace __gnu_pbds;
 using namespace std;
 
-// #pragma GCC optimization ("O3")
-// #pragma GCC optimization ("unroll-loops")
-// #pragma optimization_level 3
-// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+// #pragma GCC optimize("Ofast")
+// #pragma GCC target("avx,avx2,fma")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
 #define f0r(a, b) for (long long a = 0; a < (b); ++a)
@@ -24,6 +28,10 @@ using namespace std;
 #define ao(a, n) {for (int ele = 0; ele < (n); ele++) { if (ele) cout << " "; cout << a[ele]; } cout << '\n';}
 #define aout(a, lb, rb) {for (int ele = (lb); ele <= (rb); ele++) { if (ele > (lb)) cout << " "; cout << a[ele]; } cout << '\n';}
 #define sz(x) ((long long) x.size())
+#define trav(a,x) for (auto& a : x)
+#define lb lower_bound
+#define ub upper_bound
+#define eq equal_range
 #define endl '\n'
 
 
@@ -66,41 +74,15 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846;
-const ll INF = 1e18 + 7;
-const ll MOD = 1e9 + 7;
-// const ll INF = 1e9 + 7;
-// const ll MOD = 998244353;
+const ll lINF = (ll)1e18 + 007;
+const int MOD = 1e9 + 007;
+const int iINF = 1e9 + 007;
+// const int MOD = 998244353;
 // ll MOD;
 
-// You are given a playlist of a radio station since its establishment. The playlist has a total of n songs.
-
-// What is the longest sequence of successive songs where each song is unique?
-
-// Input
-
-// The first input line contains an integer n: the number of songs.
-
-// The next line has n integers k1,k2,…,kn: the id number of each song.
-
-// Output
-
-// Print the length of the longest sequence of unique songs.
-
-// Constraints
-// 1≤n≤2⋅105
-// 1≤ki≤109
-// Example
-
-// Input:
-// 8
-// 1 2 1 3 2 7 4 2
-
-// Output:
-// 5
 
 
-#include <bits/extc++.h>
-using namespace __gnu_pbds;
+
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -119,28 +101,26 @@ struct custom_hash {
 
 
 
-const ll tasz = 1e6 + 7;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
-
+const int tasz = 1e6 + 7;
+int a[tasz];
 
 
 
 void solve() {
-    ll n;
-    gp_hash_table<ll, vl, custom_hash> m;
-    f0r(i,n) cin >> a[i], m[a[i]].pb(i);
-    vl ers;
-    for(auto i:m) if(sz(i.ss) == 1) ers.pb(i.ff);
-    f0r(i,sz(ers)) m.erase(ers[i]);
-    
-    for(auto i:m) {
-        f0r(j,sz(i.ss)){
-
-
+    int n;
+    cin >> n;
+    gp_hash_table<int, int, custom_hash> m;
+    // unordered_map<int, int> m;
+    int ans = 0, strt = 0;
+    f0r(i,n){
+        cin >> a[i];
+        if(m.find(a[i])!=m.end()){
+            remax(strt,m[a[i]] + 1);
         }
+        m[a[i]] = i;
+        remax(ans, i - strt + 1);
     }
+    cout << ans << '\n';
 }
 
 

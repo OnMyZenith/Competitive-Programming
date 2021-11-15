@@ -110,19 +110,19 @@ const int iINF = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
+// const ll tasz = 1e6 + 007;
+// ll a[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
 
 
 
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
-
-
+    int a, b, c;
+    cin >> a >> b >> c;
+    cout<<min(abs(a + c - 2 * b) % 3,1)<<'\n';
 
 }
 

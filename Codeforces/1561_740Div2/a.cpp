@@ -110,8 +110,8 @@ const int iINF = 1e9 + 007;
 
 
 
-const ll tasz = 1e6 + 007;
-ll a[tasz];
+const int tasz = 1e6 + 007;
+int a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
@@ -120,10 +120,24 @@ ll a[tasz];
 
 void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    
-
-
-
+    int n;
+    cin >> n;
+    f0r(i, n) cin >> a[i];
+    int ans=0;
+    bool f = true;
+    bool it = true;
+    while(f){
+        f = false;
+        f0r(i, n - 1) if (a[i] > a[i + 1]) {
+            f = true;
+            break;
+        }
+        if (it) f0r(i, n / 2) if (a[2 * i] > a[2 * i + 1]) swap(a[2 * i], a[2 * i + 1]);
+        if (!it) f0r(i, n / 2) if (a[2 * i + 1] > a[2 * i + 2]) swap(a[2 * i + 1], a[2 * i + 2]);
+        if (f) ans++;
+        it = !it;
+    }
+    cout << ans << endl;
 }
 
 

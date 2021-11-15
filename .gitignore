@@ -52,3 +52,5 @@ t_out
 gen.cpp
 validator.cpp
 stress.bat
+_default.cpp
+
