@@ -34,6 +34,7 @@ using namespace std;
 #define ff first
 #define ss second
 #define all(v) v.begin(), v.end()
+#define rall(v) v.rbegin(), v.rend()
 #define ai(a, n)                      \
     for (int ele = 0; ele < n; ele++) \
         cin >> a[ele];
@@ -138,45 +139,19 @@ ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
-void solve(int TC) {
+void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    ll n;
-    string s;
-    cin >> s;
-    n = sz(s);
-    ll f[3] = {0};
-    f0r(i, n) {
-        f[s[i] - 'A']++;
-    }
-    if (abs(f[s[0] - 'A'] - f[s[n - 1] - 'A']) != f[3 - (s[0] - 'A' + s[n - 1] - 'A')]) {
-        cout << "NO\n";
-        return;
-    }
-    string res;
-    if (f[s[0] - 'A'] > f[s[n - 1] - 'A']) {
-        f0r(i, n) {
-            if (s[i] == s[0]) res += '{';
-            else
-                res += '}';
-        }
-    } else {
-        f0r(i, n) {
-            if (s[i] == s[n - 1]) res += '}';
-            else
-                res += '{';
-        }
-    }
-    stack<bool> sk;
-    f0r(i, n) {
-        if (res[i] == '{') sk.push(1);
-        else if (!sk.empty())
-            sk.pop();
-        else {
-            cout << "NO\n";
-            return;
-        }
-    }
-    cout << "YES\n";
+    int x, y;
+    cin >> x >> y;
+    if (x % 2 == 0 && y % 2 == 0)
+        cout << x / 2 << " " << y / 2 << '\n';
+    else if ((x + y) % 2 == 0)
+        if (x > y)
+            cout << (x + y) / 2 << " " << 0 << '\n';
+        else
+            cout << 0 << " " << (x + y) / 2 << '\n';
+    else
+        cout << "-1 -1\n";
 }
 
 int main() {
@@ -192,7 +167,7 @@ int main() {
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
-        solve(TC);
+        solve();
 
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();

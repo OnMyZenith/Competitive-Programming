@@ -17,59 +17,52 @@ using namespace std;
 #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
+#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr);
+#define fix(prec) cout << setprecision(prec) << fixed;
+
+#define tcT template <class T
+#define tcTU tcT, class U
+
 #define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
-#define f0r(a, b) for (int a = 0; a < (b); ++a)
-#define f1r(a, b, c) for (int a = (b); a <= (c); ++a)
-#define f0rd(a, b) for (int a = (b); a >= 0; --a)
-#define f1rd(a, b, c) for (int a = (b); a >= (c); --a)
+#define f0r(i, n) for (int i = 0; i < (n); ++i)
+#define f1r(i, l, r) for (int i = (l); i <= (r); ++i)
+#define f0rd(i, n) for (int i = (n); i >= 0; --i)
+#define f1rd(i, l, r) for (int i = (l); i >= (r); --i)
+#define each(i, a) for (auto &i : a)
+
+#define ai(a, n) f0r(i, n) cin >> a[i];
+#define ain(a, l, r) f1r(i, l, r) cin >> a[i];
+#define ao(a, n) f0r(i, n) cout << a[i] << " \n"[i == n - 1];
+#define aout(a, l, r) f1r(i, l, r) cout << a[i] << " \n"[i == r];
+
 #define pb push_back
-#define vamos                             \
-    {                                     \
-        ios_base::sync_with_stdio(false); \
-        cin.tie(nullptr);                 \
-    }
-#define fix(prec) \
-    { cout << setprecision(prec) << fixed; }
+#define eb emplace_back
 #define mp make_pair
 #define ff first
 #define ss second
-#define all(v) v.begin(), v.end()
-#define ai(a, n)                      \
-    for (int ele = 0; ele < n; ele++) \
-        cin >> a[ele];
-#define ain(a, lb, rb)                   \
-    for (int ele = lb; ele <= rb; ele++) \
-        cin >> a[ele];
-#define ao(a, n)                              \
-    {                                         \
-        for (int ele = 0; ele < (n); ele++) { \
-            if (ele) cout << " ";             \
-            cout << a[ele];                   \
-        }                                     \
-        cout << '\n';                         \
-    }
-#define aout(a, lb, rb)                            \
-    {                                              \
-        for (int ele = (lb); ele <= (rb); ele++) { \
-            if (ele > (lb)) cout << " ";           \
-            cout << a[ele];                        \
-        }                                          \
-        cout << '\n';                              \
-    }
-#define sz(x) ((long long)x.size())
-#define trav(a, x) for (auto &a : x)
 #define lb lower_bound
 #define ub upper_bound
+#define ins insert
+#define ft front()
+#define bk back()
+#define rsz resize
 #define eq equal_range
 #define endl '\n'
+
+#define all(v) v.begin(), v.end()
+#define sor(v) sort(v.begin(), v.end())
+#define rall(v) v.rbegin(), v.rend()
+#define sz(x) ((long long)x.size())
+#define bg(x) x.begin()
+
 
 typedef long long ll;
 typedef long double ld;
 typedef unsigned long long ull;
 
-typedef queue<int> qi;
-typedef queue<ll> ql;
-typedef queue<ld> qd;
+typedef string str;
+typedef vector<string> vs;
+typedef vector<bool> vb;
 
 typedef vector<int> vi;
 typedef vector<ll> vl;
@@ -87,19 +80,41 @@ typedef vector<pi> vpi;
 typedef vector<pl> vpl;
 typedef vector<pd> vpd;
 
-template <typename X, typename Y>
-X &remin(X &x, const Y &y) { return x = (y < x) ? y : x; }
-template <typename X, typename Y>
-X &remax(X &x, const Y &y) { return x = (x < y) ? y : x; }
-template <typename X, typename Y>
-bool ckmin(X &x, const Y &y) { return (y < x) ? (x = y, 1) : 0; }
-template <typename X, typename Y>
-bool ckmax(X &x, const Y &y) { return (x < y) ? (x = y, 1) : 0; }
+tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
+tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > using pqg = priority_queue<T, vector<T>, greater<T>>;
+tcT > using pq = priority_queue<T>;
+tcT > using Q = queue<T>;
+tcT > using V = vector<T>;
+
+tcTU > T fstTrue(T lo, T hi, U f) {
+    ++hi, assert(lo <= hi); // assuming f is increasing
+    while (lo < hi) { // find first index such that f is true
+        T mid = lo + (hi - lo) / 2;
+        f(mid) ? hi = mid : lo = mid + 1;
+    }
+    return lo;
+}
+tcTU > T lstTrue(T lo, T hi, U f) {
+    --lo, assert(lo <= hi); // assuming f is decreasing
+    while (lo < hi) { // find last index such that f is true
+        T mid = lo + (hi - lo + 1) / 2;
+        f(mid) ? lo = mid : hi = mid - 1;
+    }
+    return lo;
+}
+
+
+ll cdiv(ll a, ll b) { return a / b + ((a ^ b) > 0 && a % b); } // divide a by b rounded up
+ll fdiv(ll a, ll b) { return a / b - ((a ^ b) < 0 && a % b); } // divide a by b rounded down
 
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count());
 // mt19937 rng(61378913);
 /* usage - just do rng() */
 /* shuffle(permutation.begin(), permutation.end(), rng); */
+
 
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -125,6 +140,7 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics
 // Also for some reason ord_multiset just gives an error on my compiler "msys64/mingw64/include/c++/10.3.0"
 // Works on CF servers tho, (G++17 9.2.0)
 
+
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846L;
 const ll lINF = (ll)1e18L + 007;
@@ -133,51 +149,26 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
+
+
+
+
 const int tasz = 1e6 + 007;
 ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
-void solve(int TC) {
+
+
+
+void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    ll n;
-    string s;
-    cin >> s;
-    n = sz(s);
-    ll f[3] = {0};
-    f0r(i, n) {
-        f[s[i] - 'A']++;
-    }
-    if (abs(f[s[0] - 'A'] - f[s[n - 1] - 'A']) != f[3 - (s[0] - 'A' + s[n - 1] - 'A')]) {
-        cout << "NO\n";
-        return;
-    }
-    string res;
-    if (f[s[0] - 'A'] > f[s[n - 1] - 'A']) {
-        f0r(i, n) {
-            if (s[i] == s[0]) res += '{';
-            else
-                res += '}';
-        }
-    } else {
-        f0r(i, n) {
-            if (s[i] == s[n - 1]) res += '}';
-            else
-                res += '{';
-        }
-    }
-    stack<bool> sk;
-    f0r(i, n) {
-        if (res[i] == '{') sk.push(1);
-        else if (!sk.empty())
-            sk.pop();
-        else {
-            cout << "NO\n";
-            return;
-        }
-    }
-    cout << "YES\n";
+    
+
+
+
 }
+
 
 int main() {
 
@@ -192,12 +183,12 @@ int main() {
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
-        solve(TC);
+        solve();
 
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
+    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count()*1000 << " ms" << endl;
 #endif
 
     return 0;

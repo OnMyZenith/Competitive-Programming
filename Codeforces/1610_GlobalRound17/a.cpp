@@ -17,12 +17,6 @@ using namespace std;
 #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
-#define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
-#define f0r(a, b) for (int a = 0; a < (b); ++a)
-#define f1r(a, b, c) for (int a = (b); a <= (c); ++a)
-#define f0rd(a, b) for (int a = (b); a >= 0; --a)
-#define f1rd(a, b, c) for (int a = (b); a >= (c); --a)
-#define pb push_back
 #define vamos                             \
     {                                     \
         ios_base::sync_with_stdio(false); \
@@ -30,10 +24,17 @@ using namespace std;
     }
 #define fix(prec) \
     { cout << setprecision(prec) << fixed; }
-#define mp make_pair
-#define ff first
-#define ss second
-#define all(v) v.begin(), v.end()
+
+#define tcT template <class T
+#define tcTU tcT, class U
+
+#define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
+#define f0r(a, b) for (int a = 0; a < (b); ++a)
+#define f1r(a, b, c) for (int a = (b); a <= (c); ++a)
+#define f0rd(a, b) for (int a = (b); a >= 0; --a)
+#define f1rd(a, b, c) for (int a = (b); a >= (c); --a)
+#define each(a, x) for (auto &a : x)
+
 #define ai(a, n)                      \
     for (int ele = 0; ele < n; ele++) \
         cin >> a[ele];
@@ -56,16 +57,34 @@ using namespace std;
         }                                          \
         cout << '\n';                              \
     }
-#define sz(x) ((long long)x.size())
-#define trav(a, x) for (auto &a : x)
+
+#define pb push_back
+#define eb emplace_back
+#define mp make_pair
+#define ff first
+#define ss second
 #define lb lower_bound
 #define ub upper_bound
+#define ins insert
+#define ft front()
+#define bk back()
 #define eq equal_range
+
+#define all(v) v.begin(), v.end()
+#define sor(v) sort(v.begin(), v.end())
+#define rall(v) v.rbegin(), v.rend()
+#define sz(x) ((long long)x.size())
+#define bg(x) x.begin()
+#define end(x) x.end()
 #define endl '\n'
 
 typedef long long ll;
 typedef long double ld;
 typedef unsigned long long ull;
+
+typedef string str;
+typedef vector<string> vs;
+typedef vector<bool> vb;
 
 typedef queue<int> qi;
 typedef queue<ll> ql;
@@ -88,13 +107,11 @@ typedef vector<pl> vpl;
 typedef vector<pd> vpd;
 
 template <typename X, typename Y>
-X &remin(X &x, const Y &y) { return x = (y < x) ? y : x; }
-template <typename X, typename Y>
-X &remax(X &x, const Y &y) { return x = (x < y) ? y : x; }
-template <typename X, typename Y>
 bool ckmin(X &x, const Y &y) { return (y < x) ? (x = y, 1) : 0; }
 template <typename X, typename Y>
 bool ckmax(X &x, const Y &y) { return (x < y) ? (x = y, 1) : 0; }
+
+tcT > using V = vector<T>;
 
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count());
 // mt19937 rng(61378913);
@@ -133,50 +150,25 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
-void solve(int TC) {
+void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    ll n;
-    string s;
-    cin >> s;
-    n = sz(s);
-    ll f[3] = {0};
-    f0r(i, n) {
-        f[s[i] - 'A']++;
-    }
-    if (abs(f[s[0] - 'A'] - f[s[n - 1] - 'A']) != f[3 - (s[0] - 'A' + s[n - 1] - 'A')]) {
-        cout << "NO\n";
-        return;
-    }
-    string res;
-    if (f[s[0] - 'A'] > f[s[n - 1] - 'A']) {
-        f0r(i, n) {
-            if (s[i] == s[0]) res += '{';
-            else
-                res += '}';
-        }
+    int n, m;
+    cin >> n >> m;
+    if (m < n) swap(n, m);
+    if (n == 1 && m == 1) {
+        cout << 0 << '\n';
+    } else if (n <= 1) {
+        cout << 1 << '\n';
+    } else if (n <= 2) {
+        cout << 2 << '\n';
     } else {
-        f0r(i, n) {
-            if (s[i] == s[n - 1]) res += '}';
-            else
-                res += '{';
-        }
+        cout << 2 << '\n';
     }
-    stack<bool> sk;
-    f0r(i, n) {
-        if (res[i] == '{') sk.push(1);
-        else if (!sk.empty())
-            sk.pop();
-        else {
-            cout << "NO\n";
-            return;
-        }
-    }
-    cout << "YES\n";
 }
 
 int main() {
@@ -192,7 +184,7 @@ int main() {
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
-        solve(TC);
+        solve();
 
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();

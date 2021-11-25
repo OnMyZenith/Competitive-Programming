@@ -34,6 +34,7 @@ using namespace std;
 #define ff first
 #define ss second
 #define all(v) v.begin(), v.end()
+#define rall(v) v.rbegin(), v.rend()
 #define ai(a, n)                      \
     for (int ele = 0; ele < n; ele++) \
         cin >> a[ele];
@@ -138,45 +139,29 @@ ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
-void solve(int TC) {
+void solve() {
     // #warning: Switch to the Global larger array size after debugging
-    ll n;
-    string s;
-    cin >> s;
-    n = sz(s);
-    ll f[3] = {0};
-    f0r(i, n) {
-        f[s[i] - 'A']++;
+    int n, a, b;
+    cin >> n >> a >> b;
+    vi v;
+    int i = n;
+    while (sz(v) < n / 2 - 1) {
+        if (i != b && i != a) v.pb(i);
+        i--;
     }
-    if (abs(f[s[0] - 'A'] - f[s[n - 1] - 'A']) != f[3 - (s[0] - 'A' + s[n - 1] - 'A')]) {
-        cout << "NO\n";
-        return;
+    v.pb(a);
+    while (sz(v) < n - 1) {
+        if (i != b && i != a) v.pb(i);
+        i--;
     }
-    string res;
-    if (f[s[0] - 'A'] > f[s[n - 1] - 'A']) {
-        f0r(i, n) {
-            if (s[i] == s[0]) res += '{';
-            else
-                res += '}';
-        }
-    } else {
-        f0r(i, n) {
-            if (s[i] == s[n - 1]) res += '}';
-            else
-                res += '{';
-        }
-    }
-    stack<bool> sk;
-    f0r(i, n) {
-        if (res[i] == '{') sk.push(1);
-        else if (!sk.empty())
-            sk.pop();
-        else {
-            cout << "NO\n";
-            return;
-        }
-    }
-    cout << "YES\n";
+    v.pb(b);
+    bool f = true;
+    f0r(i, n) if (i < n / 2 && v[i] < a) f = false;
+    else if (i >= n / 2 && v[i] > b) f = false;
+    if (f) {
+        ao(v, n);
+    } else
+        cout << -1<<'\n';
 }
 
 int main() {
@@ -192,7 +177,7 @@ int main() {
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
-        solve(TC);
+        solve();
 
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();
