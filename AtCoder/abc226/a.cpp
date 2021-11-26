@@ -1,6 +1,6 @@
 /* Author: OnMyZenith - https://github.com/OnMyZenith */
 #include <bits/extc++.h>
-// #include <chrono>
+#include <chrono>
 // #include <bits/stdc++.h>
 using namespace __gnu_pbds;
 using namespace std;
@@ -79,18 +79,14 @@ typedef vector<pi> vpi;
 typedef vector<pl> vpl;
 typedef vector<pd> vpd;
 
-tcT > using V = vector<T>;
-tcT > using pqg = std::priority_queue<T, V<T>, greater<T>>;
-tcT > using pq = std::priority_queue<T>;
-tcT > using Q = queue<T>;
-
 tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
-tcT > ll cdiv(T &a, T &b) { return (ll)(a / b + ((a ^ b) > 0 && a % b)); }
-tcT > ll fdiv(T &a, T &b) { return (ll)(a / b - ((a ^ b) < 0 && a % b)); }
-tcT > int lwb(V<T> &a, const T &b) { return (int)(lb(all(a), b) - bg(a)); }
-tcT > int upb(V<T> &a, const T &b) { return (int)(ub(all(a), b) - bg(a)); }
-tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
+tcT > using V = vector<T>;
+tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
+tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > using pqg = __gnu_pbds::priority_queue<T, vector<T>, greater<T>>;
+tcT > using pq = __gnu_pbds::priority_queue<T>;
+tcT > using Q = queue<T>;
 
 tcTU > T fstTrue(T lo, T hi, U f) {
     ++hi, assert(lo <= hi); // assuming f is increasing
@@ -108,6 +104,9 @@ tcTU > T lstTrue(T lo, T hi, U f) {
     }
     return lo;
 }
+
+ll cdiv(ll a, ll b) { return a / b + ((a ^ b) > 0 && a % b); } // divide a by b rounded up
+ll fdiv(ll a, ll b) { return a / b - ((a ^ b) < 0 && a % b); } // divide a by b rounded down
 
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count());
 // mt19937 rng(61378913);
@@ -146,44 +145,16 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-bool isP(int n) {
-    str s;
-    for (int i = 0; n >> i > 0; i++)
-        s += ((n >> i & 1) ? "1" :"0");
-    str s1(rall(s));
-    return s == s1;
-}
-
-// const int tasz = 1e6 + 007;
-// ll a[tasz];
+const int tasz = 1e6 + 007;
+ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
-vi v;
-vi dp[1001];
-
 void solve() {
-    // Intializing ALL Global Vars b/w TCs---
-    // f0r(i, 1001) dp[i].clear();
-    // --------------------------------------
     // #warning: Switch to the Global larger array size after debugging
-    int n;
-    cin >> n;
-    // each(i, v) dp[i].pb(i);
-
-    // f1r(i, 1, n) {
-    //     each(j, v) {
-    //         if (i - j > 0 && sz(dp[i - j])) {
-    //             vi tmp(dp[i - j]);
-    //             tmp.pb(j);
-    //             if (!sz(dp[i]) || (sz(tmp) < sz(dp[i]))) dp[i] = tmp;
-    //         }
-    //     }
-    // }
-    if (sz(dp[n]) <= 12) {
-        cout << sz(dp[n]) << '\n';
-        ao(dp[n], sz(dp[n]));
-    }
+    ld a;
+    cin >> a;
+    cout << (int)round(a) << '\n';
 }
 
 int main() {
@@ -195,22 +166,9 @@ int main() {
     vamos;
 
     fix(15);
-    f0r(i, 1001) {
-        if (isP(i)) v.pb(i);
-    }
-    each(i, v) dp[i].pb(i);
-    f1r(i, 1, 1000) {
-        each(j, v) {
-            if (i - j <= 0) break;
-            if (sz(dp[i - j])) {
-                vi tmp(dp[i - j]);
-                tmp.pb(j);
-                if (!sz(dp[i]) || (sz(tmp) < sz(dp[i]))) dp[i] = tmp;
-            }
-        }
-    }
+
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

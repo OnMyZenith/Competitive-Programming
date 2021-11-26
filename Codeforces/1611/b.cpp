@@ -55,6 +55,7 @@ using namespace std;
 #define sz(x) ((long long)x.size())
 #define bg(x) x.begin()
 
+
 typedef long long ll;
 typedef long double ld;
 typedef unsigned long long ull;
@@ -94,7 +95,7 @@ tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 
 tcTU > T fstTrue(T lo, T hi, U f) {
     ++hi, assert(lo <= hi); // assuming f is increasing
-    while (lo < hi) {       // find first index such that f is true
+    while (lo < hi) { // find first index such that f is true
         T mid = lo + (hi - lo) / 2;
         f(mid) ? hi = mid : lo = mid + 1;
     }
@@ -102,17 +103,19 @@ tcTU > T fstTrue(T lo, T hi, U f) {
 }
 tcTU > T lstTrue(T lo, T hi, U f) {
     --lo, assert(lo <= hi); // assuming f is decreasing
-    while (lo < hi) {       // find last index such that f is true
+    while (lo < hi) { // find last index such that f is true
         T mid = lo + (hi - lo + 1) / 2;
         f(mid) ? lo = mid : hi = mid - 1;
     }
     return lo;
 }
 
+
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count());
 // mt19937 rng(61378913);
 /* usage - just do rng() */
 /* shuffle(permutation.begin(), permutation.end(), rng); */
+
 
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -138,6 +141,7 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics
 // Also for some reason ord_multiset just gives an error on my compiler "msys64/mingw64/include/c++/10.3.0"
 // Works on CF servers tho, (G++17 9.2.0)
 
+
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846L;
 const ll lINF = (ll)1e18L + 007;
@@ -146,45 +150,32 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-bool isP(int n) {
-    str s;
-    for (int i = 0; n >> i > 0; i++)
-        s += ((n >> i & 1) ? "1" :"0");
-    str s1(rall(s));
-    return s == s1;
-}
 
-// const int tasz = 1e6 + 007;
+
+
+
+const int tasz = 1e6 + 007;
 // ll a[tasz];
-// ll b[tasz];
-// ll c[tasz];
+// // ll b[tasz];
+// // ll c[tasz];
 
-vi v;
-vi dp[1001];
+
+
 
 void solve() {
     // Intializing ALL Global Vars b/w TCs---
-    // f0r(i, 1001) dp[i].clear();
+
+
+
     // --------------------------------------
     // #warning: Switch to the Global larger array size after debugging
-    int n;
-    cin >> n;
-    // each(i, v) dp[i].pb(i);
-
-    // f1r(i, 1, n) {
-    //     each(j, v) {
-    //         if (i - j > 0 && sz(dp[i - j])) {
-    //             vi tmp(dp[i - j]);
-    //             tmp.pb(j);
-    //             if (!sz(dp[i]) || (sz(tmp) < sz(dp[i]))) dp[i] = tmp;
-    //         }
-    //     }
-    // }
-    if (sz(dp[n]) <= 12) {
-        cout << sz(dp[n]) << '\n';
-        ao(dp[n], sz(dp[n]));
-    }
+    int a, b;
+    cin >> a >> b;
+    int m = (a + b) / 4;
+    int n = min(a, b);
+    cout << min(m, n) << '\n';
 }
+
 
 int main() {
 
@@ -195,20 +186,7 @@ int main() {
     vamos;
 
     fix(15);
-    f0r(i, 1001) {
-        if (isP(i)) v.pb(i);
-    }
-    each(i, v) dp[i].pb(i);
-    f1r(i, 1, 1000) {
-        each(j, v) {
-            if (i - j <= 0) break;
-            if (sz(dp[i - j])) {
-                vi tmp(dp[i - j]);
-                tmp.pb(j);
-                if (!sz(dp[i]) || (sz(tmp) < sz(dp[i]))) dp[i] = tmp;
-            }
-        }
-    }
+
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
@@ -217,7 +195,7 @@ int main() {
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
+    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count()*1000 << " ms" << endl;
 #endif
 
     return 0;

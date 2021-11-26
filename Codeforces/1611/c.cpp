@@ -146,43 +146,62 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-bool isP(int n) {
-    str s;
-    for (int i = 0; n >> i > 0; i++)
-        s += ((n >> i & 1) ? "1" :"0");
-    str s1(rall(s));
-    return s == s1;
-}
-
-// const int tasz = 1e6 + 007;
-// ll a[tasz];
+const int tasz = 1e6 + 007;
+int a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
-vi v;
-vi dp[1001];
+// void solve() {
+//     // Intializing ALL Global Vars b/w TCs---
+//     // rem.clear();
+//     // res.clear();
 
-void solve() {
-    // Intializing ALL Global Vars b/w TCs---
-    // f0r(i, 1001) dp[i].clear();
-    // --------------------------------------
-    // #warning: Switch to the Global larger array size after debugging
+//     // --------------------------------------
+//     // #warning: Switch to the Global larger array size after debugging
+//     int n;
+//     cin >> n;
+//     deque<int> rem, res;
+//     f0r(i, n) cin >> a[i];
+//     f0r(i, n) rem.push_back(a[i]);
+
+//     if (rem.ft > rem.bk) {
+//         res.push_front(rem.ft);
+//         rem.pop_front();
+//     } else {
+//         res.push_front(rem.bk);
+//         rem.pop_back();
+//     }
+//     while (!rem.empty()) {
+//         if (rem.ft <= rem.bk && rem.bk < res.ft) {
+//             res.push_back(rem.bk);
+//             rem.pop_back();
+//         } else if (rem.ft >= rem.bk && rem.ft < res.bk) {
+//             res.push_front(rem.ft);
+//             rem.pop_front();
+//         } else {
+//             cout << -1 << '\n';
+//             return;
+//         }
+//     }
+//     each(i, res) cout << i << " ";
+//     cout << endl;
+// }
+
+void solve(){
     int n;
     cin >> n;
-    // each(i, v) dp[i].pb(i);
-
-    // f1r(i, 1, n) {
-    //     each(j, v) {
-    //         if (i - j > 0 && sz(dp[i - j])) {
-    //             vi tmp(dp[i - j]);
-    //             tmp.pb(j);
-    //             if (!sz(dp[i]) || (sz(tmp) < sz(dp[i]))) dp[i] = tmp;
-    //         }
-    //     }
-    // }
-    if (sz(dp[n]) <= 12) {
-        cout << sz(dp[n]) << '\n';
-        ao(dp[n], sz(dp[n]));
+    f0r(i, n) cin >> a[i];
+    if(a[0]!=n&&a[n-1]!=n){
+        cout << -1 << '\n';
+        return;
+    }
+    if(a[0]==n){
+        cout << n << " \n"[n==1];
+        reverse(a + 1, a + n);
+        aout(a, 1, n - 1);
+    }else {
+        reverse(a, a + n - 1);
+        ao(a, n);
     }
 }
 
@@ -195,20 +214,7 @@ int main() {
     vamos;
 
     fix(15);
-    f0r(i, 1001) {
-        if (isP(i)) v.pb(i);
-    }
-    each(i, v) dp[i].pb(i);
-    f1r(i, 1, 1000) {
-        each(j, v) {
-            if (i - j <= 0) break;
-            if (sz(dp[i - j])) {
-                vi tmp(dp[i - j]);
-                tmp.pb(j);
-                if (!sz(dp[i]) || (sz(tmp) < sz(dp[i]))) dp[i] = tmp;
-            }
-        }
-    }
+
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
