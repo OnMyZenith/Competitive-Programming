@@ -130,7 +130,6 @@ struct custom_hash {
     }
 };
 
-typedef unordered_map<int, int, custom_hash> u_map;
 typedef gp_hash_table<int, int, custom_hash> gp_h_table;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ord_set;
 
@@ -147,21 +146,30 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
 void solve() {
     // Intializing ALL Global Vars b/w TCs---
     // #warning: Switch to the Global larger array size after debugging
-    ll n, l, r, k;
-    cin >> n >> l >> r >> k;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    ll re = 0;
-    f0r(i, n) if (a[i] >= l && a[i] <= r && k >= a[i]) re++, k -= a[i];
-    cout << re << '\n';
+    str s1, s2;
+    int n, cnt = 0;
+    cin >> n >> s1 >> s2;
+    vb ok(n, 1);
+    f0r(i, n) {
+        if ((s1[i] - '0') ^ (s2[i] - '0')) ok[i] = 0, cnt += 2;
+    }
+    f0r(i, n - 1) {
+        if (ok[i] && ok[i + 1] && s1[i] == '1' && s1[i + 1] == '0') ok[i] = 0, ok[i + 1] = 0, cnt += 2;
+        else if (ok[i] && ok[i + 1] && s1[i] == '0' && s1[i + 1] == '1')
+            ok[i] = 0, ok[i + 1] = 0, cnt += 2;
+    }
+    f0r(i, n) {
+        if (ok[i] && (s1[i] == '0')) ok[i] = 0, cnt++;
+    }
+    cout << cnt << nl;
 }
 
 int main() {

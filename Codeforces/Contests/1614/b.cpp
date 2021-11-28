@@ -148,20 +148,93 @@ const int iINF = 1e9 + 007;
 // ll MOD;
 
 const int tasz = 1e6 + 007;
-ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
 void solve() {
     // Intializing ALL Global Vars b/w TCs---
     // #warning: Switch to the Global larger array size after debugging
-    ll n, l, r, k;
-    cin >> n >> l >> r >> k;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    ll re = 0;
-    f0r(i, n) if (a[i] >= l && a[i] <= r && k >= a[i]) re++, k -= a[i];
-    cout << re << '\n';
+    int n, x;
+    cin >> n;
+    vpl a(n);
+    f0r(i, n) {
+        cin >> x;
+        a[i] = {-x, i};
+    }
+    sor(a);
+    deque<ll> dd;
+    ll fin = 0;
+    int j = 1;
+    bool f = 1;
+    dd.push_back(0);
+    each(i,a){
+        if(f){
+            dd.push_back(i.ss + 1);
+            fin += (-i.ff) * 2 * (j);
+        }else{
+            dd.push_front(i.ss + 1);
+            fin += (-i.ff) * 2 * (j);
+            j++;
+        }
+        f = !f;
+    }
+    cout << fin << nl;
+    vl res(n + 1);
+    j = 1;
+    each(i, dd) {
+        res[i] = j++;
+    }
+    ao(res, n + 1);
+    // deque<ll> d, d1;
+    // ll net = 0, nn = 0;
+    // ll r = 1, l = 1;
+    // d.push_back(0);
+    // each(i, a) {
+    //     if (net < 0) {
+    //         d.push_back(i.ss + 1);
+    //         net += (-i.ff) * 2 * (r);
+    //         nn += (-i.ff) * 2 * (r);
+    //         r++;
+    //     } else {
+    //         d.push_front(i.ss + 1);
+    //         net -= (-i.ff) * 2 * (l);
+    //         nn += (-i.ff) * 2 * (l);
+    //         l++;
+    //     }
+    // }
+    // ll net1 = 0, nn1 = 0;
+    // ll r1 = 1, l1 = 1;
+    // d1.push_back(0);
+    // each(i, a) {
+    //     if (net1 > 0) {
+    //         d1.push_front(i.ss + 1);
+    //         net1 -= (-i.ff) * 2 * (l1);
+    //         nn1 += (-i.ff) * 2 * (l1);
+    //         l1++;
+    //     } else {
+    //         d1.push_back(i.ss + 1);
+    //         net1 += (-i.ff) * 2 * (r1);
+    //         nn1 += (-i.ff) * 2 * (r1);
+    //         r1++;
+    //     }
+    // }
+    // if (ckmin(nn, nn1)) d = d1;
+    // cout << nn << nl;
+    // vl res(n + 1);
+    // ll j = 1;
+    // each(i, d) {
+    //     res[i] = j++;
+    // }
+    // bool f = 0;
+    // each(i, res) {
+    //     if (i > 1000000) f = 1;
+    // }
+    // if (f) {
+    //     each(i, res) {
+    //         i -= 500000;
+    //     }
+    // }
+    // ao(res, n + 1);
 }
 
 int main() {

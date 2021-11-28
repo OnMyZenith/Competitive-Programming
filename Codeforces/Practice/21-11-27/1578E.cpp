@@ -130,7 +130,6 @@ struct custom_hash {
     }
 };
 
-typedef unordered_map<int, int, custom_hash> u_map;
 typedef gp_hash_table<int, int, custom_hash> gp_h_table;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ord_set;
 
@@ -147,21 +146,30 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
 void solve() {
-    // Intializing ALL Global Vars b/w TCs---
+    // Intialize ALL Global Vars
+    // Don't rush into a rabbithole of wrong appraoch
     // #warning: Switch to the Global larger array size after debugging
-    ll n, l, r, k;
-    cin >> n >> l >> r >> k;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    ll re = 0;
-    f0r(i, n) if (a[i] >= l && a[i] <= r && k >= a[i]) re++, k -= a[i];
-    cout << re << '\n';
+    ll h, p;
+    cin >> h >> p;
+    ll curr = 1, t = 1;
+    while ((2 * curr - 1) < ((1LL << h) - 1)) {
+        if (2 * curr <= p)
+            curr *= 2, t++;
+        else {
+            ll l = (((1LL << h) - 1) - (2 * curr - 1));
+            t += cdiv(l, p);
+            break;
+        }
+    }
+    cout << t << nl;
+    // Take a minute to think of all edge cases
+    // Penalties can set you back by 20 mins.
 }
 
 int main() {

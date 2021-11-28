@@ -130,7 +130,6 @@ struct custom_hash {
     }
 };
 
-typedef unordered_map<int, int, custom_hash> u_map;
 typedef gp_hash_table<int, int, custom_hash> gp_h_table;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ord_set;
 
@@ -152,16 +151,58 @@ ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
+int n, m;
+V<vb> vis;
+V<vb> hwall, vwall;
+int cnt;
+
+void dfs(int x, int y) {
+    vis[x][y] = 1, cnt++;
+    if (!hwall[x][y]) {
+        hwall[x][y] = 1;
+        dfs(x, y - 1);
+    }
+    if (!hwall[x + 1][y]) {
+        hwall[x + 1][y] = 1;
+        dfs(x, y + 1);
+    }
+    if (!vwall[y][x]) {
+        vwall[y][x] = 1;
+        dfs(x - 1, y);
+    }
+    if (!vwall[y + 1][x]) {
+        vwall[y + 1][x] = 1;
+        dfs(x + 1, y);
+    }
+}
+
 void solve() {
     // Intializing ALL Global Vars b/w TCs---
     // #warning: Switch to the Global larger array size after debugging
-    ll n, l, r, k;
-    cin >> n >> l >> r >> k;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    ll re = 0;
-    f0r(i, n) if (a[i] >= l && a[i] <= r && k >= a[i]) re++, k -= a[i];
-    cout << re << '\n';
+    cin >> n >> m;
+    hwall.rsz(n + 1, vb(m));
+    vwall.rsz(m + 1, vb(n));
+    // r.rsz(n + 1, 0), c.rsz(m + 1, 0);
+    f0r(i, n) {
+        f0r(j, m) {
+            int x;
+            cin >> x;
+            bitset<4> b(x);
+            hwall[j][i] = b[0], hwall[i + 1][j] = b[2];
+            vwall[j][i] = b[3], vwall[j + 1][i] = b[1];
+        }
+    }
+    // ao(c, m);
+    // ao(r, n);
+    vis.rsz(n, vb(m));
+    vi fin;
+    f0r(i, n) {
+        f0r(j, m) {
+            if (!vis[i][j]) cnt = 0, dfs(i, j), fin.pb(cnt);
+        }
+    }
+    soR(fin);
+    ao(fin, sz(fin));
 }
 
 int main() {
@@ -175,7 +216,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

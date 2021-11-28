@@ -130,7 +130,6 @@ struct custom_hash {
     }
 };
 
-typedef unordered_map<int, int, custom_hash> u_map;
 typedef gp_hash_table<int, int, custom_hash> gp_h_table;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ord_set;
 
@@ -147,21 +146,35 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
+int m;
+bool c(pair<str,int> s1, pair<str,int> s2) {
+    f0r(i, m) if (s1.ff[i] != s2.ff[i]) {
+        if (i % 2) {
+            return (s1.ff[i] > s2.ff[i]);
+        } else
+            return s1.ff[i] < s2.ff[i];
+    }
+    return 0;
+}
 
 void solve() {
     // Intializing ALL Global Vars b/w TCs---
     // #warning: Switch to the Global larger array size after debugging
-    ll n, l, r, k;
-    cin >> n >> l >> r >> k;
-    f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    ll re = 0;
-    f0r(i, n) if (a[i] >= l && a[i] <= r && k >= a[i]) re++, k -= a[i];
-    cout << re << '\n';
+    int n;
+    cin >> n >> m;
+    V<pair<str,int>> s(n);
+    f0r(i, n) {
+        str t;
+        cin >> t;
+        s[i] = {t, i+1};
+    }
+    sort(all(s), c);
+    each(i, s) cout << i.ss << " ";
+    cout << nl;
 }
 
 int main() {
@@ -175,7 +188,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

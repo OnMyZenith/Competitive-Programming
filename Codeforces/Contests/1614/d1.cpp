@@ -14,8 +14,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("avx2")
 
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -56,6 +56,7 @@ using namespace std;
 #define sz(x) ((long long)x.size())
 #define bg(x) x.begin()
 
+
 typedef long long ll;
 typedef long double ld;
 typedef unsigned long long ull;
@@ -95,7 +96,7 @@ tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 
 tcTU > T fstTrue(T lo, T hi, U f) {
     ++hi, assert(lo <= hi); // assuming f is increasing
-    while (lo < hi) {       // find first index such that f is true
+    while (lo < hi) { // find first index such that f is true
         T mid = lo + (hi - lo) / 2;
         f(mid) ? hi = mid : lo = mid + 1;
     }
@@ -103,17 +104,19 @@ tcTU > T fstTrue(T lo, T hi, U f) {
 }
 tcTU > T lstTrue(T lo, T hi, U f) {
     --lo, assert(lo <= hi); // assuming f is decreasing
-    while (lo < hi) {       // find last index such that f is true
+    while (lo < hi) { // find last index such that f is true
         T mid = lo + (hi - lo + 1) / 2;
         f(mid) ? lo = mid : hi = mid - 1;
     }
     return lo;
 }
 
+
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count());
 // mt19937 rng(61378913);
 /* usage - just do rng() */
 /* shuffle(permutation.begin(), permutation.end(), rng); */
+
 
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -139,6 +142,7 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics
 // Also for some reason ord_multiset just gives an error on my compiler "msys64/mingw64/include/c++/10.3.0"
 // Works on CF servers tho, (G++17 9.2.0)
 
+
 const long double eps = 1e-7;
 const ld PI = 3.14159265358979323846L;
 const ll lINF = (ll)1e18L + 007;
@@ -147,22 +151,51 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
+
+
+
+
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
+
+
+
 
 void solve() {
     // Intializing ALL Global Vars b/w TCs---
     // #warning: Switch to the Global larger array size after debugging
-    ll n, l, r, k;
-    cin >> n >> l >> r >> k;
+    int n;
+    cin >> n;
+    vl a(n);
     f0r(i, n) cin >> a[i];
-    sort(a, a + n);
-    ll re = 0;
-    f0r(i, n) if (a[i] >= l && a[i] <= r && k >= a[i]) re++, k -= a[i];
-    cout << re << '\n';
+    if(n==1){
+        cout << a[0] << '\n';
+        return;
+    }
+    vl p(n+2), s(n+2);
+    p[1] = a[0];
+    f1r(i, 2, n) p[i] = __gcd(p[i - 1], a[i - 1]);
+    s[n] = a[n - 1];
+    f1rd(i, n - 1, 1) s[i] = __gcd(s[i + 1], a[i - 1]);
+    vpl res;
+    res.pb({s[2], a[0]});
+    res.pb({p[n-1], a[n-1]});
+    f1r(i,2,n-1){
+        res.pb({__gcd(p[i - 1], s[i + 1]), a[i - 1]});
+    }
+    soR(res);
+    f0r(i, n) a[i] = res[i].ss;
+    p[1] = a[0];
+    f1r(i, 2, n) p[i] = __gcd(p[i - 1], a[i - 1]);
+    ll fin = 0;
+    f1r(i,1,n){
+        fin += p[i];
+    }
+    cout << fin << '\n';
 }
+
 
 int main() {
 
@@ -175,14 +208,14 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
 #ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
+    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count()*1000 << " ms" << endl;
 #endif
 
     return 0;
