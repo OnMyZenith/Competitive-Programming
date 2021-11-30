@@ -147,62 +147,18 @@ const int iINF = 1e9 + 007;
 // ll MOD;
 
 const int tasz = 1e6 + 007;
-ll a[tasz];
+// ll a[tasz];
 // ll b[tasz];
 // ll c[tasz];
 
-int n, m;
-V<vb> vis;
-V<vb> hwall, vwall;
-int cnt;
-
-void dfs(int x, int y) {
-    vis[x][y] = 1, cnt++;
-    if (!hwall[x][y]) {
-        hwall[x][y] = 1;
-        dfs(x, y - 1);
-    }
-    if (!hwall[x + 1][y]) {
-        hwall[x + 1][y] = 1;
-        dfs(x, y + 1);
-    }
-    if (!vwall[y][x]) {
-        vwall[y][x] = 1;
-        dfs(x - 1, y);
-    }
-    if (!vwall[y + 1][x]) {
-        vwall[y + 1][x] = 1;
-        dfs(x + 1, y);
-    }
-}
 
 void solve() {
-    // Intializing ALL Global Vars b/w TCs---
-    // #warning: Switch to the Global larger array size after debugging
-    cin >> n >> m;
-    hwall.rsz(n + 1, vb(m));
-    vwall.rsz(m + 1, vb(n));
-    // r.rsz(n + 1, 0), c.rsz(m + 1, 0);
-    f0r(i, n) {
-        f0r(j, m) {
-            int x;
-            cin >> x;
-            bitset<4> b(x);
-            ckmax(hwall[j][i], (bool)(b[0])), ckmax(hwall[i + 1][j], (bool)b[2]);
-            ckmax(vwall[j][i], (bool)b[3]), ckmax(vwall[j + 1][i], (bool)b[1]);
-        }
-    }
-    // ao(c, m);
-    // ao(r, n);
-    vis.rsz(n, vb(m));
-    vi fin;
-    f0r(i, n) {
-        f0r(j, m) {
-            if (!vis[i][j]) cnt = 0, dfs(i, j), fin.pb(cnt);
-        }
-    }
-    soR(fin);
-    ao(fin, sz(fin));
+    int n, a, b;
+    str s;
+    cin >> n >> a >> b >> s;
+    int idx = unique(all(s))-bg(s);
+    int ans = n * a + max(n * b, (idx / 2 + 1)* b);
+    cout << ans << nl;
 }
 
 int main() {
@@ -216,7 +172,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

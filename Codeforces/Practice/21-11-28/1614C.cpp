@@ -1,12 +1,3 @@
-// // Source: https://usaco.guide/general/io
-
-// #include <iostream>
-// using namespace std;
-
-// int main() {
-// 	int a, b, c; cin >> a >> b >> c;
-// 	cout << "sum is " << a+b+c << "\n";
-// }
 /* Author: OnMyZenith - https://github.com/OnMyZenith */
 #include <bits/extc++.h>
 // #include <chrono>
@@ -23,8 +14,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("avx2")
 
-// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -142,7 +133,6 @@ struct custom_hash {
     }
 };
 
-typedef unordered_map<int, int, custom_hash> u_map;
 typedef gp_hash_table<int, int, custom_hash> gp_h_table;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ord_set;
 
@@ -160,10 +150,7 @@ const int iINF = 1e9 + 007;
 // const int MOD = 998244353;
 // ll MOD;
 
-void setIO(string s) {
-	freopen((s + ".in").c_str(), "r", stdin);
-	freopen((s + ".out").c_str(), "w", stdout);
-}
+
 
 
 
@@ -176,13 +163,18 @@ void setIO(string s) {
 
 
 void solve() {
-    // Intializing ALL Global Vars b/w TCs---
-    // #warning: Switch to the Global larger array size after debugging
-    vpi v(4);
-	vi r(3);
-	f0r(i,4)cin>>v[i].ff>>v[i].ss;
-	f1rd(i,3,1)r[i-1]=v[i].ss-v[i].ff,v[i-1].ss+=r[i-1];
-	f0r(i,3)cout<<r[i]<<nl;
+    ll n, m;
+    cin >> n >> m;
+    ll res = 0;
+    f0r(i,m){
+        ll l, r, x;
+        cin >> l >> r >> x;
+        res |= x;
+    }
+    res %= MOD;
+    while(--n)
+        res *= 2, res %= MOD;
+    cout << res << nl;
 }
 
 
@@ -195,9 +187,9 @@ int main() {
     vamos;
 
     fix(15);
-    // setIO("promote");
+
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
