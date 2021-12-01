@@ -313,7 +313,7 @@ struct mint {
 };
 
 const int MOD = 1e9 + 007; // 998244353;
-typedef mint<MOD, 5> mi; // 5 is primitive root for both common mods
+typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
 typedef vector<pmi> vpmi;
@@ -355,28 +355,26 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
-ll b[tasz];
-ll c[tasz];
-
-
-
+// const int tasz = 1e6 + 007;
+// int a[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
 void solve() {
-    int n, k;
-    re(n, k);
-    ord_set<int> s;
-    f0r(i, n) s.ins(i + 1);
-    int i = 0;
-    while(n--){
-        i += k;
-        i %= n + 1;
-        auto it = s.find_by_order(i);
-        cout << *it << " \n"[n==0];
-        s.erase(it);
+    ll n;
+    re(n);
+    vl a;
+    rv(n, a);
+    sor(a);
+    ll mn = a[0];
+    each(i, a) i -= mn;
+    // dbg(a);
+    ll ans = n * mn;
+    f0r(i,n)if(a[i]){
+        cout << ans + n - i << nl;
+        return;
     }
-
+    cout << ans << nl;
 }
 
 int main() {
@@ -390,11 +388,11 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
-    #ifdef asr
+#ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
     cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;

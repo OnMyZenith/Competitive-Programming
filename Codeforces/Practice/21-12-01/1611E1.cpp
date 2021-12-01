@@ -313,7 +313,7 @@ struct mint {
 };
 
 const int MOD = 1e9 + 007; // 998244353;
-typedef mint<MOD, 5> mi; // 5 is primitive root for both common mods
+typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
 typedef vector<pmi> vpmi;
@@ -355,28 +355,93 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
-ll b[tasz];
-ll c[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
-
-
+// void solve() {
+//     int n, k;
+//     re(n, k);
+//     vvi adj(n);
+//     vb vis(n);
+//     set<int> w;
+//     Q<int> f;
+//     Q<int> v;
+//     v.push(0);
+//     vis[0] = 1;
+//     f0r(i, k) {
+//         int t;
+//         cin >> t;
+//         t--;
+//         if (t == 0) {
+//             cout << "NO\n";
+//             return;
+//         }
+//         vis[t] = 1;
+//         f.push(t);
+//     }
+//     f0r(i, n - 1) {
+//         int x, y;
+//         re(x, y);
+//         x--, y--;
+//         adj[x].pb(y);
+//         adj[y].pb(x);
+//     }
+//     f0r(i, n) if (sz(adj[i]) == 1 && i != 0) w.ins(i);
+//     bool fl = 1;
+//     bool fin = 0;
+//     dbg(vis);
+//     while (1) {
+//         if (fl) {
+//             Q<int> f2;
+//             while (!f.empty()) {
+//                 int x = f.front();
+//                 f.pop();
+//                 each(i, adj[x]) {
+//                     if (!vis[i]) vis[i] = 1, f2.push(i);
+//                 }
+//             }
+//             f = f2;
+//         } else {
+//             Q<int> v2;
+//             if (v.empty()) {
+//                 cout << "NO\n";
+//                 return;
+//             }
+//             while (!v.empty()) {
+//                 int x = v.front();
+//                 if (w.count(x)) {
+//                     fin = 1;
+//                     break;
+//                 }
+//                 v.pop();
+//                 each(i, adj[x]) {
+//                     if (!vis[i]) vis[i] = 1, v2.push(i);
+//                 }
+//             }
+//             v = v2;
+//         }
+//         dbg(vis);
+//         if (fin) break;
+//         fl = !fl;
+//     }
+//     cout << (fin ? "YES\n" : "NO\n");
+// }
 
 void solve() {
-    int n, k;
-    re(n, k);
-    ord_set<int> s;
-    f0r(i, n) s.ins(i + 1);
-    int i = 0;
-    while(n--){
-        i += k;
-        i %= n + 1;
-        auto it = s.find_by_order(i);
-        cout << *it << " \n"[n==0];
-        s.erase(it);
+    int n, k; re(n, k);
+    vvi g(n); Q<int> q; vi color(n); set<int> fr;
+    f0r(i,k){ int x; re(x); x--; fr.ins(x), q.push(x); color[x] = -1; }
+    q.push(0), color[0] = 1;
+    f0r(i,n-1){ int x, y; re(x, y), x--, y--, g[x].pb(y), g[y].pb(x); }
+    while(!q.empty()){
+        int x = q.front(); q.pop();
+        each(i, g[x]) if (!color[i]) color[i] = color[x], q.push(i);
     }
-
+    bool f = 0;
+    f1r(i, 1, n - 1) if (sz(g[i]) == 1 && color[i] == 1) f = 1;
+    cout << (f ? "YES\n" : "NO\n");
 }
 
 int main() {
@@ -390,11 +455,11 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
-    #ifdef asr
+#ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
     cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;

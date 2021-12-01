@@ -313,7 +313,7 @@ struct mint {
 };
 
 const int MOD = 1e9 + 007; // 998244353;
-typedef mint<MOD, 5> mi; // 5 is primitive root for both common mods
+typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
 typedef vector<pmi> vpmi;
@@ -355,46 +355,65 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
-ll b[tasz];
-ll c[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
-
-
+int cnt(str s, str t) {
+    int c = 0, l;
+    bool f = 1;
+    f0r(i, sz(s)) if (s[i] != t[i]) f ? l = i : c += i - l, f = !f;
+    dbg(s,t,c);
+    chk(f == 1);
+    return c;
+}
 
 void solve() {
-    int n, k;
-    re(n, k);
-    ord_set<int> s;
-    f0r(i, n) s.ins(i + 1);
-    int i = 0;
-    while(n--){
-        i += k;
-        i %= n + 1;
-        auto it = s.find_by_order(i);
-        cout << *it << " \n"[n==0];
-        s.erase(it);
+    int n, m;
+    str s, t;
+    re(n, m, s, t);
+    if (n > m) {
+        cout << -1 << nl;
+        return;
     }
-
+    int best = iINF;
+    for (int i = 0; i + n <= m; i++) {
+        bool f = 1;
+        f0r(j, n) if (s[j] != t[i + j]) f = !f;
+        dbg(f);
+        if (f) {
+            ckmin(best, m - n + cnt(s, t.substr(i, n)));
+            if (i > 0 && i + n < m) ckmin(best, m - n + cnt((t[i - 1] == '0' ? '1' : '0') + s + (t[i + n] == '0' ? '1' : '0'), t.substr(i - 1, n + 2)));
+        } else {
+            if (i + n < m) ckmin(best, m - n + cnt(s + (t[i + n] == '0' ? '1' : '0'), t.substr(i, n + 1)));
+            if (i > 0) ckmin(best, m - n + cnt((t[i - 1] == '0' ? '1' : '0') + s, t.substr(i - 1, n + 1)));
+        }
+    }
+    if (best == iINF) {
+        cout << -1 << nl;
+        return;
+    }
+    ps(best);
 }
 
 int main() {
-
-#ifdef asr
-    auto begin = chrono::high_resolution_clock::now();
-#endif
 
     vamos;
 
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
+
+#ifdef asr
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
     f1r(TC, 1, TT)
         solve();
 
-    #ifdef asr
+#ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
     cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;

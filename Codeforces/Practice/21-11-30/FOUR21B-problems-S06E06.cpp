@@ -364,19 +364,28 @@ ll c[tasz];
 
 
 void solve() {
-    int n, k;
+    ll n, k;
     re(n, k);
-    ord_set<int> s;
-    f0r(i, n) s.ins(i + 1);
-    int i = 0;
-    while(n--){
-        i += k;
-        i %= n + 1;
-        auto it = s.find_by_order(i);
-        cout << *it << " \n"[n==0];
-        s.erase(it);
+    pqg<ll> s;
+    ll t = n;
+    while(t){
+        s.push(t % 10);
+        t /= 10;
     }
-
+    // dbg(s.top());
+    while(k--){
+        ll x = (s.top()) + 1;
+        if (x >= 10) break;
+        dbg(s.top());
+        s.pop();
+        s.push(x);
+    }
+    ll ans = 1;
+    while(!s.empty()){
+        ans *= s.top();
+        s.pop();
+    }
+    ps(ans);
 }
 
 int main() {
@@ -390,7 +399,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

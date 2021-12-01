@@ -355,28 +355,33 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
-ll b[tasz];
-ll c[tasz];
+// const int tasz = 1e6 + 007;
+// ll a[tasz];
+// ll b[tasz];
+// ll c[tasz];
 
 
 
 
 void solve() {
     int n, k;
+    vi a;
     re(n, k);
-    ord_set<int> s;
-    f0r(i, n) s.ins(i + 1);
-    int i = 0;
-    while(n--){
-        i += k;
-        i %= n + 1;
-        auto it = s.find_by_order(i);
-        cout << *it << " \n"[n==0];
-        s.erase(it);
+    rv(n, a);
+    n = unique(all(a)) - bg(a);
+    a.rsz(n);
+    int net = n - 1;
+    if(net==0){
+        cout << 0 << nl;
+        return;
     }
-
+    vi u(k + 1);
+    f0r(i,n){
+        u[a[i]]++;
+        if (i > 0 && i < n - 1 && a[i - 1] == a[i + 1]) u[a[i]]++;
+    }
+    f1r(i, 1, k) u[i] = net - u[i];
+    aout(u, 1, k);
 }
 
 int main() {
@@ -390,7 +395,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
