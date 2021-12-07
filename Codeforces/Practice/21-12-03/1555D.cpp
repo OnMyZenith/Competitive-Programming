@@ -94,8 +94,8 @@ tcT > using pqdec = std::priority_queue<T>;
 tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
 tcT > using Q = queue<T>;
 
-tcT > inline bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
-tcT > inline bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
 tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
@@ -380,44 +380,40 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
+// const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
 
-// Works in 500ms, will try single dimension dp
-// void solve() {
-//     int n, x; re(n, x); vi c(n), p(n); re(c, p);
-//     vvi pages(n+1, vi(x+1));
-//     // pages[uptoBookNo][spent]
-//     f1r(i,1,n){
-//         for (int j = 0; j <= x; j++){
-//             ckmax(pages[i][j], pages[i - 1][j]);
-//             if(j+c[i-1]<=x) ckmax(pages[i][j+c[i-1]], pages[i - 1][j] + p[i-1]);
-//         }
-//     }
-//     ps(pages[n][x]);
-// }
 
-int pages[100001], c[1001], p[1001];
-
-// This works in 110 ms
-// void solve() {
-//     int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-//     // vi pages(x+1);
-//     f1r(i,1,n){
-//         f0rd(j,x){
-//             if(j-c[i-1]>=0) ckmax(pages[j], pages[j-c[i-1]] + p[i-1]);
-//         }
-//     }
-//     ps(pages[x]);
-// }
-
+int c(str &s, str &p){
+    int z=sz(s), cst=0;
+    f0r(i,z)if(s[i]!=p[i])cst++;
+    return cst;
+}
 
 void solve() {
-    int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-    f1r(i,1,n){
-        f0rd(j,x-c[i-1]){
-            ckmax(pages[j+c[i-1]], pages[j] + p[i-1]);
-        }
+    int n,m; re(n,m); str s;re(s);vpi q(m);re(q);
+    str p[6];
+    f0r(i,n/3+1) p[0] += "abc";
+    f0r(i,n/3+1) p[1] += "acb";
+    f0r(i,n/3+1) p[2] += "bca";
+    f0r(i,n/3+1) p[3] += "bac";
+    f0r(i,n/3+1) p[4] += "cab";
+    f0r(i,n/3+1) p[5] += "cba";
+
+    vvi pref(6,vi(n+1));
+    f0r(i,n){
+        str t = s.substr(0,i+1);
+        f0r(j,6) pref[j][i+1] = c(t,p[j]);
     }
-    cout<<pages[x];
+    dbg(pref);
+    each(i,q){
+        int l =i.ff-1, r=i.ss-1;
+        int f=iINF;
+        f0r(j,6) ckmin(f,pref[j][r+1] - pref[j][l]);
+        ps(f);
+    }
 }
 
 int main() {

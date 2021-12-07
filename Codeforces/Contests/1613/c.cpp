@@ -17,7 +17,7 @@ using namespace std;
 #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
-#define vamos ios_base::sync_with_stdio(false);
+#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr);
 #define fix(prec) cout << setprecision(prec) << fixed;
 
 #define tcT template <class T
@@ -47,7 +47,6 @@ using namespace std;
 #define ft front()
 #define bk back()
 #define rsz resize
-#define ass assign
 #define eq equal_range
 #define ts to_string
 #define nl '\n'
@@ -90,12 +89,12 @@ using vpld = vector<pair<long double, long double>>;
 
 tcT > using V = vector<T>;
 tcT, size_t SZ > using AR = array<T, SZ>;
-tcT > using pqdec = std::priority_queue<T>;
-tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
+tcT > using pq = std::priority_queue<T>;
+tcT > using pqg = std::priority_queue<T, V<T>, greater<T>>;
 tcT > using Q = queue<T>;
 
-tcT > inline bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
-tcT > inline bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
 tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
@@ -171,7 +170,7 @@ tcT > void re(complex<T> &c) {
     re(a, b);
     c = {a, b};
 }
-tcTU > void re(pair<T, U> &p) { re(p.ff, p.ss); }
+tcTU > void re(pair<T, U> &p) { re(p.f, p.s); }
 tcT > void re(V<T> &x) { each(a, x) re(a); }
 tcT, size_t SZ > void re(AR<T, SZ> &x) { each(a, x) re(a); }
 tcT > void rv(int n, V<T> &x) {
@@ -235,9 +234,9 @@ tcT > str ts(T v) { // containers with begin(), end()
 }
 tcTU > str ts(pair<T, U> p) {
 #ifdef asr
-    return "(" + ts(p.ff) + ", " + ts(p.ss) + ")";
+    return "(" + ts(p.f) + ", " + ts(p.s) + ")";
 #else
-    return ts(p.ff) + " " + ts(p.ss);
+    return ts(p.f) + " " + ts(p.s);
 #endif
 }
 
@@ -372,52 +371,44 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
 const int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
-//these are checked at 1 + eps on CF, accuracy gets better near zero
-const float epsf = 1e-7F;
-const long double epsld = 1e-19L;
-const double epsd = 2e-16;
+const long double eps = 1e-7;
 const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
+const int _ = 1e6 + 007;
+// ll a[_];
+// ll m[_];
+ll n, h;
 
-// Works in 500ms, will try single dimension dp
-// void solve() {
-//     int n, x; re(n, x); vi c(n), p(n); re(c, p);
-//     vvi pages(n+1, vi(x+1));
-//     // pages[uptoBookNo][spent]
-//     f1r(i,1,n){
-//         for (int j = 0; j <= x; j++){
-//             ckmax(pages[i][j], pages[i - 1][j]);
-//             if(j+c[i-1]<=x) ckmax(pages[i][j+c[i-1]], pages[i - 1][j] + p[i-1]);
-//         }
-//     }
-//     ps(pages[n][x]);
-// }
+vl m;
+vl a;
 
-int pages[100001], c[1001], p[1001];
-
-// This works in 110 ms
-// void solve() {
-//     int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-//     // vi pages(x+1);
-//     f1r(i,1,n){
-//         f0rd(j,x){
-//             if(j-c[i-1]>=0) ckmax(pages[j], pages[j-c[i-1]] + p[i-1]);
-//         }
-//     }
-//     ps(pages[x]);
-// }
-
+bool f(ll x) {
+    ll ans = 0;
+    // dbg(x);
+    f0r(i, n) {
+        ans += min(x, m[i]);
+    }
+    // dbg(ans);
+    // dbg(ans >= cdiv(h, n));
+    return ans >= h;
+}
 
 void solve() {
-    int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-    f1r(i,1,n){
-        f0rd(j,x-c[i-1]){
-            ckmax(pages[j+c[i-1]], pages[j] + p[i-1]);
-        }
-    }
-    cout<<pages[x];
+    re(n, h);
+    rv(n,a);
+    m.rsz(n);
+    f0r(i, n - 1) m[i] = a[i + 1] - a[i];
+    // ll mn = m[0];
+    // f0r(i, n - 1) ckmin(mn, m[i]);
+    // if (mn <= cdiv(h, n)) {
+    //     ps(mn);
+    //     return;
+    // }
+    m[n - 1] = lINF;
+    // dbg(m);
+    ps(fstTrue(0LL, lINF, f));
 }
 
 int main() {
@@ -428,14 +419,10 @@ int main() {
 
     vamos;
 
-#ifndef asr
-    cin.tie(nullptr);
-#endif
-
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

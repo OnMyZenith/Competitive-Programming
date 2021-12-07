@@ -17,17 +17,17 @@ using namespace std;
 #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
-#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr);
+#define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
 
 #define tcT template <class T
 #define tcTU tcT, class U
 #define tcTUU tcT, class... U
 
-#define f0r(i, n) for (int i = 0; i < (n); ++i)
-#define f1r(i, l, r) for (int i = (l); i <= (r); ++i)
-#define f0rd(i, n) for (int i = (n); i >= 0; --i)
-#define f1rd(i, l, r) for (int i = (l); i >= (r); --i)
+#define f0r(i, n) for (long long i = 0; i < (n); ++i)
+#define f1r(i, l, r) for (long long i = (l); i <= (r); ++i)
+#define f0rd(i, n) for (long long i = (n); i >= 0; --i)
+#define f1rd(i, l, r) for (long long i = (l); i >= (r); --i)
 #define each(i, a) for (auto &i : a)
 
 // for pure array I/O, for other types use INPUT/OUTPUT section
@@ -47,6 +47,7 @@ using namespace std;
 #define ft front()
 #define bk back()
 #define rsz resize
+#define ass assign
 #define eq equal_range
 #define ts to_string
 #define nl '\n'
@@ -89,16 +90,16 @@ using vpld = vector<pair<long double, long double>>;
 
 tcT > using V = vector<T>;
 tcT, size_t SZ > using AR = array<T, SZ>;
-tcT > using pq = std::priority_queue<T>;
-tcT > using pqg = std::priority_queue<T, V<T>, greater<T>>;
+tcT > using pqdec = std::priority_queue<T>;
+tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
 tcT > using Q = queue<T>;
 
 tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
-tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
-tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > ll lwb(V<T> &a, const T &b) { return ll(lb(all(a), b) - bg(a)); }
+tcT > ll upb(V<T> &a, const T &b) { return ll(ub(all(a), b) - bg(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 
 tcTU > bool erase(T &t, const U &u) {
@@ -124,6 +125,19 @@ tcTU > T lstTrue(T lo, T hi, U f) {
     }
     return lo;
 }
+
+template <class Fun>
+class y_combinator_result {
+    Fun fun_;
+
+public:
+    template <class T>
+    explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
+    template <class... Args>
+    decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
+};
+template <class Fun>
+decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
 
 constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
 constexpr int p2(int x) { return 1 << x; }
@@ -157,7 +171,7 @@ tcT > void re(complex<T> &c) {
     re(a, b);
     c = {a, b};
 }
-tcTU > void re(pair<T, U> &p) { re(p.f, p.s); }
+tcTU > void re(pair<T, U> &p) { re(p.ff, p.ss); }
 tcT > void re(V<T> &x) { each(a, x) re(a); }
 tcT, size_t SZ > void re(AR<T, SZ> &x) { each(a, x) re(a); }
 tcT > void rv(int n, V<T> &x) {
@@ -221,9 +235,9 @@ tcT > str ts(T v) { // containers with begin(), end()
 }
 tcTU > str ts(pair<T, U> p) {
 #ifdef asr
-    return "(" + ts(p.f) + ", " + ts(p.s) + ")";
+    return "(" + ts(p.ff) + ", " + ts(p.ss) + ")";
 #else
-    return ts(p.f) + " " + ts(p.s);
+    return ts(p.ff) + " " + ts(p.ss);
 #endif
 }
 
@@ -313,10 +327,18 @@ struct mint {
 };
 
 const int MOD = 1e9 + 007; // 998244353;
-typedef mint<MOD, 5> mi; // 5 is primitive root for both common mods
+typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
 typedef vector<pmi> vpmi;
+
+vector<vmi> scmb; // small combinations
+void genComb(int SZ) {
+    scmb.assign(SZ, vmi(SZ));
+    scmb[0][0] = 1;
+    f1r(i, 1, SZ - 1) f0r(j, i + 1)
+        scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
+}
 
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -349,22 +371,34 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
-const int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
-const long double eps = 1e-7;
+const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1};
+//these are checked at 1 + eps on CF, accuracy gets better near zero
+const float epsf = 1e-7F;
+const long double epsld = 1e-19L;
+const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
-const long long lINF = 1e18L + 007;
-const int iINF = 1e9 + 007;
+const long long lINF = 1e18L;
+const int iINF = 1e9;
 
-
-
-
-
+const int _ = 1e6 + 007;
+ll a[_];
+bool f(int i){
+    if(a[i+1]>max(max(a[i],a[i+2]),a[i+3])&&a[i+2]<min(min(a[i],a[i+1]),a[i+3])) return 1;
+    else if(a[i+1]<min(min(a[i],a[i+2]),a[i+3])&&a[i+2]>max(max(a[i],a[i+1]),a[i+3])) return 1;
+    return 0;
+}
 void solve() {
-    int n, k; re(n, k);
-    vvi g(n);
-    f0r(i,k){ int x; re(x); x--; fr.ins(x), q.push(x); color[x] = -1; }
-    f0r(i,n-1){ int x, y; re(x, y), x--, y--, g[x].pb(y), g[y].pb(x); }
-    
+    ll n;re(n);ai(a,n);int fin=0;
+    f0r(i,n-3){
+        // if([&]()->bool{
+        //     if(a[i+1]>max(max(a[i],a[i+2]),a[i+3])&&a[i+2]<min(min(a[i],a[i+1]),a[i+3])) return true;
+        //     else if(a[i+1]<min(min(a[i],a[i+2]),a[i+3])&&a[i+2]>max(max(a[i],a[i+1]),a[i+3])) return true;
+        //     return false;
+        // })fin++;
+        if(f(i))fin+=10;
+    }
+    if(!(a[n-3]>a[n-2]&&a[n-2]>a[n-1]||a[n-3]<a[n-2]&&a[n-2]<a[n-1])) fin+=6;
+    ps(fin);
 }
 
 int main() {
@@ -375,6 +409,10 @@ int main() {
 
     vamos;
 
+// #ifndef asr
+    cin.tie(nullptr);
+// #endif
+
     fix(15);
 
     int TT = 1;
@@ -382,7 +420,7 @@ int main() {
     f1r(TC, 1, TT)
         solve();
 
-    #ifdef asr
+#ifdef asr
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
     cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;

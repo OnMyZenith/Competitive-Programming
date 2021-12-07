@@ -24,10 +24,10 @@ using namespace std;
 #define tcTU tcT, class U
 #define tcTUU tcT, class... U
 
-#define f0r(i, n) for (int i = 0; i < (n); ++i)
-#define f1r(i, l, r) for (int i = (l); i <= (r); ++i)
-#define f0rd(i, n) for (int i = (n); i >= 0; --i)
-#define f1rd(i, l, r) for (int i = (l); i >= (r); --i)
+#define f0r(i, n) for (long long i = 0; i < (n); ++i)
+#define f1r(i, l, r) for (long long i = (l); i <= (r); ++i)
+#define f0rd(i, n) for (long long i = (n); i >= 0; --i)
+#define f1rd(i, l, r) for (long long i = (l); i >= (r); --i)
 #define each(i, a) for (auto &i : a)
 
 // for pure array I/O, for other types use INPUT/OUTPUT section
@@ -94,8 +94,8 @@ tcT > using pqdec = std::priority_queue<T>;
 tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
 tcT > using Q = queue<T>;
 
-tcT > inline bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
-tcT > inline bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
 tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
@@ -380,44 +380,44 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
+// const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+ll n,a,b,p,q,r,s;
+pl k1,k2;
 
-// Works in 500ms, will try single dimension dp
-// void solve() {
-//     int n, x; re(n, x); vi c(n), p(n); re(c, p);
-//     vvi pages(n+1, vi(x+1));
-//     // pages[uptoBookNo][spent]
-//     f1r(i,1,n){
-//         for (int j = 0; j <= x; j++){
-//             ckmax(pages[i][j], pages[i - 1][j]);
-//             if(j+c[i-1]<=x) ckmax(pages[i][j+c[i-1]], pages[i - 1][j] + p[i-1]);
-//         }
-//     }
-//     ps(pages[n][x]);
-// }
-
-int pages[100001], c[1001], p[1001];
-
-// This works in 110 ms
-// void solve() {
-//     int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-//     // vi pages(x+1);
-//     f1r(i,1,n){
-//         f0rd(j,x){
-//             if(j-c[i-1]>=0) ckmax(pages[j], pages[j-c[i-1]] + p[i-1]);
-//         }
-//     }
-//     ps(pages[x]);
-// }
+bool f(ll ro, ll co){
+    // dbg(ro,co);
+    if(a+k1.ff<=ro&&a+k1.ss>=ro){
+        ll k = ro - a;
+        // dbg(ro ,co, k);
+        if(b+k==co)return 1;
+    }
+    if(a+k2.ff<=ro&&a+k2.ss>=ro) {
+        ll k = ro - a;
+        // dbg(ro ,co, k);
+        if(b-k==co)return 1;
+    }
+    // if(a+k1.ff<=ro&&a+k1.ss>=ro&&b+k1.ff<=co&&b+k1.ss>=co) return (a+k1.ss-ro==b+k1.ss-co)||(a+k1.ff-ro==b+k1.ff-co);
+    // if(a+k2.ff<=ro&&a+k2.ss>=ro&&b-k2.ff<=co&&b-k2.ss>=co) return (a+k2.ss-ro==b-k2.ss-co)||(a+k2.ff-ro==b-k2.ff-co);
+    return 0;
+}
 
 
 void solve() {
-    int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-    f1r(i,1,n){
-        f0rd(j,x-c[i-1]){
-            ckmax(pages[j+c[i-1]], pages[j] + p[i-1]);
+    re(n,a,b,p,q,r,s);
+    k1.ff=max(1-a,1-b);
+    k1.ss =min(n-a,n-b);
+    k2.ff=max(1-a,b-n);
+    k2.ss =min(n-a,b-1);
+    dbg(k1,k2);
+    f1r(i,p,q){
+        f1r(j,r,s){
+            cout<<((f(i,j)?'#':'.'));
         }
+        cout<<nl;
     }
-    cout<<pages[x];
 }
 
 int main() {

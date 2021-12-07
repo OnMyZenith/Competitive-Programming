@@ -125,6 +125,19 @@ tcTU > T lstTrue(T lo, T hi, U f) {
     return lo;
 }
 
+template <class Fun>
+class y_combinator_result {
+    Fun fun_;
+
+public:
+    template <class T>
+    explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
+    template <class... Args>
+    decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
+};
+template <class Fun>
+decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
+
 constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
 constexpr int p2(int x) { return 1 << x; }
 constexpr int msk2(int x) { return p2(x) - 1; }
@@ -312,10 +325,19 @@ struct mint {
     friend mint operator/(mint a, const mint &b) { return a /= b; }
 };
 
-typedef mint<MOD, 5> mi; // 5 is primitive root for both common mods
+const int MOD = 1e9 + 007; // 998244353;
+typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
 typedef vector<pmi> vpmi;
+
+vector<vmi> scmb; // small combinations
+void genComb(int SZ) {
+    scmb.assign(SZ, vmi(SZ));
+    scmb[0][0] = 1;
+    f1r(i, 1, SZ - 1) f0r(j, i + 1)
+        scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
+}
 
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -349,16 +371,18 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
 const int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
-const long double eps = 1e-7;
+//these are checked at 1 + eps on CF, precision gets better near zero
+const float epsf = 1e-7F;
+const long double epsld = 1e-19L;
+const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
-const int MOD = 1e9 + 007; // 998244353;
 const int iINF = 1e9 + 007;
 
-const int tasz = 1e6 + 007;
-ll a[tasz];
-ll b[tasz];
-ll c[tasz];
+const int _ = 1e6 + 007;
+ll a[_];
+ll b[_];
+ll c[_];
 
 
 

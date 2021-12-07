@@ -24,10 +24,10 @@ using namespace std;
 #define tcTU tcT, class U
 #define tcTUU tcT, class... U
 
-#define f0r(i, n) for (int i = 0; i < (n); ++i)
-#define f1r(i, l, r) for (int i = (l); i <= (r); ++i)
-#define f0rd(i, n) for (int i = (n); i >= 0; --i)
-#define f1rd(i, l, r) for (int i = (l); i >= (r); --i)
+#define f0r(i, n) for (long long i = 0; i < (n); ++i)
+#define f1r(i, l, r) for (long long i = (l); i <= (r); ++i)
+#define f0rd(i, n) for (long long i = (n); i >= 0; --i)
+#define f1rd(i, l, r) for (long long i = (l); i >= (r); --i)
 #define each(i, a) for (auto &i : a)
 
 // for pure array I/O, for other types use INPUT/OUTPUT section
@@ -94,12 +94,12 @@ tcT > using pqdec = std::priority_queue<T>;
 tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
 tcT > using Q = queue<T>;
 
-tcT > inline bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
-tcT > inline bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
-tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
-tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > ll lwb(V<T> &a, const T &b) { return ll(lb(all(a), b) - bg(a)); }
+tcT > ll upb(V<T> &a, const T &b) { return ll(ub(all(a), b) - bg(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 
 tcTU > bool erase(T &t, const U &u) {
@@ -380,45 +380,39 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
-
-// Works in 500ms, will try single dimension dp
-// void solve() {
-//     int n, x; re(n, x); vi c(n), p(n); re(c, p);
-//     vvi pages(n+1, vi(x+1));
-//     // pages[uptoBookNo][spent]
-//     f1r(i,1,n){
-//         for (int j = 0; j <= x; j++){
-//             ckmax(pages[i][j], pages[i - 1][j]);
-//             if(j+c[i-1]<=x) ckmax(pages[i][j+c[i-1]], pages[i - 1][j] + p[i-1]);
-//         }
-//     }
-//     ps(pages[n][x]);
-// }
-
-int pages[100001], c[1001], p[1001];
-
-// This works in 110 ms
-// void solve() {
-//     int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-//     // vi pages(x+1);
-//     f1r(i,1,n){
-//         f0rd(j,x){
-//             if(j-c[i-1]>=0) ckmax(pages[j], pages[j-c[i-1]] + p[i-1]);
-//         }
-//     }
-//     ps(pages[x]);
-// }
+const int _ = 1e6 + 007;
+ll a[_];
+// int b[_];
+// ll c[_];
 
 
 void solve() {
-    int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-    f1r(i,1,n){
-        f0rd(j,x-c[i-1]){
-            ckmax(pages[j+c[i-1]], pages[j] + p[i-1]);
+    ll n; re(n); ai(a,n); V<mi> endWith(n+1),endWithTyp2(n+1); mi ans=0;
+    f0r(i,n){
+        if(a[i]>1) {
+            ans+=endWith[a[i]]+endWith[a[i]-1];             // if ai = 2, then all 00111... + 00111222...
+            ans+=endWithTyp2[a[i]]+endWith[a[i]-2];
+            endWith[a[i]]+=endWith[a[i]]+endWith[a[i]-1];
+            endWithTyp2[a[i]]+=endWithTyp2[a[i]];
+            endWithTyp2[a[i]]+=endWith[a[i]-2];             // if ai = 2, then all 00000... to make + 0022...
+            // dbg(ans);
+            continue;
         }
+        if(a[i]) {
+            ans+=endWith[1]+endWith[0];                     // (00000, 000111.....) <--appending 1 here
+            ans+=endWithTyp2[1]+1;
+            endWith[1]+=endWith[1]+endWith[0];
+            endWithTyp2[1]+=endWithTyp2[1]+1;               // 11111 <--appending 1 here + starting here
+            // dbg(ans);
+            continue;
+        }
+        ans+=endWith[0]+1;
+        // dbg(ans);
+        endWith[0]+=endWith[0]+1;
     }
-    cout<<pages[x];
+    ps(ans);
 }
+
 
 int main() {
 
@@ -428,14 +422,14 @@ int main() {
 
     vamos;
 
-#ifndef asr
+// #ifndef asr
     cin.tie(nullptr);
-#endif
+// #endif
 
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -90,12 +90,12 @@ using vpld = vector<pair<long double, long double>>;
 
 tcT > using V = vector<T>;
 tcT, size_t SZ > using AR = array<T, SZ>;
-tcT > using pqdec = std::priority_queue<T>;
-tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
+tcT > using pq = std::priority_queue<T>;
+tcT > using pqg = std::priority_queue<T, V<T>, greater<T>>;
 tcT > using Q = queue<T>;
 
-tcT > inline bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
-tcT > inline bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
 tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
@@ -372,7 +372,7 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
 const int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
-//these are checked at 1 + eps on CF, accuracy gets better near zero
+//these are checked at 1 + eps on CF, precision gets better near zero
 const float epsf = 1e-7F;
 const long double epsld = 1e-19L;
 const double epsd = 2e-16;
@@ -380,44 +380,22 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
+const int _ = 1e6 + 007;
+ll a[_];
+ll s[_];
+// ll c[_];
 
-// Works in 500ms, will try single dimension dp
-// void solve() {
-//     int n, x; re(n, x); vi c(n), p(n); re(c, p);
-//     vvi pages(n+1, vi(x+1));
-//     // pages[uptoBookNo][spent]
-//     f1r(i,1,n){
-//         for (int j = 0; j <= x; j++){
-//             ckmax(pages[i][j], pages[i - 1][j]);
-//             if(j+c[i-1]<=x) ckmax(pages[i][j+c[i-1]], pages[i - 1][j] + p[i-1]);
-//         }
-//     }
-//     ps(pages[n][x]);
-// }
 
-int pages[100001], c[1001], p[1001];
-
-// This works in 110 ms
-// void solve() {
-//     int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-//     // vi pages(x+1);
-//     f1r(i,1,n){
-//         f0rd(j,x){
-//             if(j-c[i-1]>=0) ckmax(pages[j], pages[j-c[i-1]] + p[i-1]);
-//         }
-//     }
-//     ps(pages[x]);
-// }
 
 
 void solve() {
-    int n, x; cin>>n>>x; ai(c,n);ai(p,n);
-    f1r(i,1,n){
-        f0rd(j,x-c[i-1]){
-            ckmax(pages[j+c[i-1]], pages[j] + p[i-1]);
-        }
-    }
-    cout<<pages[x];
+    int n,q;
+    re(n,q);
+    ai(a,n);
+    f0r(i,n)s[i]=(i?s[i-1]:0)+a[i];
+    vpi qu(q);
+    f0r(i,q)re(qu[i]);
+    each(i,qu)cout<<s[i.ss-1]-(i.ff>1?s[i.ff-2]:0)<<nl;
 }
 
 int main() {
