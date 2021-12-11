@@ -139,11 +139,11 @@ public:
 template <class Fun>
 decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
 
-constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
-constexpr int p2(int x) { return 1 << x; }
-constexpr int msk2(int x) { return p2(x) - 1; }
-constexpr int log_2(int a) { return a ? (8 * sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
-constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
+constexpr ll pct(ll x) { return __builtin_popcountll(x); } // # of bits set
+constexpr ll p2(ll x) { return 1 << x; }
+constexpr ll msk2(ll x) { return p2(x) - 1; }
+constexpr ll log_2(ll a) { return a ? (8 * sizeof(a)) - 1 - __builtin_clzll(a) : -1; } // Floor of log_2(a); index of highest 1-bit
+ll next_pow_2(ll a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -381,24 +381,23 @@ const long long lINF = 1e18L;
 const int iINF = 1e9;
 
 const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
+
+
+
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    ll n,m;re(n,m); int ans=0; m++;
+    for (int i = 30; i >= 0 && n < m; i--){
+        if(((n>>i)&1)!=((m>>i)&1)) {
+            if((m>>i)&1) {
+                ans|=1<<i; n|=1<<i; 
+            }
+        }
     }
-    reverse(all(res));
-    ps(res);
+    ps(ans);
 }
 
 int main() {

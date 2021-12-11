@@ -380,25 +380,62 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e6 + 007;
+struct union_find {
+    vector<int> parent;
+    vector<int> size;
+    int components = 0;
+    
+    pqdec<int> mxsz;
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
-void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    union_find(int n = -1) {
+        if (n >= 0)
+            init(n);
     }
-    reverse(all(res));
-    ps(res);
+
+    void init(int n) {
+        parent.resize(n + 1);
+        size.assign(n + 1, 1);
+        f0r(i,n+1) mxsz.push(1);
+        components = n;
+
+        for (int i = 0; i <= n; i++)
+            parent[i] = i;
+    }
+
+    int find(int x) {
+        return x == parent[x] ? x : parent[x] = find(parent[x]);
+    }
+
+    bool unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+
+        if (x == y)
+            return false;
+
+        if (size[x] < size[y])
+            swap(x, y);
+
+        parent[y] = x;
+        size[x] += size[y];
+        mxsz.push(size[x]);
+        components--;
+        return true;
+    }
+};
+
+const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vi adj[400007];
+
+void solve() {
+    int n, d;re(n,d); union_find UF(n);
+    while(d--){
+        int x,y; re(x,y); UF.unite(x,y);
+        ps((UF.mxsz.top())-1);
+    }
 }
 
 int main() {
@@ -416,7 +453,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
@@ -427,4 +464,4 @@ int main() {
 #endif
 
     return 0;
-}
+}  

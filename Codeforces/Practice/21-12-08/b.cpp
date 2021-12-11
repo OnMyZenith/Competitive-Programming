@@ -380,24 +380,18 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e6 + 007;
+// const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    int n,k;re(n,k);vi a(n);re(a); ll res = (ll)(n)*(n-1)-k*(a[(n-2)]|a[(n-1)]);
+    for (int i = n - 1; i >= 1 && i >= n - 200; i--){
+        for (int j = i - 1; j >= 0 && j >= n - 200; j--){
+            ckmax(res,(ll)(i+1)*(j+1) - k*(a[i]|a[j]));
+        }
     }
-    reverse(all(res));
     ps(res);
 }
 

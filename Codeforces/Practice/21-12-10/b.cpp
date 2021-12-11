@@ -380,25 +380,29 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e6 + 007;
+// const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vi adj[400007];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
+
+
+
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    int n, q; str s; re(n,q,s); int cnt=0; f0r(i,n-2)if(s[i]=='a'&&s[i+1]=='b'&&s[i+2]=='c')cnt++;dbg(cnt);
+    while(q--){
+        int i; char c; re(i,c); if (n<3) {ps(0);continue;}i--;
+        if(i < n - 2 && s[i]=='a'&&s[i+1]=='b'&&s[i+2]=='c')cnt--;
+        else if (i > 0  && i < n - 1 && s[i-1]=='a'&&s[i]=='b'&&s[i+1]=='c')cnt--;
+        else if (i > 1 && s[i-2]=='a'&&s[i-1]=='b'&&s[i]=='c')cnt--;
+        s[i]=c;
+        // dbg(s);
+        if(i < n - 2 && s[i]=='a'&&s[i+1]=='b'&&s[i+2]=='c')cnt++;
+        else if (i > 0  && i < n - 1 && s[i-1]=='a'&&s[i]=='b'&&s[i+1]=='c')cnt++;
+        else if (i > 1 && s[i-2]=='a'&&s[i-1]=='b'&&s[i]=='c')cnt++;
+        ps(cnt);
     }
-    reverse(all(res));
-    ps(res);
 }
 
 int main() {
@@ -416,7 +420,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

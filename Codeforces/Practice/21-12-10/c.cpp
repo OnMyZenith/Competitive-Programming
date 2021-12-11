@@ -14,8 +14,8 @@ using namespace std;
 // #pragma GCC optimize ("O3")
 // #pragma GCC target ("avx2")
 
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
+// #pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -381,24 +381,45 @@ const long long lINF = 1e18L;
 const int iINF = 1e9;
 
 const int _ = 1e6 + 007;
+ll a[_];
+// ll b[_];
+// ll c[_];
+// vi adj[400007];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
+
+ll NN = 1000007;
+vb is_prime(NN+1, 1);
+
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    ll n,e;re(n,e);ai(a,n); vvl poss;
+    f0r(i,e){
+        for (ll j = i; j < n; j+=e){
+            if(a[j]==1 || is_prime[a[j]]){
+                vl tmp;
+                while(j<n&&(a[j]==1 || is_prime[a[j]])){
+                    tmp.pb(a[j]);j+=e;
+                }
+                poss.pb(tmp);
+            }
+        }
     }
-    reverse(all(res));
-    ps(res);
+    ll ans=0;
+    each(v,poss){
+        ll cnt=0; vl v1; bool f=0;
+        each(i,v){
+            if(i==1)cnt++;
+            else v1.pb(cnt),cnt=0, f=1;
+        }
+        v1.pb(cnt);
+        if(f){
+            f0r(i,sz(v1)-1){
+                ll t1=ans;
+                ans += (ll)((v1[i]+1+v1[i+1])*((v1[i]+1+v1[i+1])-1)/2) - (v1[i]*(v1[i]-1)/2 + v1[i+1]*(v1[i+1]-1)/2);
+                assert(ans>=t1);
+            }
+        }
+    }
+    ps(ans);
 }
 
 int main() {
@@ -415,6 +436,13 @@ int main() {
 
     fix(15);
 
+    is_prime[0] = is_prime[1] = false;
+    for (int i = 2; i <= NN; i++) {
+        if (is_prime[i] && (long long)i * i <= NN) {
+            for (int j = i * i; j <= NN; j += i)
+                is_prime[j] = false;
+        }
+    }
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)

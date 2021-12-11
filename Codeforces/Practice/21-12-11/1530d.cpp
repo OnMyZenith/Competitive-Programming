@@ -381,24 +381,29 @@ const long long lINF = 1e18L;
 const int iINF = 1e9;
 
 const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+vl a;
+// vi adj[400007];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
+
+
+
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    ll n;re(n); a.rsz(n); re(a);vl lonely,denied; vb wasGifted(n), giftedOnce(n); vpl ans;
+    each(i,a){wasGifted[i-1]=1;} f0r(i,n){if(!wasGifted[i])lonely.pb(i+1);}
+    f0rd(i,n-1)if(!giftedOnce[a[i]-1])giftedOnce[a[i]-1]=1,ans.pb({i+1,a[i]});else denied.pb(i+1);
+    if(denied.empty()){ps(n);f0r(i,n)cout<<ans[i].ss<<" \n"[i==n-1];return;}
+    sor(denied); sor(lonely); int s1=sz(denied), i=0,j=0; vl tmp;
+    while(i<s1&&j<s1) {if(denied[i]<lonely[j])i++;else if(denied[i]>lonely[j])j++; else tmp.pb(denied[i]),i++,j++;}
+    if(sz(tmp)==1) {
+        if(denied[0]!=tmp[0])
     }
-    reverse(all(res));
-    ps(res);
+    f0r(i,s1){assert(denied[i]!=lonely[i]); ans.pb({denied[i],lonely[i]});}
+    sor(ans);ps(n-sz(denied));
+    dbg(lonely,denied,ans);
+    f0r(i,n)cout<<ans[i].ss<<" \n"[i==n-1];
 }
 
 int main() {

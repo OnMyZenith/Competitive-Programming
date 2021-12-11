@@ -380,25 +380,63 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e6 + 007;
+// const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vi adj[400007];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
-void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+// no intersection == 1 path
+vl ldown, lup, rdown, rup;
+
+ll width(ll n) {return fstTrue(1LL,(ll)1e6,[&](ll r)->bool{return n>=r*(r+1)/2;});}
+
+ll depth(ll s, ll e){
+    ll dep=0, l=s, r=s, w = width(s);
+    while(1){
+        ldown.pb(l); rdown.pb(r);
+        if(l>e&&r>e){return -1;}
+        if(l<=e&&r>=e) break;
+        l+=w;r+=w+1; dep++;
+        w=width(l);
     }
-    reverse(all(res));
-    ps(res);
+    return dep;
+}
+
+void pushIntersection(ll s){
+    ll l=s, r=s, w = width(s); bool l_dead=0,r_dead=0;
+    while(1){
+        if(l_dead&&r_dead) return;
+        if(!l_dead) lup.pb(l); if(!r_dead) rup.pb(r);
+        if(w - width(l-w)>1)l_dead=1;
+        if(w - width(r-w)>1)r_dead=1;
+        if(!l_dead) l-=w; if(!r_dead) r-=w-1;
+        w=width(min(l,r));
+    }
+    return;
+}
+
+mi ways(ll n){
+    mi ways=1;ll w=2;
+    while(n--){
+        ways*=(2*(w-1));
+        w++;
+    }
+    return ways;
+}
+
+void solve() {
+    ll s, e; re(s,e); mi ans=0; ldown.clear();lup.clear();rdown.clear();rup.clear();
+    ll dep = depth(s, e); if(dep==-1){ps(0);return;}
+    pushIntersection(e); sor(ldown); sor(rdown); sor(lup); sor(rup);
+    ll l=-1,r=-1; ll i=0,j=0;
+    while(i<sz(ldown)&&j<sz(lup))if(ldown[i]<lup[j])i++;else if(ldown[i]>lup[j])j++; else {l = ldown[i]; break;}
+    i=0,j=0;while(i<sz(rdown)&&j<sz(rup))if(rdown[i]<rup[j])i++;else if(rdown[i]>rup[j])j++; else {r = rdown[i]; break;}
+    if(l==-1||r==-1){ps(1);return;}
+    ll h1 = depth(l,e), h2 = depth(r, e);
+    mi t1=1,t2=1,t3=1;
+    ans=t1-t2-t3+2;
+    ps(ans);
 }
 
 int main() {

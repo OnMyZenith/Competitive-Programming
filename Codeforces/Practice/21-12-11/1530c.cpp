@@ -381,24 +381,31 @@ const long long lINF = 1e18L;
 const int iINF = 1e9;
 
 const int _ = 1e6 + 007;
+vl a;
+vl sum_a;
+vl sum_b;
+vl b;
+// ll c[_];
+// vi adj[400007];
+int n;
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
+bool f(int x){
+    int c=(n+x)-(n+x)/4;
+    ll mys=0,s=0;
+    if(c>x){
+        mys = x*100+sum_a[c-x-1];
+    }else mys = c*100;
+    if(c>n)s=sum_b[n-1];
+    else s = sum_b[c-1];
+    return mys>=s;
 }
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
+
+
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
-    }
-    reverse(all(res));
-    ps(res);
+    re(n);a.ass(n,0);b.ass(n,0);sum_b.ass(n,0);sum_a.ass(n,0); re(a,b); sort(rall(a));sort(rall(b));
+    f0r(i,n){sum_a[i]=a[i]+(i?sum_a[i-1]:0);sum_b[i]=b[i]+(i?sum_b[i-1]:0);}
+    // dbg(a,b,sum_a,sum_b);
+    ps(fstTrue(0,(int)1e5,f));
 }
 
 int main() {

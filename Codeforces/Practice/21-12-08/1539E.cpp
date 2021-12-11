@@ -381,24 +381,29 @@ const long long lINF = 1e18L;
 const int iINF = 1e9;
 
 const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
+vi adj[400005];
+
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    int n,k;re(n,k);f0r(i,n)adj[i].clear(); vi nn(n); f0r(i,n-1){int x,y;re(x,y) ; x--,y--;nn[x]++;nn[y]++; adj[x].pb(y);adj[y].pb(x);}
+    vi cut; f0r(i,n)if(nn[i]<=1)cut.pb((int)i); int ans = n; int cnt=0;
+    vi n_cut;
+    while(k--){
+        n_cut.clear();
+        each(node, cut){
+            nn[node]=-1;
+            each(nei, adj[node]){
+                nn[nei]--;
+                if(nn[nei]<=1)n_cut.pb(nei);
+            }
+        }
+        cut=n_cut;
     }
-    reverse(all(res));
-    ps(res);
+    f0r(i,n) if(nn[i]<0)ans--;
+    ps(max((ans),0));
 }
 
 int main() {

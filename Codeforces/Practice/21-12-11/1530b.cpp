@@ -381,24 +381,33 @@ const long long lINF = 1e18L;
 const int iINF = 1e9;
 
 const int _ = 1e6 + 007;
+ll a[_];
+ll b[_];
+ll c[_];
+vi adj[400007];
 
-char all[3] = {'R', 'P', 'S'};
-char fight(char a, char b){
-    if(a==b) return a;
-    if(a>b)swap(a,b);
-    if(a=='P'){ if(b=='R')return 'P';else return 'S';}
-    return 'R';
-}
-int p(char c){ if(c=='P')return 1; if(c=='S')return 2; return 0;}
+
+
+
 void solve() {
-    int n; str s; re(n,s); V<V<char>> dp(3, V<char>(n)); str res;
-    f0r(i,3){dp[i][n-1]=all[i];} res+=dp[p(s.back())][n-1];
-    f1rd(i,n-2,0){
-        f0r(j,3){dp[j][i] = dp[p(fight(all[j], s[i+1]))][i+1];}
-        res+= dp[p(s[i])][i];
+    int h,w;re(h,w); vs s(h, str(w, '0')); 
+    // vs s11=s,s12=s,s21=s,s22=s; int cnt12=0,cnt11=0,cnt21=0,cnt22=0;
+    if(w&1){
+        f0r(i,w) s[0][i]='1', s[h-1][i]='1',i++;
+        f1r(i,2,h-3)s[i][0]='1',s[i][w-1]='1',i++;
+        each(i,s)ps(i);ps(); return;
     }
-    reverse(all(res));
-    ps(res);
+    if(h&1){
+        f0r(i,h)s[i][0]='1',s[i][w-1]='1',i++;
+        f1r(i,2,w-3) s[0][i]='1', s[h-1][i]='1',i++;
+        each(i,s)ps(i);ps(); return;
+    }
+    f1r(i,1,w-3)s[0][i]='1', s[h-1][i+1]='1',i++;
+    f1r(i,1,h-3)s[i+1][0]='1',s[i][w-1]='1',i++;
+    each(i,s)ps(i);ps();
+
+
+
 }
 
 int main() {
