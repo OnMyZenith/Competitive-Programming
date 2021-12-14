@@ -372,7 +372,7 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1};
-//these are checked at 1 + eps on CF, accuracy gets better near zero
+//these are checked at (1 + eps == 1) on CF, accuracy gets better near zero
 const float epsf = 1e-7F;
 const long double epsld = 1e-19L;
 const double epsd = 2e-16;
@@ -380,26 +380,86 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e5 + 007;
+const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vl a;
+// vl b;
+// vl c;
+// vi adj[400007];
 
-mi fact[_];
-
-pl height(ll n) {
-    if(n==1) return {1,1};
-    ll lvl =-1, idx = -1, st=2, end = 1LL + ceil(sqrt(2*n));
-    while(st<=end) {
-        lvl= (st+end)/2;
-        if((((lvl + 1)*lvl) / 2)>=n && ((((lvl-1) + 1)*(lvl-1)) / 2)<n) break;
-        else if((((lvl + 1)*lvl) / 2)>n) end = lvl - 1;
-        else st = lvl + 1;
+int getSum(int BITree[], int index)
+{
+    int sum = 0; // Initialize result
+ 
+    // Traverse ancestors of BITree[index]
+    while (index > 0)
+    {
+        // Add current element of BITree to sum
+        sum += BITree[index];
+ 
+        // Move index to parent node in getSum View
+        index -= index & (-index);
     }
-    idx = n - (lvl*(lvl-1))/2; return {lvl,idx};
+    return sum;
 }
+ 
+// Updates a node in Binary Index Tree (BITree) at given index
+// in BITree.  The given value 'val' is added to BITree[i] and
+// all of its ancestors in tree.
+void updateBIT(int BITree[], int n, int index, int val)
+{
+    // Traverse all ancestors and add 'val'
+    while (index <= n)
+    {
+       // Add 'val' to current node of BI Tree
+       BITree[index] += val;
+ 
+       // Update index to that of parent in update View
+       index += index & (-index);
+    }
+}
+ 
+// Returns inversion count arr[0..n-1]
+int getInvCount(int arr[], int n)
+{
+    int invcount = 0; // Initialize result
+ 
+    // Find maximum element in arr[]
+    int maxElement = 0;
+    for (int i=0; i<n; i++)
+        if (maxElement < arr[i])
+            maxElement = arr[i];
+ 
+    // Create a BIT with size equal to maxElement+1 (Extra
+    // one is used so that elements can be directly be
+    // used as index)
+    int BIT[maxElement+1];
+    for (int i=1; i<=maxElement; i++)
+        BIT[i] = 0;
+ 
+    // Traverse all elements from right.
+    for (int i=n-1; i>=0; i--)
+    {
+        // Get count of elements smaller than arr[i]
+        invcount += getSum(BIT, arr[i]-1);
+ 
+        // Add current element to BIT
+        updateBIT(BIT, maxElement, arr[i], 1);
+    }
+ 
+    return invcount;
+}
+
+int a[_];
 void solve() {
-    ll s,e; re(s,e); pl r1= height(s),r2=height(e);
-    ll last = r2.ff -r1.ff, kth = r2.ss-r1.ss; mi ans =0 ;
-    if(!(last<=0||kth<0||kth>last)) ans = fact[last] * inv(fact[kth]) * inv(fact[last-kth]);
-    ps(ans);
+    int n; re(n); ai(a,n); int inv =getInvCount(a,n);  bool f =0; sort(a,a+n);f0r(i,n-1)if(a[i]==a[i+1]){f=1;break;}
+    if(inv%2==0|| f)ps("YES"); else ps("NO");
+
+
+
+
 }
 
 int main() {
@@ -415,7 +475,7 @@ int main() {
 // #endif
 
     fix(15);
-    fact[0]=1; fact[1]=1; f1r(i,2,100007) fact[i]=i*fact[i-1];
+
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)

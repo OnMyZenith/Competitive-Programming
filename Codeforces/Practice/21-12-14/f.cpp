@@ -40,7 +40,7 @@ using namespace std;
 #define eb emplace_back
 #define mp make_pair
 #define ff first
-#define ss second
+// #define ss second
 #define lb lower_bound
 #define ub upper_bound
 #define ins insert
@@ -372,34 +372,99 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1};
-//these are checked at 1 + eps on CF, accuracy gets better near zero
+//these are checked at (1 + eps == 1) on CF, accuracy gets better near zero
 const float epsf = 1e-7F;
 const long double epsld = 1e-19L;
 const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
-const long long lINF = 1e18L;
-const int iINF = 1e9;
+const long long lINF = 2e18L + 007;
+const int iINF = 2e9 + 007;
 
-const int _ = 1e5 + 007;
+const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vi adj[400007];
 
-mi fact[_];
-
-pl height(ll n) {
-    if(n==1) return {1,1};
-    ll lvl =-1, idx = -1, st=2, end = 1LL + ceil(sqrt(2*n));
-    while(st<=end) {
-        lvl= (st+end)/2;
-        if((((lvl + 1)*lvl) / 2)>=n && ((((lvl-1) + 1)*(lvl-1)) / 2)<n) break;
-        else if((((lvl + 1)*lvl) / 2)>n) end = lvl - 1;
-        else st = lvl + 1;
+// To store segment tree
+int *st;
+  
+  
+/*  A recursive function to get gcd of given
+    range of array indexes. The following are parameters for
+    this function.
+  
+    st    --> Pointer to segment tree
+    si --> Index of current node in the segment tree. Initially
+               0 is passed as root is always at index 0
+    ss & se  --> Starting and ending indexes of the segment
+                 represented by current node, i.e., st[index]
+    qs & qe  --> Starting and ending indexes of query range */
+int findGcd(int ss, int se, int qs, int qe, int si)
+{
+    if (ss>qe || se < qs)
+        return 0;
+    if (qs<=ss && qe>=se)
+        return st[si];
+    int mid = ss+(se-ss)/2;
+    return __gcd(findGcd(ss, mid, qs, qe, si*2+1),
+               findGcd(mid+1, se, qs, qe, si*2+2));
+}
+  
+//Finding The gcd of given Range
+int findRangeGcd(int ss, int se, int arr[],int n)
+{
+    if (ss<0 || se > n-1 || ss>se)
+    {
+        dbg(ss,se);
+        cout << "Invalid Arguments" << "\n";
+        return -1;
     }
-    idx = n - (lvl*(lvl-1))/2; return {lvl,idx};
+    return findGcd(0, n-1, ss, se, 0);
+}
+  
+// A recursive function that constructs Segment Tree for
+// array[ss..se]. si is index of current node in segment
+// tree st
+int constructST(int arr[], int ss, int se, int si)
+{
+    if (ss==se)
+    {
+        st[si] = arr[ss];
+        return st[si];
+    }
+    int mid = ss+(se-ss)/2;
+    st[si] = __gcd(constructST(arr, ss, mid, si*2+1),
+                 constructST(arr, mid+1, se, si*2+2));
+    return st[si];
+}
+  
+/* Function to construct segment tree from given array.
+   This function allocates memory for segment tree and
+   calls constructSTUtil() to fill the allocated memory */
+int *constructSegmentTree(int arr[], int n)
+{
+   int height = (int)(ceil(log2(n)));
+   int size = 2*(int)pow(2, height)-1;
+   st = new int[size];
+   constructST(arr, 0, n-1, 0);
+   return st;
+}
+  
+int a[_]; int gc;
+
+int idx;int n;
+bool f(int j){
+    int g=a[idx]; j+=idx;
+    if(j>=n) {g=gcd(g,findRangeGcd(0,j%n,a,n)); g=gcd(g,findRangeGcd(idx,n-1,a,n));}
+    else g=gcd(g,findRangeGcd(idx,j,a,n));
+    return g==gc;
 }
 void solve() {
-    ll s,e; re(s,e); pl r1= height(s),r2=height(e);
-    ll last = r2.ff -r1.ff, kth = r2.ss-r1.ss; mi ans =0 ;
-    if(!(last<=0||kth<0||kth>last)) ans = fact[last] * inv(fact[kth]) * inv(fact[last-kth]);
-    ps(ans);
+    re(n); ai(a,n); gc=a[0]; f0r(j,n)gc=gcd(gc,a[j]); int cnt=0; constructSegmentTree(a,n);
+    idx=0; for (;idx < n; idx++) ckmax(cnt,fstTrue(0,n,f));
+    ps(cnt);
 }
 
 int main() {
@@ -415,7 +480,7 @@ int main() {
 // #endif
 
     fix(15);
-    fact[0]=1; fact[1]=1; f1r(i,2,100007) fact[i]=i*fact[i-1];
+
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)

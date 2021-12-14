@@ -372,7 +372,7 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1};
-//these are checked at 1 + eps on CF, accuracy gets better near zero
+//these are checked at (1 + eps == 1) on CF, accuracy gets better near zero
 const float epsf = 1e-7F;
 const long double epsld = 1e-19L;
 const double epsd = 2e-16;
@@ -380,26 +380,37 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e5 + 007;
+const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vl a;
+// vl b;
+// vl c;
+// vi adj[400007];
 
-mi fact[_];
+vpl fr[5]; vl tot;
+vvl freq;
 
-pl height(ll n) {
-    if(n==1) return {1,1};
-    ll lvl =-1, idx = -1, st=2, end = 1LL + ceil(sqrt(2*n));
-    while(st<=end) {
-        lvl= (st+end)/2;
-        if((((lvl + 1)*lvl) / 2)>=n && ((((lvl-1) + 1)*(lvl-1)) / 2)<n) break;
-        else if((((lvl + 1)*lvl) / 2)>n) end = lvl - 1;
-        else st = lvl + 1;
+bool f(ll x){
+    f0r(i,5){
+        ll sa=0, s=0; vl used;
+        f0r(j,x){
+            sa+=freq[fr[i][j].ss][i+1]; used.pb(fr[i][j].ss);
+        }
+        each(j,used) s+=tot[j];
+        if(2*sa>s){return 1;}
     }
-    idx = n - (lvl*(lvl-1))/2; return {lvl,idx};
+    return 0;
 }
+
 void solve() {
-    ll s,e; re(s,e); pl r1= height(s),r2=height(e);
-    ll last = r2.ff -r1.ff, kth = r2.ss-r1.ss; mi ans =0 ;
-    if(!(last<=0||kth<0||kth>last)) ans = fact[last] * inv(fact[kth]) * inv(fact[last-kth]);
-    ps(ans);
+    ll n; re(n); vs s(n); re(s); freq.ass(n,vl(6)); tot.ass(n,0); f0r(i,5)fr[i].clear();
+    f0r(i,n)each(c,s[i]) freq[i][c-'a' + 1]++;
+    f0r(i,n)f1r(j,1,5) freq[i][0] += freq[i][j];
+    f0r(i,n)f1r(j,1,5) fr[j-1].pb({2*(freq[i][j])-freq[i][0], i});
+    f0r(i,5)soR(fr[i]); f0r(i,n) tot[i] = freq[i][0];
+    ps(lstTrue(1LL,n,f));
 }
 
 int main() {
@@ -415,7 +426,7 @@ int main() {
 // #endif
 
     fix(15);
-    fact[0]=1; fact[1]=1; f1r(i,2,100007) fact[i]=i*fact[i-1];
+
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)

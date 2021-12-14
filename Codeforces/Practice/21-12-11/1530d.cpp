@@ -395,12 +395,15 @@ void solve() {
     each(i,a){wasGifted[i-1]=1;} f0r(i,n){if(!wasGifted[i])lonely.pb(i+1);}
     f0rd(i,n-1)if(!giftedOnce[a[i]-1])giftedOnce[a[i]-1]=1,ans.pb({i+1,a[i]});else denied.pb(i+1);
     if(denied.empty()){ps(n);f0r(i,n)cout<<ans[i].ss<<" \n"[i==n-1];return;}
-    sor(denied); sor(lonely); int s1=sz(denied), i=0,j=0; vl tmp;
-    while(i<s1&&j<s1) {if(denied[i]<lonely[j])i++;else if(denied[i]>lonely[j])j++; else tmp.pb(denied[i]),i++,j++;}
-    if(sz(tmp)==1) {
-        if(denied[0]!=tmp[0])
-    }
-    f0r(i,s1){assert(denied[i]!=lonely[i]); ans.pb({denied[i],lonely[i]});}
+    sor(denied); sor(lonely); ll s1=sz(denied);
+    // int i=0,j=0; vl tmp;
+    // while(i<s1&&j<s1) {if(denied[i]<lonely[j])i++;else if(denied[i]>lonely[j])j++; else tmp.pb(denied[i]),i++,j++;}
+    // if(sz(tmp)==1) {
+    //     if(denied[0]!=tmp[0])
+    // }
+    bool f = 0;
+    do{ f=0; shuffle(all(lonely),rng); f0r(i,s1){if(denied[i]==lonely[i]){f=1;break;}} }while(f);
+    f0r(i,s1){ans.pb({denied[i],lonely[i]});}
     sor(ans);ps(n-sz(denied));
     dbg(lonely,denied,ans);
     f0r(i,n)cout<<ans[i].ss<<" \n"[i==n-1];

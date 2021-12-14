@@ -380,26 +380,46 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e5 + 007;
+const int _ = 1e6 + 007;
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vl a;
+// vl b;
+// vl c;
+// vi adj[400007];
 
-mi fact[_];
 
-pl height(ll n) {
-    if(n==1) return {1,1};
-    ll lvl =-1, idx = -1, st=2, end = 1LL + ceil(sqrt(2*n));
-    while(st<=end) {
-        lvl= (st+end)/2;
-        if((((lvl + 1)*lvl) / 2)>=n && ((((lvl-1) + 1)*(lvl-1)) / 2)<n) break;
-        else if((((lvl + 1)*lvl) / 2)>n) end = lvl - 1;
-        else st = lvl + 1;
-    }
-    idx = n - (lvl*(lvl-1))/2; return {lvl,idx};
-}
+
+
 void solve() {
-    ll s,e; re(s,e); pl r1= height(s),r2=height(e);
-    ll last = r2.ff -r1.ff, kth = r2.ss-r1.ss; mi ans =0 ;
-    if(!(last<=0||kth<0||kth>last)) ans = fact[last] * inv(fact[kth]) * inv(fact[last-kth]);
-    ps(ans);
+    int n,a,b;re(n,a,b); vi res;
+    if(a+b>n-2||abs(a-b)>1){ps(-1);return;}
+    f0r(i,n)res.pb(i+1);
+    if(a>b){int cnt=b;
+        f1r(i,1,n-2){
+            if(!cnt)break;
+            swap(res[i],res[i+1]);cnt--;i++;
+        }
+        swap(res[n-2],res[n-1]);
+        if(cnt){ps(-1);return;}
+    }
+    else if(b>a){int cnt=b;
+        f1r(i,0,n-2){
+            if(!cnt)break;
+            swap(res[i],res[i+1]);cnt--;i++;
+        }if(cnt){ps(-1);return;}
+    }else{int cnt=b;
+        f1r(i,1,n-2){
+            if(!cnt)break;
+            swap(res[i],res[i+1]);cnt--;i++;
+        }if(cnt){ps(-1);return;}
+    }
+    f0r(i,n)cout<<res[i]<<" \n"[i==n-1];
+
+
+
+
 }
 
 int main() {
@@ -415,7 +435,7 @@ int main() {
 // #endif
 
     fix(15);
-    fact[0]=1; fact[1]=1; f1r(i,2,100007) fact[i]=i*fact[i-1];
+
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)

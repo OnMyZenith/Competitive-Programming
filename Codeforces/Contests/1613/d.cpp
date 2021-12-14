@@ -326,7 +326,7 @@ struct mint {
     friend mint operator/(mint a, const mint &b) { return a /= b; }
 };
 
-const int MOD = 1e9 + 007; // 998244353;
+const int MOD = 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
@@ -381,38 +381,22 @@ const long long lINF = 1e18L + 007;
 const int iINF = 1e9 + 007;
 
 const int _ = 1e6 + 007;
-ll a[_];
-// int b[_];
-// ll c[_];
+vl a;
 
-
-void solve() {
-    ll n; re(n); ai(a,n); V<mi> endWith(n+1),endWithTyp2(n+1); mi ans=0;
+void solve(){
+    int n; re(n); rv(n,a); vmi endsWith(n+1,0), gapEndsWith(n+1,0); mi ans=0;
     f0r(i,n){
-        if(a[i]>1) {
-            ans+=endWith[a[i]]+endWith[a[i]-1];             // if ai = 2, then all 00111... + 00111222...
-            ans+=endWithTyp2[a[i]]+endWith[a[i]-2];
-            endWith[a[i]]+=endWith[a[i]]+endWith[a[i]-1];
-            endWithTyp2[a[i]]+=endWithTyp2[a[i]];
-            endWithTyp2[a[i]]+=endWith[a[i]-2];             // if ai = 2, then all 00000... to make + 0022...
-            // dbg(ans);
-            continue;
-        }
-        if(a[i]) {
-            ans+=endWith[1]+endWith[0];                     // (00000, 000111.....) <--appending 1 here
-            ans+=endWithTyp2[1]+1;
-            endWith[1]+=endWith[1]+endWith[0];
-            endWithTyp2[1]+=endWithTyp2[1]+1;               // 11111 <--appending 1 here + starting here
-            // dbg(ans);
-            continue;
-        }
-        ans+=endWith[0]+1;
-        // dbg(ans);
-        endWith[0]+=endWith[0]+1;
+        if(a[i]==0){ans+=endsWith[0] + 1; endsWith[0]+=endsWith[0] + 1; continue;}
+
+        ans+=endsWith[a[i]]+endsWith[a[i]-1]+(a[i]>1?endsWith[a[i]-2]:1)+gapEndsWith[a[i]];
+
+        gapEndsWith[a[i]]+=gapEndsWith[a[i]];
+        endsWith[a[i]]+=endsWith[a[i]];
+        endsWith[a[i]]+=endsWith[a[i]-1];
+        gapEndsWith[a[i]]+=(a[i]>1?endsWith[a[i]-2]:1);
     }
     ps(ans);
 }
-
 
 int main() {
 

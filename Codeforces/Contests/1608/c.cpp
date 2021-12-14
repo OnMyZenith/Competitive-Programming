@@ -372,7 +372,7 @@ tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_o
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // shuffle(permutation.begin(), permutation.end(), rng);
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1};
-//these are checked at 1 + eps on CF, accuracy gets better near zero
+//these are checked at (1 + eps == 1) on CF, accuracy gets better near zero
 const float epsf = 1e-7F;
 const long double epsld = 1e-19L;
 const double epsd = 2e-16;
@@ -380,26 +380,41 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 1e18L;
 const int iINF = 1e9;
 
-const int _ = 1e5 + 007;
+const int _ = 1e6 + 007;
 
-mi fact[_];
-
-pl height(ll n) {
-    if(n==1) return {1,1};
-    ll lvl =-1, idx = -1, st=2, end = 1LL + ceil(sqrt(2*n));
-    while(st<=end) {
-        lvl= (st+end)/2;
-        if((((lvl + 1)*lvl) / 2)>=n && ((((lvl-1) + 1)*(lvl-1)) / 2)<n) break;
-        else if((((lvl + 1)*lvl) / 2)>n) end = lvl - 1;
-        else st = lvl + 1;
+struct Per { int f,s,pm1,pm2;};
+str s; vb win; int n; vpi m1,m2; int wm1,wm2; V<Per> p;
+void dfsm2(int idx);
+void dfsm1(int idx){
+    int val = m1[p[idx].pm1].ff;
+    int lo = fstTrue(0,n-1,[&](int x)->bool{return m1[x].ff>=val;});
+    int pr =wm1;
+    if(ckmin(wm1,lo)){
+        f1r(i,lo+1,pr-1){
+            dfsm2(m1[i].ss);
+        }
     }
-    idx = n - (lvl*(lvl-1))/2; return {lvl,idx};
+}
+void dfsm2(int idx){
+    int val = m2[p[idx].pm2].ff;
+    int lo = fstTrue(0,n-1,[&](int x)->bool{return m2[x].ff>=val;});
+    int pr=wm2;
+    if(ckmin(wm2,lo)){
+        f1r(i,lo+1,pr-1){
+            dfsm1(m2[i].ss);
+        }
+    }
 }
 void solve() {
-    ll s,e; re(s,e); pl r1= height(s),r2=height(e);
-    ll last = r2.ff -r1.ff, kth = r2.ss-r1.ss; mi ans =0 ;
-    if(!(last<=0||kth<0||kth>last)) ans = fact[last] * inv(fact[kth]) * inv(fact[last-kth]);
-    ps(ans);
+    re(n); p.clear(); p.rsz(n); f0r(i,n)cin>>p[i].f;f0r(i,n)cin>>p[i].s; m1.clear();m2.clear();
+    f0r(i,n) m1.push_back({p[i].f,i}),m2.push_back({p[i].s,i}); sor(m1);sor(m2);
+    f0r(i,n) p[m1[i].ss].pm1 = (int)i, p[m2[i].ss].pm2 = (int)i;
+    s.ass(n,'0'); wm1=n-1,wm2=n-1;
+    dfsm1(m2[n-1].ss);
+    dfsm2(m1[n-1].ss);
+    f1r(i,wm1,n-1) s[m1[i].ss]='1';
+    f1r(i,wm2,n-1) s[m2[i].ss]='1';
+    ps(s);
 }
 
 int main() {
@@ -415,7 +430,7 @@ int main() {
 // #endif
 
     fix(15);
-    fact[0]=1; fact[1]=1; f1r(i,2,100007) fact[i]=i*fact[i-1];
+
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
