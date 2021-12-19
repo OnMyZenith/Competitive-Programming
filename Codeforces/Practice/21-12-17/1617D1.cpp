@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -385,19 +385,23 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
-
+bool moreCrewmates(int i, int j, int k){
+    cout<<"? "<<i+1<<" "<<j+1<<" "<<k+1<< endl;
+    bool f; cin>>f; return f;
+}
 
 void solve() {
-    
-
-
-
-
+    int n; re(n); int i=0; vvi v(2,vi{});// im, crew
+    bool f = moreCrewmates(i,i+1,i+2); i++; while(f==moreCrewmates(i,i+1,i+2))i++;
+    v[f].pb(i-1); v[!f].pb(i+2);
+    f0r(j,n)if(j!=v[0][0]&&j!=v[1][0])v[moreCrewmates(v[0][0],v[1][0],j)].pb(j);
+    int m = sz(v[0]); sor(v[0]); cout<< "! " << m << " ";  f0r(j,m) cout << v[0][j] + 1 << " ";
+    cout<<endl;
 }
 
 int main() {

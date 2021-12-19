@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -385,21 +385,93 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
+
+// void solve() {
+//     int n; re(n); vb a(n); f0r(i,n){bool f; cin>>f; a[i]=f;} V<pqinc<pi>> p(n);
+//     f0r(i,n){
+//         if(a[i]){
+//             f0r(j,n){
+//                 if(!a[j]) p[i].push({abs(j-i),((j-i)/(abs(j-i)))});
+//             }
+//         }
+//     }
+//     vb taken(n); ll ans=0; vb tmp =taken;V<pqinc<pi>> p1=p;
+//     f0r(i,n){
+//         if(a[i]){
+//             pi  t =p[i].top(); p[i].pop();
+//             while(taken[t.ss*t.ff+i]) {t =p[i].top(); p[i].pop();}
+//             ans+=t.ff;taken[t.ss*t.ff+i]=1;
+//         }
+//     }
+//     ll ans1=0; taken=tmp; p=p1;
+//     f0rd(i,n-1){
+//         if(a[i]){
+//             pi  t =p[i].top(); p[i].pop();
+//             while(taken[t.ss*t.ff+i]) {t =p[i].top(); p[i].pop();}
+//             ans1+=t.ff;taken[t.ss*t.ff+i]=1;
+//         }
+//     }
+//     ps(min(ans,ans1));
+// }
 
 void solve() {
-    
-
-
-
+    int n; re(n); vb a(n); f0r(i,n){bool f; cin>>f; a[i]=f;} vi need,have; f0r(i,n){if(a[i])need.pb(i);else have.pb(i);}
+    int nn = sz(need), h = sz(have); vvi time(nn+1,vi(h+1,iINF)); f0r(i,h+1)time[0][i]=0; sor(have);sor(need);
+    f1r(i,1,nn){
+        f1r(j,i,h){
+            time[i][j]=time[i][j-1];
+            ckmin(time[i][j],time[i-1][j-1]+abs(have[j-1]-need[i-1]));
+        }
+    }
+    dbg(have,need ,time);
+    ps(time[nn][h]);
 
 }
-
+// const int INF = 1e9 + 5;
+ 
+// void min_self(int& a, int b) {
+// 	a = min(a, b);
+// }
+ 
+// void solve() {
+// 	int n;
+// 	scanf("%d", &n);
+// 	vector<int> a(n);
+// 	for(int i = 0; i < n; ++i) {
+// 		scanf("%d", &a[i]);
+// 	}
+// 	vector<vector<int>> dp(n + 1, vector<int>(n + 1, INF));
+// 	dp[0][0] = 0;
+// 	int last_alive = 0;
+// 	for(int person = 0; person < n; ++person) {
+// 		if(a[person] == 1) {
+// 			last_alive = person;
+// 		}
+// 		for(int spot = 0; spot < n; ++spot) {
+// 			int me = dp[person][spot];
+// 			if(a[person] == 0) { // no person
+// 				min_self(dp[person+1][spot], me);
+// 			}
+// 			else {
+// 				min_self(dp[person][spot+1], me);
+// 				if(a[spot] == 0) {
+// 					min_self(dp[person+1][spot+1], me + abs(person - spot));
+// 				}
+// 			}
+// 		}
+// 	}
+// 	int answer = INF;
+// 	for(int spot = 0; spot <= n; ++spot) {
+// 		min_self(answer, dp[last_alive+1][spot]);
+// 	}
+// 	printf("%d\n", answer);
+// }
 int main() {
 
 #ifdef asr
@@ -415,7 +487,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

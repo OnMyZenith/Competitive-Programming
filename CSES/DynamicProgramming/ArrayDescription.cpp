@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -24,10 +24,10 @@ using namespace std;
 #define tcTU tcT, class U
 #define tcTUU tcT, class... U
 
-#define f0r(i, n) for (int i = 0; i < (n); ++i)
-#define f1r(i, l, r) for (int i = (l); i <= (r); ++i)
-#define f0rd(i, n) for (int i = (n); i >= 0; --i)
-#define f1rd(i, l, r) for (int i = (l); i >= (r); --i)
+#define f0r(i, n) for (long long i = 0; i < (n); ++i)
+#define f1r(i, l, r) for (long long i = (l); i <= (r); ++i)
+#define f0rd(i, n) for (long long i = (n); i >= 0; --i)
+#define f1rd(i, l, r) for (long long i = (l); i >= (r); --i)
 #define each(i, a) for (auto &i : a)
 
 // for pure array I/O, for other types use INPUT/OUTPUT section
@@ -38,6 +38,7 @@ using namespace std;
 
 #define pb push_back
 #define eb emplace_back
+#define mp make_pair
 #define ff first
 #define ss second
 #define lb lower_bound
@@ -55,7 +56,7 @@ using namespace std;
 #define rall(v) v.rbegin(), v.rend()
 #define sor(v) sort(v.begin(), v.end())
 #define soR(v) sort(v.rbegin(), v.rend())
-#define sz(v) ((int)v.size())
+#define sz(v) ((long long)v.size())
 #define bg(v) v.begin()
 
 using ll = long long;
@@ -97,8 +98,8 @@ tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
-tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
-tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > ll lwb(V<T> &a, const T &b) { return ll(lb(all(a), b) - bg(a)); }
+tcT > ll upb(V<T> &a, const T &b) { return ll(ub(all(a), b) - bg(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 
 tcTU > bool erase(T &t, const U &u) {
@@ -380,24 +381,24 @@ const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
 const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int _ = 1e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
+
 vl a;
-vl b;
-vl c;
-
-
-
-
 void solve() {
-    
-
-
-
-
+    int n,m; re(n,m); rv(n,a); V<V<mi>> dp(n+1,V<mi>(m+1)); if(!a[0]) f0r(i,m+1)dp[1][i]=1; else dp[1][a[0]]=1;
+    f1r(i,2,n){
+        if(a[i-1]) dp[i][a[i-1]] = dp[i-1][a[i-1]]+ (a[i-1]>1?dp[i-1][a[i-1]-1]:0)+ (a[i-1]<m?dp[i-1][a[i-1]+1]:0);
+        else 
+            f1r(j,1,m){
+                dp[i][j]=dp[i-1][j]+(j>1?dp[i-1][j-1]:0)+(j<m?dp[i-1][j+1]:0);
+            }
+    }
+    if(a[n-1]) ps(dp[n][a[n-1]]);
+    else { mi ans=0; f1r(i,1,m)ans+=dp[n][i];ps(ans);}
 }
 
 int main() {
@@ -415,7 +416,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

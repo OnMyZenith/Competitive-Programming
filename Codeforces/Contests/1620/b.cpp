@@ -385,16 +385,25 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
+    ll w ,h ; re(w,h); vl h0, h1,v0,v1; int x;
+    re(x); rv(x,h0);
+    re(x); rv(x,h1);
+    re(x); rv(x,v0);
+    re(x); rv(x,v1);
 
+    ll ans = h*(h0.back()-h0.front());
+    ckmax(ans, h*(h1.back()-h1.front()));
+    ckmax(ans, w*(v0.back()-v0.front()));
+    ckmax(ans, w*(v1.back()-v1.front()));
+    ps(ans);
 
 
 

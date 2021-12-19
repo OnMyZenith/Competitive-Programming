@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -385,19 +385,101 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
+// bool prime[_];
+// void SieveOfEratosthenes(int n)
+// {
+//     // Create a boolean array
+//     // "prime[0..n]" and initialize
+//     // all entries it as true.
+//     // A value in prime[i] will
+//     // finally be false if i is
+//     // Not a prime, else true.
+    
+//     memset(prime, true, sizeof(prime));
+ 
+//     for (int p = 2; p * p <= n; p++)
+//     {
+//         // If prime[p] is not changed,
+//         // then it is a prime
+//         if (prime[p] == true)
+//         {
+//             // Update all multiples
+//             // of p greater than or
+//             // equal to the square of it
+//             // numbers which are multiple
+//             // of p and are less than p^2
+//             // are already been marked.
+//             for (int i = p * p; i <= n; i += p)
+//                 prime[i] = false;
+//         }
+//     }
+ 
+//     // // Print all prime numbers
+//     // for (int p = 2; p <= n; p++)
+//     //     if (prime[p])
+//     //         cout << p << " ";
+// }
 
-
-
+// bool checkSpecialPrime(bool* sieve, int num)
+// {
+//     // While number is not equal to zero
+//     while (num) {
+//         // If the number is not prime
+//         // return false.
+//         if (!sieve[num]) {
+//             return false;
+//         }
+ 
+//         // Else remove the last digit
+//         // by dividing the number by 10.
+//         num /= 10;
+//     }
+ 
+//     // If the number has become zero
+//     // then the number is special prime,
+//     // hence return true
+//     return true;
+// }
+ 
+// // Function to find the Largest Special Prime
+// // which is less than or equal to a given number
+// int findSpecialPrime(int N)
+// {
+//     bool sieve[N + 10];
+ 
+//     // Initially all numbers are considered Primes.
+//     memset(sieve, true, sizeof(sieve));
+//     sieve[0] = sieve[1] = false;
+//     for (long long i = 2; i <= N; i++) {
+//         if (sieve[i]) {
+ 
+//             for (long long j = i * i; j <= N; j += i) {
+//                 sieve[j] = false;
+//             }
+//         }
+//     }
+ 
+//     // There is always an answer possible
+//     while (true) {
+//         // Checking if the number is a
+//         // special prime or not
+//         if (checkSpecialPrime(sieve, N)) {
+//             // If yes print the number
+//             // and break the loop.
+//             return N;
+//         }
+//         // Else decrement the number.
+//         else
+//             N--;
+//     }
+// }
 
 void solve() {
-    
-
-
-
-
+    int n; re(n); if(n%2==0){ cout<<2<<" "<<n-3<<" 1\n";return;}
+    cout<<(n-1)/2-(((n-1)/2)&1?2:1)<<" "<<(n-1)/2+(((n-1)/2)&1?2:1)<<" 1\n";
 }
 
 int main() {
@@ -413,7 +495,7 @@ int main() {
 // #endif
 
     fix(15);
-
+    // SieveOfEratosthenes(_-1);
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)

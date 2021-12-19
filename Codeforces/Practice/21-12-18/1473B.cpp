@@ -393,7 +393,9 @@ vl c;
 
 
 void solve() {
-    
+    str s, t; re(s,t); if(sz(s)<sz(t)) swap(s,t); int n = sz(s), m = sz(t);
+    f0r(i,2*n) if(s[i%n]!=t[i%m]) { ps(-1); return;}
+    f0r(i,n/gcd(n,m)) cout<<t; ps();
 
 
 

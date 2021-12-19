@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -393,7 +393,16 @@ vl c;
 
 
 void solve() {
-    
+    str s, t; re(s,t);sor(s); 
+    vi f(26); each(i,s)f[i-'a']++; 
+    if(t!="abc") { ps(s); return;}
+    if(!(f[0]&&f[1]&&f[2])) { ps(s); return;}
+    s.clear();
+    f0r(i,f[0])s+='a';
+    f0r(i,f[2])s+='c';
+    f0r(i,f[1])s+='b';
+    f1r(i,3,25)f0r(j,f[i])s+='a'+i;
+    ps(s);
 
 
 

@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -24,10 +24,10 @@ using namespace std;
 #define tcTU tcT, class U
 #define tcTUU tcT, class... U
 
-#define f0r(i, n) for (int i = 0; i < (n); ++i)
-#define f1r(i, l, r) for (int i = (l); i <= (r); ++i)
-#define f0rd(i, n) for (int i = (n); i >= 0; --i)
-#define f1rd(i, l, r) for (int i = (l); i >= (r); --i)
+#define f0r(i, n) for (long long i = 0; i < (n); ++i)
+#define f1r(i, l, r) for (long long i = (l); i <= (r); ++i)
+#define f0rd(i, n) for (long long i = (n); i >= 0; --i)
+#define f1rd(i, l, r) for (long long i = (l); i >= (r); --i)
 #define each(i, a) for (auto &i : a)
 
 // for pure array I/O, for other types use INPUT/OUTPUT section
@@ -38,6 +38,7 @@ using namespace std;
 
 #define pb push_back
 #define eb emplace_back
+#define mp make_pair
 #define ff first
 #define ss second
 #define lb lower_bound
@@ -55,7 +56,7 @@ using namespace std;
 #define rall(v) v.rbegin(), v.rend()
 #define sor(v) sort(v.begin(), v.end())
 #define soR(v) sort(v.rbegin(), v.rend())
-#define sz(v) ((int)v.size())
+#define sz(v) ((long long)v.size())
 #define bg(v) v.begin()
 
 using ll = long long;
@@ -97,8 +98,8 @@ tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
-tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
-tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > ll lwb(V<T> &a, const T &b) { return ll(lb(all(a), b) - bg(a)); }
+tcT > ll upb(V<T> &a, const T &b) { return ll(ub(all(a), b) - bg(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 
 tcTU > bool erase(T &t, const U &u) {
@@ -137,12 +138,6 @@ public:
 };
 template <class Fun>
 decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
-
-constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
-constexpr int p2(int x) { return 1 << x; }
-constexpr int msk2(int x) { return p2(x) - 1; }
-constexpr int log_2(int a) { return a ? (8 * sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
-constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -385,19 +380,25 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
+
+constexpr ll pct(ll x) { return __builtin_popcountll(x); } // # of bits set
+// constexpr int p2(int x) { return 1 << x; }
+// constexpr int msk2(int x) { return p2(x) - 1; }
+constexpr ll log_2(ll a) { return a ? (8 * sizeof(a)) - 1 - __builtin_clzll(a) : -1; } // Floor of log_2(a); index of highest 1-bit
+constexpr ll next_pow_2(ll a) { return a > 0 ? 1LL << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
 
 
 
 void solve() {
-    
-
-
-
-
+    ll n; re(n); ll t = 0;  if(n==2) {ps(2); return;}
+    if(pct(n)==1) n*=2, t=1;
+    ll a = next_pow_2(n) - t;
+    mi ans = a;
+    ps(ans);
 }
 
 int main() {

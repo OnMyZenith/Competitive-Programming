@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -38,6 +38,7 @@ using namespace std;
 
 #define pb push_back
 #define eb emplace_back
+#define mp make_pair
 #define ff first
 #define ss second
 #define lb lower_bound
@@ -385,19 +386,17 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
-
-
-
-
+    str s, t; re(s,t); int n = sz(s), m = sz(t); vvi dist(n+1, vi(m+1,iINF)); dist[0][0]=0; f1r(i,1,m) dist[0][i]=i; f1r(i,1,n) dist[i][0]=i;
+    f1r(i,1,n) f1r(j,1,m) dist[i][j] = min({dist[i-1][j]+1, dist[i][j-1]+1, dist[i-1][j-1] + int(s[i-1]!=t[j-1])});
+    ps(dist[n][m]);
 }
 
 int main() {
@@ -415,7 +414,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

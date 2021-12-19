@@ -108,14 +108,7 @@ tcTU > bool erase(T &t, const U &u) {
         t.erase(it);
     return true;
 }
-tcTU > T fstTrue(T lo, T hi, U f) {
-    ++hi, assert(lo <= hi);
-    while (lo < hi) {
-        T mid = lo + (hi - lo) / 2;
-        f(mid) ? hi = mid : lo = mid + 1;
-    }
-    return lo;
-}
+
 tcTU > T lstTrue(T lo, T hi, U f) {
     --lo, assert(lo <= hi);
     while (lo < hi) {
@@ -385,19 +378,61 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
-
-
+tcTU > T fstTrue(T lo, T hi, U f) {
+    ++hi, assert(lo <= hi);
+    while (lo < hi) {
+        T mid = lo + (hi - lo) / 2;
+        f(mid) ? hi = mid : lo = mid + 1;
+    }
+    return lo;
+}
 
 void solve() {
-    
-
-
-
-
+    ll n,k,x; re(n,k,x); str s; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
+    for (ll i = 0; i < n;){
+        if(s[i]=='*'){
+            ll cnt=0;
+            while(i<n&&s[i]=='*') cnt++,i++;
+            allk.pb(cnt*k);
+        }else i++;
+    }
+    x--;
+    reverse(all(allk)); ll m =sz(allk); vl ans(m);
+    while(x){
+        ll mmx = 1, mxidx=-1; f0r(i,m) if((allk[i]+1)*mmx>x){mxidx=i; break;} else mmx*=(allk[i]+1);
+        ll mxK = fstTrue(0LL,mxidx+1,[&](ll mid){
+            ll v=1;
+            f0r(i,mid) v*=(allk[i]+1);
+            return v>x;
+        }); ll idx = mxK-1;
+        ll val = 1;
+        f1r(i,0,idx-1) val*=(allk[i]+1);
+        ans[idx] = x/val; x%=val;
+    }
+    str res, s1;  reverse(all(ans));
+    for (ll i = 0; i < n;){
+        if(s[i]=='a'){s1+='a';i++;}
+        else {
+            s1+='*';
+            while(i<n&&s[i]=='*')i++;
+        }
+    }
+    n = sz(s1); 
+    s=s1;
+    ll mm=0;
+    f0r(i,n){
+        if(s[i]=='a'){res+='a';}
+        else {
+            if(mm>=m)continue;
+            f0r(j,ans[mm])res+='b';
+            mm++;
+        }
+    }
+    ps(res);
 }
 
 int main() {

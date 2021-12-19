@@ -385,20 +385,23 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
+struct R { int x, d;};
 void solve() {
-    
-
-
+    int n,m; re(n,m); V<R> r(n); f0r(i,n){re(r[i].x);} f0r(i,n){char c; re(c); r[i].d = (c=='L'?-1:1);} vi ord(n); iota(all(ord),0);
+    sort(all(ord), [&](int i, int j){return r[i].x < r[j].x;});
+    stack<R> goingRight;
+    // each(i,ord)
 
 
 }
+
 
 int main() {
 

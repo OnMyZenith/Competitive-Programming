@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -95,8 +95,8 @@ tcT > using Q = queue<T>;
 
 tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
-tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
-tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
+tcT > T cdiv(T a, T b) { return (a / b) + ((a ^ b) > 0 && a % b); }
+tcT > T fdiv(T a, T b) { return (a / b) - ((a ^ b) < 0 && a % b); }
 tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
 tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
@@ -116,14 +116,14 @@ tcTU > T fstTrue(T lo, T hi, U f) {
     }
     return lo;
 }
-tcTU > T lstTrue(T lo, T hi, U f) {
-    --lo, assert(lo <= hi);
-    while (lo < hi) {
-        T mid = lo + (hi - lo + 1) / 2;
-        f(mid) ? lo = mid : hi = mid - 1;
-    }
-    return lo;
-}
+// tcTU > T lstTrue(T lo, T hi, U f) {
+//     --lo, assert(lo <= hi);
+//     while (lo < hi) {
+//         T mid = lo + (hi - lo + 1) / 2;
+//         f(mid) ? lo = mid : hi = mid - 1;
+//     }
+//     return lo;
+// }
 
 template <class Fun>
 class y_combinator_result {
@@ -377,27 +377,79 @@ const long double epsld = 1e-19L;
 const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
-const int iINF = 2e9 + 007;
+const int iINF = 1e9 + 007;
 
-const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vpi b;
+// vl c;
 
 
 
+// void solve() {
+//     ll w, h, n; re(w,h,n); auto f = [&](ll x){return (fdiv(x,h)*fdiv(x,w))>=n;};
+//     ll v=1; f0r(i,61) if(f(1LL<<i)){ v = 1LL<<i; break;}
+//     ps(fstTrue(0LL,v,f));
+// }
 
-void solve() {
-    
+
+
+// tcTU > T lstTrue(T lo, T hi, U f) {
+//     f0r(i,100) {
+//         T mid = lo + (hi - lo) / 2;
+//         f(mid) ? lo = mid : hi = mid;
+//     }
+//     return lo;
+// }
+// void solve(){
+//     ll n,k; re(n,k); vl a(n); re(a);
+//     ps(lstTrue(0.0L,1e9L,[&](ld x){
+//         ld cnt = 0; each(i,a)cnt += floor((ld)i/x); return cnt >= k;
+//     }));
+// }
 
 
 
+// void solve(){
+//     ll n, x, y; re(n,x,y);
+//     ps(min(x,y) + fstTrue(0LL, n*max(x,y)/2, [&](ll t){return t/x + t/y >= n - 1;}));
+// }
 
+
+
+// struct A {ll t, z, y;};
+// ll m, n; V<A> a;
+
+// ll f(ll i, ll time){
+//     ll t1 = (a[i].t * a[i].z + a[i].y);
+//     ll x = a[i].z * fdiv(time, t1);
+//     ll rem = time % t1;
+//     return (x + min(a[i].z, (rem / a[i].t)));
+// }
+
+// ll cnt(ll time){
+//     ll fin = 0; f0r(i,m) fin += f(i,time); return fin;
+// }
+
+// void solve(){
+//     re(n, m); a.rsz(m); f0r(i,m) cin>>a[i].t>>a[i].z>>a[i].y;
+//     ll mx = 0; f0r(i,60){ mx = (1LL << i); if(cnt(mx)>=n) break;}
+//     ll res = fstTrue(0LL, mx, [](ll x){ return cnt(x) >= n;});
+//     ps(res); ll tmp = 0; vl tt(m);
+//     f0r(i,m){ if(tmp+f(i,res)>n) {tt[i] = n - tmp; break;} else{tt[i] = f(i,res); tmp+=tt[i];}}
+//     ao(tt, m);
+// }
+
+
+void solve(){
+    ld c; re(c); ld l =0, h = 1e6;
+    f0r(i,100){ld m = (l+h)/2; if(m*m + sqrt(m)<c) l= m; else h = m;}
+    cout<<l<<nl;
 }
 
 int main() {
@@ -408,14 +460,14 @@ int main() {
 
     vamos;
 
-// #ifndef asr
+    // #ifndef asr
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

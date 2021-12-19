@@ -5,17 +5,17 @@
 using namespace __gnu_pbds;
 using namespace std;
 
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
+// #pragma GCC target("avx,avx2,fma")
 
-#pragma GCC target("avx2")
-#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("sse4")
+
+// #pragma GCC optimize ("O3")
+// #pragma GCC target ("avx2")
+
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma,tune=native")
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -38,6 +38,7 @@ using namespace std;
 
 #define pb push_back
 #define eb emplace_back
+#define mp make_pair
 #define ff first
 #define ss second
 #define lb lower_bound
@@ -381,24 +382,49 @@ const int iINF = 2e9 + 007;
 
 const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
 
-
-
+tcT > struct segtree{
+    // ALL INPUT FROM THE USER IS 0 BASED.
+    int SZ; V<T> v; 
+    static constexpr T NEUTRAL_VAL = {iINF,1};  // Change this
+    T f(T a, T b){if(a.ff<b.ff) return a; else if (b.ff<a.ff) return b; else return {a.ff, a.ss+b.ss};};        // Change this
+    // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
+    void build(V<T> &a){
+        SZ = 2*next_pow_2(sz(a)); v.ass(SZ, NEUTRAL_VAL);
+        f0r(i,sz(a)) v[SZ / 2 + i] = a[i];
+        f1rd(i, SZ / 2 - 1, 1) v[i] = f(v[2 * i], v[2 * i + 1]);
+    }
+    // idx is 0 based
+    void update(int idx, T x){
+        int i = SZ/2 + idx; v[i] = x;
+        while(i>1){i/=2; v[i] = f(v[2*i], v[2*i+1]);}
+    }
+    // l, r, lx and rx are 0 based, node is 1 based
+    T q(int l, int r, int lx, int rx, int node){
+        if(l <= lx && rx <= r) return v[node];
+        if(r < lx || rx < l) return NEUTRAL_VAL;
+        return f(q(l, r, lx, (lx + rx) / 2, node * 2), q(l, r, (lx + rx) / 2 + 1, rx, node * 2 + 1));
+    }
+    // l and r are inclusive and 0 based
+    T q(int l, int r){ return q(l, r, 0, SZ / 2 - 1, 1); }
+    void printWillTLE(){
+        int nodes = 1, spaces = SZ; int idx=1;
+        while(idx<SZ){
+            f0r(j, nodes){ cout<<setw(j?2*spaces:spaces); if(v[idx].ff!=NEUTRAL_VAL.ff) pr(v[idx]); else pr('_'); idx++; }
+            cout<<'\n'; nodes*=2; spaces/=2;
+        }
+        f0r(k,2*SZ)cout<<"-\n"[k==2*SZ-1];
+    }
+};
 
 void solve() {
-    
-
-
-
-
+    int n,m; re(n,m); vpi a; a.ass(n,{iINF,1}); f0r(i,n) re(a[i].ff); segtree<pi> st; st.build(a);
+    while(m--){
+        int f; re(f); if(f==1){int i, v; re(i,v); st.update(i, {v,1});}
+        else {int l, r; re(l,r); r--; ps(st.q(l,r));}
+    }
 }
+
 
 int main() {
 
@@ -415,7 +441,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
