@@ -5,6 +5,7 @@
 using namespace __gnu_pbds;
 using namespace std;
 
+#ifndef asr_debug
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
@@ -16,6 +17,7 @@ using namespace std;
 // #pragma GCC target("sse4.2,fma")
 // run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
 // or use avx instead of sse4.2, leave fma in as it was covered in avx2
+#endif
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -141,7 +143,7 @@ decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t
 constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
 constexpr int p2(int x) { return 1 << x; }
 constexpr int msk2(int x) { return p2(x) - 1; }
-constexpr int log_2(int a) { return a ? (8 * sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
+constexpr int log_2(int a) { return a ? (8 * (int)sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
 constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
 
 // INPUT
@@ -183,7 +185,7 @@ str ts(char c) { return str(1, c); }
 str ts(const char *s) { return (str)s; }
 str ts(str s) { return s; }
 str ts(bool b) {
-#ifdef asr
+#ifdef asr_debug
     return b ? "true" : "false";
 #else
     return ts((int)b);
@@ -210,7 +212,7 @@ str ts(bitset<SZ> b) {
 }
 tcTU > str ts(pair<T, U> p);
 tcT > str ts(T v) { // containers with begin(), end()
-#ifdef asr
+#ifdef asr_debug
     bool fst = 1;
     str res = "{";
     for (const auto &x : v) {
@@ -233,7 +235,7 @@ tcT > str ts(T v) { // containers with begin(), end()
 #endif
 }
 tcTU > str ts(pair<T, U> p) {
-#ifdef asr
+#ifdef asr_debug
     return "(" + ts(p.ff) + ", " + ts(p.ss) + ")";
 #else
     return ts(p.ff) + " " + ts(p.ss);
@@ -261,7 +263,7 @@ tcTUU > void DBG(const T &t, const U &...u) {
     if (sizeof...(u)) cerr << ", ";
     DBG(u...);
 }
-#ifdef asr // chk -> fake assert
+#ifdef asr_debug // chk -> fake assert
 #define dbg(...) cerr << "Line(" << __LINE__ << ") -> [" << #__VA_ARGS__ << "]: [", DBG(__VA_ARGS__)
 #define chk(...) \
     if (!(__VA_ARGS__)) cerr << "Line(" << __LINE__ << ") -> function(" << __FUNCTION__ << ") -> CHK FAILED: (" << #__VA_ARGS__ << ")" << '\n', exit(0);
@@ -402,13 +404,13 @@ void solve() {
 
 int main() {
 
-#ifdef asr
+#ifdef asr_fin
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
     vamos;
 
-// #ifndef asr
+// #ifndef asr_debug
     cin.tie(nullptr);
 // #endif
 
@@ -419,7 +421,7 @@ int main() {
     f1r(TC, 1, TT)
         solve();
 
-#ifdef asr
+#ifdef asr_fin
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
     cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
