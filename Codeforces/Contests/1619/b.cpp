@@ -391,35 +391,60 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vl b;
 // vl c;
 
-
+double diff(double n,double mid)
+{
+    if (n > (mid*mid*mid))
+        return (n-(mid*mid*mid));
+    else
+        return ((mid*mid*mid) - n);
+}
+ 
+// Returns cube root of a no n
+double cubicRoot(double n)
+{
+    // Set start and end for binary search
+    double start = 0, end = n;
+ 
+    // Set precision
+    double e = 0.0000001;
+ 
+    while (true)
+    {
+        double mid = (start + end)/2;
+        double error = diff(n, mid);
+ 
+        // If error is less than e then mid is
+        // our answer so return mid
+        if (error <= e)
+            return mid;
+ 
+        // If mid*mid*mid is greater than n set
+        // end = mid
+        if ((mid*mid*mid) > n)
+            end = mid;
+ 
+        // If mid*mid*mid is less than n set
+        // start = mid
+        else
+            start = mid;
+    }
+}
 
 
 void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
-    }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
-        else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
-        }
-    }
-    ps(res);
+    ll n; re(n); 
+    ll m=1; ll mx=0; 
+    // f0r(i,32) if((1LL<<m)>=n){mx=1LL<<m; break;}
+    ll yy = lstTrue(0LL,(ll)1e5+1,[&](ll x){ return x*x<=n;});
+
+    ll xx = lstTrue(0LL,(ll)1e3+1,[&](ll x){ return x*x*x<=n;});
+
+    ll xy = lstTrue(0LL,(ll)1e2+1,[&](ll x){ return x*x*x*x*x*x<=n;});
+
+    ps(xx+yy-xy);
+
+
+
 }
 
 int main() {

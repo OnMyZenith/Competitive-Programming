@@ -395,31 +395,28 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
 
 void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
+    int n,k; re(n,k); vpi kk(k); re(kk); int cnt=0; vb vis(2*n);
+    f0r(i,k) vis[kk[i].ff-1]=1,vis[kk[i].ss-1]=1;
+    vi rem; f0r(i,2*n) if(!vis[i]) rem.pb(i+1);
+    sor(rem); int m = n-k; f0r(i,m) kk.pb({rem[i],rem[i+m]});
+    f0r(i,n) if(kk[i].ff>kk[i].ss) swap(kk[i].ff,kk[i].ss);
+    dbg(rem);
+    f0r(i,n) f1r(j,i+1,n-1){
+        if(kk[i].ff<kk[j].ff&&kk[i].ss<kk[j].ss&&kk[j].ff<kk[i].ss){cnt++; continue;}
+        swap(i,j);
+        if(kk[i].ff<kk[j].ff&&kk[i].ss<kk[j].ss&&kk[j].ff<kk[i].ss){cnt++;}
+        swap(i,j);
     }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
-        else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
-        }
-    }
-    ps(res);
+    ps(cnt);
+
+
+
+
+    
+
+
+
+
 }
 
 int main() {

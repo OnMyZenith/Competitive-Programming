@@ -6,9 +6,9 @@ using namespace __gnu_pbds;
 using namespace std;
 
 #ifndef asr_debug
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
-// #pragma GCC optimize("Ofast")
+// #pragma GCC optimize("O3")
+// #pragma GCC optimize("unroll-loops")
+#pragma GCC optimize("Ofast")
 // Can casuse floating point errors, assumes associativeness for instance
 
 #pragma GCC target("avx2")
@@ -395,31 +395,16 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
 
 void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
-    }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
-        else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
-        }
-    }
-    ps(res);
+    int n; re(n); vvi r(n,vi(5)); f0r(i,n) f0r(j,5) cin>>r[i][j];
+    auto fight = [&](int a, int b)->int{
+        int wia=0, wib=0;
+        f0r(k,5) if(r[a][k]>r[b][k])wib++;else wia++;
+        if(wia>wib)return a;
+        return b;
+    };
+    int win = 0; f0r(i,n) win = fight(i,win);
+    f0r(i,n) if(win!=fight(i,win)){ps(-1);return;}
+    ps(win+1);
 }
 
 int main() {

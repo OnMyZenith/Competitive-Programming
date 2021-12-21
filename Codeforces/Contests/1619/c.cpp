@@ -395,31 +395,32 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
 
 void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
-    }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
+    str a,s; re(a,s); str b;
+    while((!a.empty())&&(!s.empty())){
+        dbg(s,a,b);
+        char x = a.back(); a.pop_back();
+        char y = s.back(); s.pop_back();
+
+        if(x>y){
+            if(s.empty()){ps(-1); return;}
+            if(s.back()!='1'){ps(-1); return;}
+            s.pop_back();
+            int t = x-'0'; int tr = 10 + (y-'0');
+            b=ts(tr-t)+b;
+        }
         else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
+            int t = x-'0'; int tr = (y-'0');
+            if(tr-t>9){ps(-1); return;}
+            b=ts(tr-t)+b;
         }
     }
-    ps(res);
+    dbg(s,a,b);
+    if(s.empty()&&(!a.empty())){ps(-1); return;}
+    if(!s.empty()){b=s+b;}
+    reverse(all(b)); while(b.back()=='0')b.pop_back();
+    if(b.empty()){ps(-1); return;}
+    reverse(all(b)); 
+    ps(b);
 }
 
 int main() {
@@ -430,9 +431,9 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+#ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+#endif
 
     fix(15);
 
@@ -444,7 +445,7 @@ int main() {
 #ifdef asr_fin
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
+    // cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
 #endif
 
     return 0;

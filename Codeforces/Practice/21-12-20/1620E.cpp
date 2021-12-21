@@ -382,7 +382,7 @@ const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
 const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int _ = 5e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
@@ -391,20 +391,30 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vl b;
 // vl c;
 
+struct QQ {bool change; int x; int y=-1;};
 
+int a[_];
 
 void solve() {    
-    int q; re(q); vvi v; vpi c; vi tmp;
+    int q; re(q); V<QQ> qq;
     while(q--){
         int x; re(x); 
-        if(x==1){int a; re(a); tmp.pb(a);}
-        else {v.pb(tmp); tmp.clear(); pi t; re(t); c.pb(t);}
-    }if(!tmp.empty()){v.pb(tmp);}
-    dbg(v,c);
-
-
-
-
+        if(x==1){int y; re(y); qq.pb(QQ{0,y});}
+        else {int y, z; re(y,z); qq.pb(QQ{1,y,z});}
+    }
+    vi res;
+    while(!qq.empty()){
+        QQ t = qq.back(); qq.pop_back();
+        if(t.change){
+            if(a[t.y]!=0) t.y = a[t.y];
+            a[t.x] = t.y;
+        }else{
+            if(a[t.x]!=0){ t.x = a[t.x];}
+            res.pb(t.x);
+        }
+    }
+    reverse(all(res));
+    ao(res,sz(res));
 }
 
 int main() {

@@ -391,35 +391,23 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vl b;
 // vl c;
 
+vvi dp; V<vb> ok;
 
-
+int f(int a, int b){
+    if(a>b) swap(a,b);
+    if(ok[a][b]) return dp[a][b];
+    f1r(i,1,b-1) ckmin(dp[a][b], 1 + f(i,a) + f(b-i,a));
+    f1r(i,1,a-1) ckmin(dp[a][b], 1 + f(i,b) + f(a-i,b));
+    ok[a][b]=1;
+    return dp[a][b];
+}
 
 void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
-    }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
-        else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
-        }
-    }
-    ps(res);
+    int a,b; re(a,b); if(a>b) swap(a,b); ok.ass(a+1,vb(b+1,0)); dp.ass(a+1,vi(b+1,iINF));
+    f0r(i,a+1) dp[i][0] = 0, ok[i][0] = 1;
+    f0r(i,b+1) dp[0][i] = 0, ok[0][i] = 1;
+    f0r(i,min(a+1,b+1)) dp[i][i] = 0, ok[i][i] = 1;
+    ps(f(a,b));
 }
 
 int main() {
@@ -437,7 +425,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

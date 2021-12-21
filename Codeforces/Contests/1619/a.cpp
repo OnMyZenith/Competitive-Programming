@@ -387,39 +387,23 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-// vl a;
-// vl b;
-// vl c;
+vl a;
+vl b;
+vl c;
 
 
 
 
 void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
+    str s; re(s); int n = sz(s); if(n&1){ps("NO"); return;}
+    f0r(i,n/2){
+        if(s[i]!=s[n/2+i]){ps("NO"); return;}
     }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
-        else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
-        }
-    }
-    ps(res);
+    ps("YES");
+
+
+
+
 }
 
 int main() {

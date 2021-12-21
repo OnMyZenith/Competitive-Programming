@@ -387,7 +387,7 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-// vl a;
+vl a;
 // vl b;
 // vl c;
 
@@ -395,31 +395,29 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
 
 void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
+    int n; re(n); rv(n,a); vi f(n+1); f0r(i,n) f[a[i]]++;
+    vl preff(n+1); f0r(i,n) preff[i+1] = preff[i] + f[i];
+    dbg(preff);
+    int mx=n; f0r(i,n+1) if(preff[i]<i) {mx=i-1;break;}
+    ll cost=0;
+    f0r(i,mx) cost+=max((f[i]-1),0);
+
+    dbg(cost,mx);
+
+    f0r(i,n+1){
+        if(i<=mx){
+            ll ans = f[i];
+            ans+=max((cost-(mx-i)),0LL);
+            // ans+=cost-(mx-i);
+            cout<<ans<<" ";
+        } else cout<<"-1 ";
     }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
-        else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
-        }
-    }
-    ps(res);
+    ps();
+    
+
+
+
+
 }
 
 int main() {

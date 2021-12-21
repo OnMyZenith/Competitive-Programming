@@ -391,35 +391,39 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vl b;
 // vl c;
 
+// 700 ms Solution
+// int coins[1001];
+
+// void solve() {
+//     int n; re(n); ai(coins,n); sort(coins, coins + n); vi A = {0};
+//     f0r(i,n){
+//         int m = sz(A);
+//         f0r(j,m){
+//             A.pb(A[j]+coins[i]);
+//         }
+//         remDup(A);
+//     }
+//     remDup(A);
+//     ps(sz(A)-1);
+//     aout(A,1,sz(A)-1);
+// }
 
 
+// 40ms Solution
+int coins[1001];
 
-void solve() {
-    ll n,k,x; re(n,k,x); str s,s1,res; re(s); if(x==1){each(i,s)if(i=='a')pr('a');ps();return;} vl allk;
-    for (ll i = 0; i < n;){
-        if(s[i]=='*'){
-            ll cnt=0; s1+='*';
-            while(i<n&&s[i]=='*') cnt++,i++;
-            allk.pb(cnt*k);
-        }else i++,s1+='a';
-    }
-    x--; ll m =sz(allk); vl ans(m);
-    ll idx = m - 1;
-    while(x&&idx>=0){
-        ans[idx] = x%(allk[idx]+1); x/=(allk[idx]+1); idx--;
-    }
-    n = sz(s1);
-    s=s1;
-    ll mm=0;
-    f0r(i,n){
-        if(s[i]=='a'){res+='a';}
-        else {
-            if(mm>=m)continue;
-            f0r(j,ans[mm])res+='b';
-            mm++;
+void solve(){
+    int n; re(n); ai(coins,n); sort(coins, coins + n); V<vb> dp(n+1,vb(int(1e5+1),false));
+    dp[0][0] = 1;
+    f1r(i,1,n){
+        f0r(j,int(1e5+1)){
+            dp[i][j] = dp[i-1][j];
+            if(j-coins[i-1]>=0&&dp[i-1][j-coins[i-1]])dp[i][j] = 1;
         }
     }
-    ps(res);
+    vi A;
+    f1r(i,1,(int)1e5) if(dp[n][i]) A.pb(i);
+    ps(sz(A)); ao(A,sz(A));
 }
 
 int main() {
@@ -437,7 +441,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
