@@ -387,17 +387,22 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
-
-
+ll w[20];
+int minRides[(1<<20)];
 
 void solve() {
+    int n, x; re(n,x); ai(w,n); 
+
+    f1r(i,1,20){
+        f0r(j,(1<<n)){
+
+        }
+    }
     
-
-
 
 
 }
@@ -417,7 +422,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

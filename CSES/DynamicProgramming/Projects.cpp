@@ -392,9 +392,13 @@ vl b;
 vl c;
 
 
+struct P{int s, e, r;};
 
+int day[_];
 
 void solve() {
+    int n; re(n); V<P> p(n); f0r(i,n) cin>>p[i].s>>p[i].e>>p[i].r;
+    vi days; f0r(i,n) days.pb(p[i].s), days.pb(p[i].e); sor(days);
     
 
 
@@ -417,7 +421,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
