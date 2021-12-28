@@ -327,7 +327,7 @@ struct mint {
     friend mint operator/(mint a, const mint &b) { return a /= b; }
 };
 
-const int MOD = 998244353;
+const int MOD = 1e9 + 007; // 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
@@ -387,66 +387,23 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-// vl a;
-// vl b;
-// vl c;
-
-// Not Finished
-
-mi fac[5001];
-
-ll bc(ll n, ll k)
-{
-    mi R = fac[n]*inv(fac[k])*inv(fac[n-k]);
-    // dbg(n,k,R.v,fac[n].v,inv(fac[k]),inv(fac[n-k]));
-    return R.v;
-}
+vl a;
+vl b;
+vl c;
 
 
-pi pp[26*__];
 
-// vpi pp(26*__);
 
 void solve() {
-    int n,k; re(n,k); str s; re(s); vpi v;
-    vi pre(n); f0r(i,n) pre[i] = (i?pre[i-1]:0)+(s[i]=='1');
-    int idx=0;
-    f0r(i,n) f1r(j,i,n-1) if(pre[j]-(i?pre[i-1]:0)==k) {pp[idx].ff=i;pp[idx++].ss=j;}
-    mi ans=1; sort(pp,pp+idx); vpi pv;
-    int f=-1;
-    f0r(i,idx){
-        if(ckmax(f,pp[i].ff)) pv.pb(pp[i]);
-        else ckmax(pv.back().ss,pp[i].ss);
-    }
-    idx = sz(pv);
-    f0r(i,idx){
-        swap(pv[i].ff,pv[i].ss);
-    }
-    sor(pv);
-    f=-1;
-    vpi pt;
-    f0r(i,idx){
-        if(ckmax(f,pv[i].ff)) pt.pb(pv[i]);
-    }
-    idx = sz(pt);
-    f0r(i,idx){
-        swap(pt[i].ff,pt[i].ss);
-    }
-    sor(pt);
-    dbg(pt);
-    f0r(i,idx){
-        ans+= bc(pt[i].ss-pt[i].ff+1,k)-1;
-    }
-    ps(ans);
-
+    int n,x; re(n,x); rv(n,a); b=a; sor(b); ll xx=iINF; vi v;
+    int cnt=0; f0r(i,n) if(a[i]==b[i])cnt++; else ckmin(xx,a[i]),v.pb(a[i]);
+    if(xx<=x)ps(-1); else ps(max(n-cnt-1,0));
+    dbg(a);dbg(b);dbg(v);
 
 
 
 }
-    // mi ans=0; vb valid(idx); sort(pp,pp+idx,[&](int *a,int *b){
-    //     if(a[0]!=b[0]) return a[0]<b[0];
-    //     else return a[1]>b[1];
-    // });
+
 int main() {
 
 #ifdef asr_time
@@ -460,10 +417,9 @@ int main() {
 // #endif
 
     fix(15);
-    fac[0]=1;
-    f1r(i,1,5000) fac[i] = i*fac[i-1];
+
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
