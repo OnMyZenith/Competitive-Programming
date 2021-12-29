@@ -382,28 +382,24 @@ const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
 const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vvl revProd;
-int n;
-vl &rv(int idx){
-    if(idx<0) idx+=n;
-    if(idx>=n) idx-=n;
-    return revProd[idx];
-}
+const int _ = 1e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
+ll a[_];
+ll b[_];
 
 void solve() {
-    re(n); rv(n,a); rv(n,b);
+    int n; re(n); ai(a,n); ai(b,n);
     vl prod(n); f0r(i,n) prod[i] = a[i]*b[i] + (i?prod[i-1]:0);
 
-    revProd.rsz(n,vl(n)); // revProd[i][l] <-- revProd that starts at i of length l
-    reverse(all(a));
+    vvl revProd(n,vl(n)); // revProd[i][l] <-- revProd that starts at i of length l
+    reverse(a,a+n);
+    
+    auto rv = [&](int idx)->vl&{
+        if(idx<0) idx+=n;
+        if(idx>=n) idx-=n;
+        return revProd[idx];
+    };
+
     for (int i = 1-n; i < n; i++){
         int j =0, k=0;
         if(i<0) k = abs(i); else j = i;
