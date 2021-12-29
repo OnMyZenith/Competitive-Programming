@@ -144,7 +144,7 @@ constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
 constexpr int p2(int x) { return 1 << x; }
 constexpr int msk2(int x) { return p2(x) - 1; }
 constexpr int log_2(int a) { return a ? (8 * (int)sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
-constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
+constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }               // 16->16, 13->16, (a<=0)->0
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -381,8 +381,8 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
-const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
@@ -391,29 +391,56 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vl b;
 // vl c;
 
-
-
-
 void solve() {
-    ll n; re(n); vpl s(n); ll total = 0; f0r(i,n){re(s[i].ff);} f0r(i,n){re(s[i].ss);total+=s[i].ss;}
-
-    sort(all(s),[&](pi a, pi b){if(a.ff!=b.ff) return a.ff<b.ff; else return a.ss>b.ss;});
-    
-    ll totUni = s[n-1].ff;
-    vvl uni(totUni); f0r(i,n) uni[s[i].ff-1].pb(s[i].ss);
-    vvl preuni(totUni); f0r(i,totUni){int x =sz(uni[i]); preuni[i].rsz(x); f0r(j,x){ preuni[i][j] = uni[i][j]+(j?preuni[i][j-1]:0);}}
-    // dbg(uni);
-    // dbg(preuni);
-
-    f1r(i,1,n){
-        ll t1 = 0;
-        f0r(j,totUni){
-            ll rem = sz(uni[j])/i;
-            if(rem) t1+=preuni[j][(rem)*i-1];
-        }
-        cout<<t1<<" \n"[i==n];
+    ll n; re(n); vpl s(n); ll total = 0;
+    f0r(i, n) { re(s[i].ff); }
+    f0r(i, n) {
+        re(s[i].ss);
+        total += s[i].ss;
     }
+
+    sort(all(s), [&](pi a, pi b) {if(a.ff!=b.ff) return a.ff<b.ff; else return a.ss>b.ss; });
+
+    ll totUni = s[n - 1].ff; vvl uni(totUni);
+    f0r(i, n) uni[s[i].ff - 1].pb(s[i].ss);
+    vvl preuni(totUni); vl ans(n);
+    f0r(i, totUni) {
+        int x = sz(uni[i]);
+        preuni[i].rsz(x);
+        f0r(j, x) { preuni[i][j] = uni[i][j] + (j ? preuni[i][j - 1] : 0); }
+        for (int j = 1; x/j > 0 && j <= n; j++){
+            int take = x-x%j;
+            ans[j-1] += preuni[i][take-1];
+        }
+    }
+    ao(ans,n);
 }
+
+
+// void solve() {
+//     ll n; re(n); vpl s(n); ll total = 0;
+//     f0r(i, n) { re(s[i].ff); }
+//     f0r(i, n) {
+//         re(s[i].ss);
+//         total += s[i].ss;
+//     }
+//     sort(all(s), [&](pi a, pi b) {if(a.ff!=b.ff) return a.ff<b.ff; else return a.ss>b.ss; });
+
+//     hash_map<ll,vl> u; f0r(i,n) u[s[i].ff].pb(s[i].ss);
+//     ll totuni = sz(u); vvl strongesInUni(totuni);
+//     int k = 0; vl ans(n);
+//     each(i,u) {
+//         int x = sz(i.ss);
+//         strongesInUni[k].rsz(x);
+//         f0r(j, x) { strongesInUni[k][j] = i.ss[j] + (j?strongesInUni[k][j - 1]:0);}
+//         for (int j = 1; x/j > 0; j++){
+//             int take = x-x%j; assert(take>0);
+//             ans[j-1] += strongesInUni[k][take-1];
+//         }
+//         k++;
+//     }
+//     ao(ans,n);
+// }
 
 int main() {
 
@@ -423,9 +450,9 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
 

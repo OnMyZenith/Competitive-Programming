@@ -389,17 +389,39 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vi adj[400007];
 vl a;
 vl b;
-vl c;
-
-
+vvl revProd;
+int n;
+vl &rv(int idx){
+    if(idx<0) idx+=n;
+    if(idx>=n) idx-=n;
+    return revProd[idx];
+}
 
 
 void solve() {
-    int n; re(n); rv(n,a); rv(n,b); reverse(all(a)); 
+    re(n); rv(n,a); rv(n,b);
+    vl prod(n); f0r(i,n) prod[i] = a[i]*b[i] + (i?prod[i-1]:0);
 
+    revProd.rsz(n,vl(n)); // revProd[i][l] <-- revProd that starts at i of length l
+    reverse(all(a));
+    for (int i = 1-n; i < n; i++){
+        int j =0, k=0;
+        if(i<0) k = abs(i); else j = i;
+        for ( ; max(j,k) < n; k++, j++){
+            rv(i)[j] = a[k]*b[j] + (j?rv(i)[j-1]:0);
+            // revProd[n+i][j] = a[k]*b[j] + (j?revProd[n+i][j-1]:0);
+        }
+    }
 
+    ll best = prod.back();
 
-
+    f0r(i,n) f1r(j,i,n-1) {
+        ll curr = (i?prod[i-1]:0) + prod.back() - prod[j];
+        curr += rv(i-(n-1-j))[j] - (i?rv(n+i-(n-1-j))[i-1]:0);
+        // curr += revProd[n+i-(n-1-j)][j] - (i?revProd[n+i-(n-1-j)][i-1]:0);
+        ckmax(best,curr);
+    }
+    ps(best);
 }
 
 int main() {
@@ -417,7 +439,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
