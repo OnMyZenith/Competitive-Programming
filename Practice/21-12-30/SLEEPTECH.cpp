@@ -144,7 +144,7 @@ constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
 constexpr int p2(int x) { return 1 << x; }
 constexpr int msk2(int x) { return p2(x) - 1; }
 constexpr int log_2(int a) { return a ? (8 * (int)sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
-constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
+constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }               // 16->16, 13->16, (a<=0)->0
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -381,8 +381,8 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
-const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 3e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 3e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
@@ -391,27 +391,80 @@ const int _ = 3e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vl b;
 // vl c;
 
+// // Subtask A = 1;
+// void solve() {
+//     ll n,a ,b; re(n,a,b); vpl q(n); re(q); sor(q); ll LIM = b*(b+1)/2;
+//     ll mx = lstTrue(0LL,n-1,[&](ll x){return q[x].ff<=LIM;});
+//     vpl v;
+//     f0r(i,mx+1){
+//         v.pb({q[i].ff,-1});
+//         v.pb({q[i].ss,1});
+//     }
+//     sor(v);
+//     ll best =0, curr=0;
+//     each(i,v){
+//         curr-=i.ss;
+//         ckmax(best,curr);
+//     }
+//     ps(best);
+// }
 
 void solve() {
-    ll n,a ,b; re(n,a,b); vpl q(n); re(q); sor(q); ll LIM = b*(b+1)/2;
-    ll mx = lstTrue(0LL,n-1,[&](ll x){return q[x].ff<=LIM;});
+    ll n, a, b; re(n, a, b); vpl q(n); re(q);
 
-    map<ll,ll> m; f0r(i,mx+1)m[q[i].ff],m[q[i].ss];
-    ll IDX =0 ; each(i,m) i.ss = IDX++;
+    map<ll, ll> joys;
+    f0r(i, n) joys[q[i].ff]++, joys[q[i].ss + 1]--;
 
-    vpl v;
-    f0r(i,mx+1){
-        v.pb({m[q[i].ff],-1});
-        v.pb({m[q[i].ss],1});
-    }
-    sor(v);
-    ll best =0, curr=0;
-    each(i,v){
-        curr-=i.ss;
-        ckmax(best,curr);
+    auto ok = [&](ll l, ll r) -> bool {
+        ll lo = 1, hi = b - a + 1;
+        while(lo <= hi) {
+            ll x = (lo+hi)/2;
+            ll Lx = a*x + (x-1)*x/2, Rx = b*x - (x-1)*x/2;
+            if(Rx<l) lo = x + 1;
+            else if(Lx>r) hi = x - 1;
+            else return true;
+        }
+        return false;
+    };
+
+    ll best = 0, curr = 0;
+    ll prev = (*joys.begin()).ff;
+    each(i, joys) {
+        if (ok(prev, i.ff-1)) ckmax(best, curr);
+        curr += i.ss;
+        prev = i.ff;
     }
     ps(best);
 }
+
+// void solve() {
+//     ll n, a, b; re(n, a, b); vpl q(n); re(q);
+
+//     vpl joys;
+//     f0r(i, n) joys.pb({q[i].ff,1}), joys.pb({q[i].ss,-1});
+//     sort(all(joys),[&](pl x, pl y){if(x.ff==y.ff)return x.ss>y.ss; return x.ff<y.ff;});
+
+//     auto ok = [&](ll l, ll r) -> bool {
+//         ll lo = 1, hi = b - a + 1;
+//         while(lo <= hi) {
+//             ll x = (lo+hi)/2;
+//             ll Lx = a*x + (x-1)*x/2, Rx = b*x - (x-1)*x/2;
+//             if(Rx<l) lo = x + 1;
+//             else if(Lx>r) hi = x - 1;
+//             else return true;
+//         }
+//         return false;
+//     };
+
+//     ll best = 0, curr = 0;
+//     ll prev = (*joys.begin()).ff;
+//     each(i, joys) {
+//         if (ok(prev, i.ff)) ckmax(best, curr);
+//         curr += i.ss;
+//         prev = i.ff;
+//     }
+//     ps(best);
+// }
 
 int main() {
 
@@ -421,9 +474,9 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
 

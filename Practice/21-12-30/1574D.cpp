@@ -391,17 +391,16 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 vvi b;
 vvi c;
 
-
-
-
 void solve() {
     int n; re(n); c.rsz(n); f0r(i,n){int cnt; re(cnt); rv(cnt,c[i]);}
-    int m; re(m); b.ass(m,vi(n)); f0r(i,m) rv(n,b[i]);
+    set<vi> s; int m; re(m); b.ass(m,vi(n)); f0r(i,m) {rv(n,b[i]);s.ins(b[i]);}
     // hash_set<vi> h; f0r(i,m) h.ins(b[i]);
     // unordered_set<vi> h; f0r(i,m) h.ins(b[i]);
     // sort(all(b),[&](vi i, vi j){int x=0, y=0; f0r(k,n)x+=c[k][i[k]-1]; f0r(k,n)y+=c[k][j[k]-1]; return x>y; });
 
-    vvi adj(n); f0r(i,n) {f0r(j,sz(c[i])-1) {adj[i].pb(c[i][j+1]-c[i][j]);} adj[i].pb(0);}
+    vvi adj(n); f0r(i,n) {f0r(j,sz(c[i])-1) {adj[i].pb(c[i][j+1]-c[i][j]);}}
+
+    pqinc<int> q; f0r(i,n) 
 
     dbg(adj);
 

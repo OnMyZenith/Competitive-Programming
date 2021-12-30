@@ -379,7 +379,7 @@ void prand(int n, int l = 0, int r = 10) {
     f0r(i, n) cout << rand(l, r) << " \n"[i == n - 1];
 }
 
-// Print n random Unique numbers between l and r inclusive
+// Print n random UNIQUE numbers between l and r inclusive
 void puni(int n, int l = 0, int r = 10) {
     assert(n <= r - l + 1);
     set<int> used;
@@ -399,14 +399,22 @@ void pbin(int n) {
     ps();
 }
 
+// Print a random set of characters of length n
+void pstr(int n, char c = 'a', char d = 'z') {
+    if(d<c) swap(c,d);
+    f0r(i, n) { pr(char(c + rand(0, int(d-c)))); }
+    ps();
+}
+
 int main(int argc, char *argv[]) {
-    fix(15);
-    ps(1); // One Test Case
     srand(atoi(argv[1]));
+    fix(15); ps(1);
 
     
 
 
+    // pstr(10, 'l', 'k');
+    // pstr(10);
     // prand(5);
     // pbin(20);
     // prand(10, 45, 55);
