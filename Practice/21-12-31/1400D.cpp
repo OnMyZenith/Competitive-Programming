@@ -395,10 +395,15 @@ vl a;
 
 
 void solve() {
-    int n; re(n); rv(n,a); ll ans=0; vvi m(n+1,vi(n+1));
-    f0r(i,n) f1r(j,i+1,n-1) m[a[i]][a[j]]++;
-    dbg(m);
-    f0r(i,n) f1r(j,i+1,n-1) ans+=m[a[i]][a[j]];
+    int n; re(n); rv(n,a); ll ans=0; vi cntLeft(n+1);
+    f0r(i,n){
+        vi cntRight(n+1);
+        f1rd(j,n-1,i+1){
+            ans+=cntLeft[a[j]]*cntRight[a[i]];
+            cntRight[a[j]]++;
+        }
+        cntLeft[a[i]]++;
+    }
     ps(ans);
 }
 

@@ -383,30 +383,67 @@ const int iINF = 2e9 + 007;
 
 const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-// vl a;
+
+// vvi b;
+// vvi c;
+
+// void solve() {
+//     int n; re(n); c.rsz(n); f0r(i,n){int cnt; re(cnt); rv(cnt,c[i]);}
+//     int m; re(m); b.rsz(m,vi(n));
+//     set<vi> s;
+//     f0r(i,m) {rv(n,b[i]);s.ins(b[i]);}
+
+//     auto p = [&](vi &i)->int{
+//         int x=0;
+//         f0r(k,n)x+=c[k][i[k]-1];
+//         return x;
+//     };
+
+//     pqdec<pair<int,vi>> q;
+//     vi tmp; f0r(i,n) tmp.pb(sz(c[i]));
+//     q.push({p(tmp),tmp}); set<vi> vis; vis.ins(tmp);
+//     vi res;
+//     while(!q.empty()){
+//         vi v = q.top().ss; q.pop();
+//         if(!s.count(v)) {ao(v,n);return;}
+//         f0r(i,n){
+//             vi nv = v; nv[i]--;
+//             if(!nv[i]) continue;
+//             if(vis.count(nv)) continue;
+//             vis.ins(nv);
+//             q.push({p(nv),nv});
+//         }
+//     }    
+// }
+
 vvi b;
 vvi c;
 
 void solve() {
     int n; re(n); c.rsz(n); f0r(i,n){int cnt; re(cnt); rv(cnt,c[i]);}
-    set<vi> s; int m; re(m); b.ass(m,vi(n)); f0r(i,m) {rv(n,b[i]);s.ins(b[i]);}
-    // hash_set<vi> h; f0r(i,m) h.ins(b[i]);
-    // unordered_set<vi> h; f0r(i,m) h.ins(b[i]);
-    // sort(all(b),[&](vi i, vi j){int x=0, y=0; f0r(k,n)x+=c[k][i[k]-1]; f0r(k,n)y+=c[k][j[k]-1]; return x>y; });
+    int m; re(m); b.rsz(m,vi(n));
+    // set<vi> s;
+    f0r(i,m) {rv(n,b[i]);/*s.ins(b[i]);*/}
 
-    vvi adj(n); f0r(i,n) {f0r(j,sz(c[i])-1) {adj[i].pb(c[i][j+1]-c[i][j]);}}
+    auto p = [&](vi &i)->int{
+        int x=0;
+        f0r(k,n)x+=c[k][i[k]-1];
+        return x;
+    };
+    sor(b);
 
-    pqinc<int> q; f0r(i,n) 
+    vi tmp; f0r(i,n) tmp.pb(sz(c[i]));
+    if(!binary_search(all(b),tmp)){ao(tmp,n);return;}
 
-    dbg(adj);
-
-
-
-
+    vvi poss;
+    f0r(k,m){
+        f0r(j,n){
+            tmp = b[k]; tmp[j]--; if(!tmp[j]) continue;
+            if(!binary_search(all(b),tmp)){poss.pb(tmp);}
+        }
+    }
+    vi res = *max_element(all(poss),[&](vi i, vi j){return p(i) < p(j);});
+    ao(res,n);
 }
 
 int main() {

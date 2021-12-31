@@ -387,19 +387,21 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
-
+vi a;
 
 void solve() {
-    int n,x; re(n,x); rv(n,a); b=a; sor(b); ll xx=iINF; vi v;
-    int cnt=0; f0r(i,n) if(a[i]==b[i])cnt++; else ckmin(xx,a[i]),v.pb(a[i]);
-    if(xx<=x)ps(-1); else ps(max(n-cnt-1,0));
-    dbg(a);dbg(b);dbg(v);
-
+    int n,x; re(n,x); rv(n,a); int ans = 0;
+    auto first_idx = [&]{
+        f0r(i,n) if(a[i]>x) return i;
+        return -1;
+    };
+    while(!is_sorted(all(a))){
+        int idx = first_idx();
+        if(idx==-1){ps(-1);return;}
+        swap(a[idx],x); ans++;
+    }
+    if(is_sorted(all(a)))ps(ans);
+    else ps(-1);
 
 
 }
