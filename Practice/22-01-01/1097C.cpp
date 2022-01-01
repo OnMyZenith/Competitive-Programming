@@ -5,6 +5,20 @@
 using namespace __gnu_pbds;
 using namespace std;
 
+#ifndef asr_debug
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+// #pragma GCC optimize("Ofast")
+// Can casuse floating point errors, assumes associativeness for instance
+
+#pragma GCC target("avx2")
+#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
+// #pragma GCC target("avx,fma")
+// #pragma GCC target("sse4.2,fma")
+// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
+// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+#endif
+
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
 
@@ -130,7 +144,7 @@ constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
 constexpr int p2(int x) { return 1 << x; }
 constexpr int msk2(int x) { return p2(x) - 1; }
 constexpr int log_2(int a) { return a ? (8 * (int)sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
-constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }               // 16->16, 13->16, (a<=0)->0
+constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -367,68 +381,84 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
-const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vi adj[400007];
+// vl a;
+// vl b;
+// vl c;
 
-int rand(int a, int b) {
-    return a + rand() % (b - a + 1);
-}
 
-// Print n random numbers between l and r inclusive
-void prand(int n, int l = 0, int r = 10) {
-    f0r(i, n) cout << rand(l, r) << " \n"[i == n - 1];
-}
+int tr[__];
+int tl[__];
 
-// Print n random UNIQUE numbers between l and r inclusive
-void puni(int n, int l = 0, int r = 10) {
-    assert(n <= r - l + 1);
-    set<int> used;
-    f0r(i, n) {
-        int x;
-        do {
-            x = rand(l, r);
-        } while (used.count(x));
-        cout << x << " \n"[i == n - 1];
-        used.insert(x);
+void solve() {
+    int n; re(n); V<pair<str,pair<int,int>>> mp; f0r(i,n){str s; re(s); mp.pb({s,{0,0}});}
+    // mp[one] = {par,needed}; par= -1 -> leftNeeded; par= 1 -> rightNeeded; par=0 -> dontNeed;
+    // par = 2 noneWillDo
+    int t0 = 0;
+    for(auto &[s,need]:mp){
+        stack<char> st; need.ff = 0;
+        each(c,s){
+            if(c=='(')st.push(c);
+            else { // ')' need '('
+                if(st.empty()) {need.first = -1; need.ss++;}
+                else if(st.top()=='(') st.pop();
+                else{
+                    need.first = -1; need.ss++;
+                }
+            }
+        }
+        if(!st.empty()){
+            if(need.ff==0){
+                need.ff = 1;
+                need.ss = sz(st);
+            }else {
+                need.ff = 2;
+            }
+        }
+        if(need.ff==0) t0++;
+        else if(need.ff == 1) tr[need.ss]++;
+        else if(need.ff == -1) tl[need.ss]++;
+        // dbg(s,need);
     }
+    int ans = t0/2;
+    f0r(i,__){ans+=min(tr[i],tl[i]);}
+
+    ps(ans+((ans&&ans%3==0)?1:0));
+
+
+
+
 }
 
-// Print a random binary string of length n
-void pbin(int n) {
-    f0r(i, n) { pr(rand(0, 1)); }
-    ps();
-}
+int main() {
 
-// Print a random set of characters of length n
-void pstr(int n, char c = 'a', char d = 'z') {
-    if (d < c) swap(c, d);
-    f0r(i, n) { pr(char(c + rand(0, int(d - c)))); }
-    ps();
-}
+#ifdef asr_time
+    auto begin = chrono::high_resolution_clock::now();
+#endif
 
-int main(int argc, char *argv[]) {
-    (void)argc;
-    srand(atoi(argv[1]));
+    vamos;
+
+// #ifndef asr_debug
+    cin.tie(nullptr);
+// #endif
+
     fix(15);
-    ps(1);
 
-    int n = rand(1, 10);
-    ps(n);
+    int TT = 1;
+    // cin >> TT;
+    f1r(TC, 1, TT)
+        solve();
 
-    
-
-
-
-
-
-
-    // pstr(10, 'l', 'k');
-    // pstr(10);
-    // prand(5);
-    // pbin(20);
-    // prand(10, 45, 55);
-    // puni(12, 1, 12);
-    // puni(12, 1, 10); // will fail the assertion
+#ifdef asr_time
+    auto end = chrono::high_resolution_clock::now();
+    cout << setprecision(2) << fixed;
+    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
+#endif
 
     return 0;
 }

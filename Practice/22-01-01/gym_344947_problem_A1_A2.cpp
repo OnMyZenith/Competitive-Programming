@@ -5,6 +5,20 @@
 using namespace __gnu_pbds;
 using namespace std;
 
+#ifndef asr_debug
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+// #pragma GCC optimize("Ofast")
+// Can casuse floating point errors, assumes associativeness for instance
+
+#pragma GCC target("avx2")
+#pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
+// #pragma GCC target("avx,fma")
+// #pragma GCC target("sse4.2,fma")
+// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
+// or use avx instead of sse4.2, leave fma in as it was covered in avx2
+#endif
+
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
 
@@ -130,7 +144,7 @@ constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
 constexpr int p2(int x) { return 1 << x; }
 constexpr int msk2(int x) { return p2(x) - 1; }
 constexpr int log_2(int a) { return a ? (8 * (int)sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
-constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }               // 16->16, 13->16, (a<=0)->0
+constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -367,68 +381,107 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
-const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+// ll a[_];
+// ll b[_];
+// ll c[_];
+// vi adj[400007];
+// vl a;
+// vl b;
+// vl c;
 
-int rand(int a, int b) {
-    return a + rand() % (b - a + 1);
-}
+/*
+A1. K-k-knapsack??
+time limit per test30.0 s/1.0 s
+memory limit per test256 MB
+inputstandard input
+outputstandard output
+You are given n items, weight of i-th (1≤i≤n) is ai. You need to choose some of them with the total weight of w.
 
-// Print n random numbers between l and r inclusive
-void prand(int n, int l = 0, int r = 10) {
-    f0r(i, n) cout << rand(l, r) << " \n"[i == n - 1];
-}
+Input
+First line contains two integers n and w (1≤n,w≤2∗105). Next line contains n integers a1,a2,...,an. The sum a1+a2+...+an will be less than or equal to 2∗105.
 
-// Print n random UNIQUE numbers between l and r inclusive
-void puni(int n, int l = 0, int r = 10) {
-    assert(n <= r - l + 1);
-    set<int> used;
-    f0r(i, n) {
-        int x;
-        do {
-            x = rand(l, r);
-        } while (used.count(x));
-        cout << x << " \n"[i == n - 1];
-        used.insert(x);
+Output
+Output YES if it's possible to choose some items with the total weight of w. Otherwise print NO
+
+Examples
+inputCopy
+3 5
+1 2 3
+outputCopy
+YES
+inputCopy
+3 7
+5 6 4
+outputCopy
+NO
+inputCopy
+4 17
+8 5 6 3
+outputCopy
+YES
+inputCopy
+3 11
+2 10 4
+outputCopy
+NO
+Note
+For first test, answer is YES because we can choose two items with sum of 5: 2 and 3 For second test, answer is NO because it's not possible to choose any items with sum of 7
+
+*/
+
+
+/*
+// Works in ~18secs
+vi a;
+bool dp[_];
+
+void solve() {
+    int n,w; re(n,w); rv(n,a);
+    dp[0] = 1;
+    f1r(i,1,n){
+        f1rd(j,w,a[i-1]){
+            dp[j]|=dp[j-a[i-1]];
+        }
     }
+    ps((dp[w]?"YES":"NO"));
+}
+*/
+
+// Works in 640 ms, use c++ 32bit
+bitset<_> dp;
+void solve() {
+    int n,w; scanf("%d%d",&n,&w);
+    dp[0] = 1; int x;
+    f0r(i,n){scanf("%d",&x); dp|=(dp<<x);}
+    printf((dp[w]?"YES\n":"NO\n"));
 }
 
-// Print a random binary string of length n
-void pbin(int n) {
-    f0r(i, n) { pr(rand(0, 1)); }
-    ps();
-}
+int main() {
 
-// Print a random set of characters of length n
-void pstr(int n, char c = 'a', char d = 'z') {
-    if (d < c) swap(c, d);
-    f0r(i, n) { pr(char(c + rand(0, int(d - c)))); }
-    ps();
-}
+#ifdef asr_time
+    auto begin = chrono::high_resolution_clock::now();
+#endif
 
-int main(int argc, char *argv[]) {
-    (void)argc;
-    srand(atoi(argv[1]));
+    vamos;
+
+// #ifndef asr_debug
+    cin.tie(nullptr);
+// #endif
+
     fix(15);
-    ps(1);
 
-    int n = rand(1, 10);
-    ps(n);
+    int TT = 1;
+    // cin >> TT;
+    f1r(TC, 1, TT)
+        solve();
 
-    
-
-
-
-
-
-
-    // pstr(10, 'l', 'k');
-    // pstr(10);
-    // prand(5);
-    // pbin(20);
-    // prand(10, 45, 55);
-    // puni(12, 1, 12);
-    // puni(12, 1, 10); // will fail the assertion
+#ifdef asr_time
+    auto end = chrono::high_resolution_clock::now();
+    cout << setprecision(2) << fixed;
+    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
+#endif
 
     return 0;
 }

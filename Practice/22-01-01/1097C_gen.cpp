@@ -410,17 +410,17 @@ int main(int argc, char *argv[]) {
     (void)argc;
     srand(atoi(argv[1]));
     fix(15);
-    ps(1);
+    // ps(1);
 
     int n = rand(1, 10);
     ps(n);
-
-    
-
-
-
-
-
+    f0r(i,n){
+        int m = rand(1, 10);
+        f0r(j,m){
+            cout<<(rand(0,1)?'(':')');
+        }
+        ps();
+    }
 
     // pstr(10, 'l', 'k');
     // pstr(10);
