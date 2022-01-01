@@ -428,7 +428,7 @@ void solve() {
     int ans = t0/2;
     f0r(i,__){ans+=min(tr[i],tl[i]);}
 
-    ps(ans+((ans&&ans%3==0)?1:0));
+    ps(ans);
 
 
 
