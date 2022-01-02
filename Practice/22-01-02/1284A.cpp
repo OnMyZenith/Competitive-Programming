@@ -387,98 +387,25 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-// vl a;
-// vl b;
-// vl c;
-
-/*
-A1. K-k-knapsack??
-time limit per test30.0 s/1.0 s
-memory limit per test256 MB
-inputstandard input
-outputstandard output
-You are given n items, weight of i-th (1≤i≤n) is ai. You need to choose some of them with the total weight of w.
-
-Input
-First line contains two integers n and w (1≤n,w≤2∗105). Next line contains n integers a1,a2,...,an. The sum a1+a2+...+an will be less than or equal to 2∗105.
-
-Output
-Output YES if it's possible to choose some items with the total weight of w. Otherwise print NO
-
-Examples
-inputCopy
-3 5
-1 2 3
-outputCopy
-YES
-inputCopy
-3 7
-5 6 4
-outputCopy
-NO
-inputCopy
-4 17
-8 5 6 3
-outputCopy
-YES
-inputCopy
-3 11
-2 10 4
-outputCopy
-NO
-Note
-For first test, answer is YES because we can choose two items with sum of 5: 2 and 3 For second test, answer is NO because it's not possible to choose any items with sum of 7
-
-*/
+vl a;
+vl b;
+vl c;
 
 
-/*
-// Works in ~18secs
-vi a;
-bool dp[_];
+
 
 void solve() {
-    int n,w; re(n,w); rv(n,a);
-    dp[0] = 1;
-    f1r(i,1,n){
-        f1rd(j,w,a[i-1]){
-            dp[j]|=dp[j-a[i-1]];
-        }
+    int n,m; re(n,m); vs s(n), t(m); re(s,t);
+    int q; re(q);
+    while(q--){
+        int x; re(x); x--;
+        int l = x%n; int r = x%m;
+        cout<<s[l]<<t[r]<<'\n';
     }
-    ps((dp[w]?"YES":"NO"));
-}
-*/
-
-// Works in 640 ms, use c++ 32bit
-// bitset<_> dp;
-// void solve() {
-//     int n,w; scanf("%d%d",&n,&w);
-//     dp[0] = 1; int x;
-//     f0r(i,n){scanf("%d",&x); dp|=(dp<<x);}
-//     printf((dp[w]?"YES\n":"NO\n"));
-// }
 
 
-// Works in 46ms, use c++ 32bit for best speed
-bitset<_> dp;
 
-void solve() {
-    int n, w;
-    scanf("%d%d", &n, &w);
-    dp[0] = 1; hash_map<int,int> m;
-    f0r(i, n) {
-        int x;
-        scanf("%d", &x);
-        m[x]++;
-    }
-    for(auto &[i, f] : m) {
-        for (int j = 0; (1 << j) <= f; j++) {
-            dp |= (dp << (i * (1 << j)));
-            f -= 1 << j;
-        }
-        dp |= dp << (i * f);
-    }
-    printf((dp[w] ? "YES\n" : "NO\n"));
+
 }
 
 int main() {
