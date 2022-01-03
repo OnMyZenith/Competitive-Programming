@@ -268,8 +268,8 @@ tcTUU > void DBG(const T &t, const U &...u) {
 #define chk(...) \
     if (!(__VA_ARGS__)) cerr << "Line(" << __LINE__ << ") -> function(" << __FUNCTION__ << ") -> CHK FAILED: (" << #__VA_ARGS__ << ")" << '\n', exit(0);
 #else
-#define dbg(...) 0
-#define chk(...) 0
+#define dbg(...) 007
+#define chk(...) 007
 #endif
 
 template <int MOD, int RT>
@@ -387,36 +387,32 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-// vl a;
-// vl b;
-// vl c;
+vl a;
+vl b;
+vl c;
 
-// Works in 500 ms
-// Brought a machine gun to a fist fight
-// Will use dp and improve...later
+
+
+
 void solve() {
-    int n; re(n); vi a; rv(n,a); ord_set<int> lst, len; lst.ins(0); len.ins(0); // {lstEle, len}
-    each(i,a) {
-        auto it = lst.lb(i);
-        if(*it == i) continue;
-
-        it--; // appending to this
-        int l = *len.find_by_order(lst.order_of_key(*it));
-        auto itrem = len.lb(l+1);
-        if(itrem==len.end() || *itrem > l + 1){
-            len.ins(l+1); lst.ins(i);
-        }else{
-            auto itrem2 = lst.find_by_order(len.order_of_key(l+1));
-            lst.erase(itrem2);
-            lst.ins(i);
-        }
+    int n, k; re(n,k);
+    if((n-1)<2*(k-1)){ps(-1);return;}
+    f0r(i,n)f0r(j,n){
+        if(k&&i==0&&j==0){cout<<'R';k--;}
+        else if(k&&i&&j&&i%2==0&&j%2==0&&i==j){cout<<'R';k--;}
+        else cout<<'.';
+        if(j==n-1)cout<<nl;
     }
-    ps((*len.find_by_order(sz(len)-1)));
+
+
+
+
+
 }
 
 int main() {
 
-#ifdef asr_fin
+#ifdef asr_time
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
@@ -429,11 +425,11 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
-#ifdef asr_fin
+#ifdef asr_time
     auto end = chrono::high_resolution_clock::now();
     cout << setprecision(2) << fixed;
     cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
