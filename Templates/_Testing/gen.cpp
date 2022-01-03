@@ -410,7 +410,7 @@ int main(int argc, char *argv[]) {
     (void)argc;
     srand(atoi(argv[1]));
     fix(15);
-    ps(1);
+    ps(1);      // One Test Case
 
     int n = rand(1, 10);
     ps(n);

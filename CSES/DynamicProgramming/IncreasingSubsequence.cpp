@@ -391,17 +391,13 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vl b;
 // vl c;
 
-vi a;
-
-struct ST{
-    int ele, cnt;
-    bool operator<(ST a){ return ele < a.ele;}
-};
-
 void solve() {
-    int n; re(n); rv(n,a); set<ST> poss;
+    int n; re(n); vi a; rv(n,a); set<pi> s; s.ins({0,0}); // {lstEle, len}
     each(i,a){
-        poss.lb(ST{i,-1});
+        auto it = s.lb({i,0});
+        if(it->ff == i) continue;
+        it--; s.ins({i,it->ss+1});
+        
     }
 
 
@@ -424,7 +420,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

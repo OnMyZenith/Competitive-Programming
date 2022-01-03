@@ -383,33 +383,56 @@ const int iINF = 2e9 + 007;
 
 const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-// vl a;
-// vl b;
-// vl c;
 
-int n;
-int a[5001];
-ll dp[5001][5001];
-bool ok[5001][5001];
+// Works in 330 ms
+// int n; vl a;
+// ll dp[5001][5001][2];   // max points I get if player p(me/you) goes first
+// bool ok[5001][5001][2];
+// ll f(int l, int r, bool me){
+//     if(l>r) return 0;
+//     if(ok[l][r][me]) return dp[l][r][me];
+//     if(l==r) return ok[l][r][me] = 1,dp[l][r][me] = me*a[l], dp[l][r][me];
+//     if(me) dp[l][r][me] = max(f(l,r-1,!me) + a[r], f(l+1,r,!me) + a[l]);
+//     else dp[l][r][me] = min(f(l,r-1,!me), f(l+1,r,!me));
+//     return ok[l][r][me] = 1, dp[l][r][me];
+// }
+// void solve() {
+//     re(n); rv(n,a); f(0,n-1,1);
+//     ps(dp[0][n-1][1]);
+// }
 
-ll f(int l, int r){
-    if(l>r)return 0;
-    if(l==r) return (n&1)*a[l];
-    if(ok[l][r]) return dp[l][r];
-    ckmax(dp[l][r], f(l,r-2)+a[r]);
-    ckmax(dp[l][r], f(l+2,r)+a[l]);
-    ckmax(dp[l][r], f(l+1,r-1)+a[l]);
-    ckmax(dp[l][r], f(l+1,r-1)+a[r]);
-    return ok[l][r] = 1, dp[l][r];
-}
+// Works in 140 ms
+// void solve(){
+//     int n; re(n); vl a; rv(n,a); vvl dp(n,vl(n));      // dp[l][r] <== max diff b/w my score and oppponent's (when only played on l to r)
+//     f0r(l,n) dp[l][l] = a[l];
+//     f0rd(l,n) f1r(r,l+1,n-1) dp[l][r] = max(a[r] - dp[l][r-1], a[l] - dp[l+1][r]);
+//     ps((accumulate(all(a),0LL)+dp[0][n-1])/2);
+// }
 
-void solve() {
-    re(n); ai(a,n); f(0,n-1);
-    ps(dp[0][n-1]);
+// Greedy solution 10ms
+// basically every subsequence like small1_BIG_small2 can be replaced with small1+small2-BIG
+void solve(){
+    int n; re(n); vl a; ll tot = 0; ll x, y, z;
+    f0r(i,n){
+        re(x); tot+=x; a.pb(x);
+        while(sz(a) >= 3){
+            x = a[sz(a)-3]; y = a[sz(a)-2]; z = a[sz(a) -1 ];
+            if(x<y&&y>z){ a.pop_back(); a.pop_back(); a.pop_back(); a.pb(x+z-y);}
+            else break;
+        }
+    }
+    int l = 0, r = sz(a) - 1; ll diff = 0; bool turn = 1;
+    while(l<=r){
+        if(turn){
+            if(a[l]>a[r]) diff+=a[l++];
+            else diff+= a[r--];
+        }else{
+            if(a[l]>a[r]) diff-=a[l++];
+            else diff-= a[r--];
+        }
+        turn^=1;
+    }
+    ps((tot+diff)/2);
 }
 
 int main() {
