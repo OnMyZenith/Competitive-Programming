@@ -397,8 +397,11 @@ vl c;
 
 
 void solve() {
-    
-
+    int n; str s; re(n,s); int cnt =0;
+    f0r(i,n){
+        if(i<n-1 && ((s[i] == 'U' && s[i+1] == 'R') || (s[i] == 'R' && s[i+1] == 'U'))) cnt++,i++;
+    }
+    ps(n - cnt);
 
 
 
@@ -419,7 +422,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -397,6 +397,22 @@ vl c;
 
 
 void solve() {
+    int n; re(n); str s; re(s); vl pre(n+1), suff(n+1);
+    ll sh = 0;
+    f1r(i,1,n){
+        sh += (s[i-1]=='*');
+        pre[i] = pre[i-1] + (s[i-1]=='.'?sh:0LL);
+    }
+    sh = 0;
+    f1rd(i,n-1,0){
+        sh += (s[i]=='*');
+        suff[i] = suff[i+1] + (s[i]=='.'?sh:0LL);
+    }
+    ll cost = lINF;
+    f1r(i,0,n){
+        ckmin(cost,pre[i]+suff[i]);
+    }
+    ps(cost);
     
 
 

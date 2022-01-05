@@ -388,20 +388,29 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
+// // vi adj[400007];
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
-
-
-
-
+    int n,m; re(n,m); vvi g(n);
+    f0r(i,m){int x,y; re(x,y); x--,y--; g[x].pb(y); g[y].pb(x);}
+    vb vis(n); Q<int> q; vb team(n);
+    f0r(i,n){
+        if(!vis[i]){
+            q.push(i); team[i] = 1;
+            while(!q.empty()){
+                int v = q.front(); q.pop();
+                each(u,g[v])if(!vis[u]) vis[u] = 1, team[u] = 1^team[v], q.push(u);
+                else if(team[u]==team[v]){ps("IMPOSSIBLE"); return;}
+            }
+        }
+    }
+    f0r(i,n) cout<< 1 + int(team[i]) << " \n"[i==n-1];
 }
 
 int main() {
@@ -419,7 +428,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

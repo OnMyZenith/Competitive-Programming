@@ -327,7 +327,7 @@ struct mint {
     friend mint operator/(mint a, const mint &b) { return a /= b; }
 };
 
-const int MOD = 1e9 + 007; // 998244353;
+const int MOD = 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 typedef vector<mi> vmi;
 typedef pair<mi, mi> pmi;
@@ -384,7 +384,7 @@ const int iINF = 2e9 + 007;
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int _ = 1e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
@@ -393,15 +393,16 @@ vl a;
 vl b;
 vl c;
 
+mi fac[_];
 
 
 
 void solve() {
-    
-
-
-
-
+    int n; re(n); str s; re(s);
+    int c0 = 0, c11 = 0;
+    f0r(i,n) if(i<n-1&& s[i]=='1'&&s[i+1]=='1')i++,c11++;else if(s[i]=='0')c0++;
+    mi res = fac[c0+c11]*inv(fac[c0])*inv(fac[c11]);
+    ps(res.v);
 }
 
 int main() {
@@ -415,9 +416,9 @@ int main() {
     // #ifndef asr_debug
     cin.tie(nullptr);
     // #endif
-
+    fac[0] = 1;
+    f1r(i,1,_-1)fac[i] = fac[i-1]*i;
     fix(15);
-
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)

@@ -389,19 +389,16 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
-
-
+int k;
+bool q(int r){
+    cout<<"? "<<1<<" "<<r+1<<endl;
+    int x; re(x); 
+    return (r+1 - x)>=k;
+}
 void solve() {
-    
-
-
-
-
+    int n,t; re(n,t); re(k);
+    int res = fstTrue(0,n-1,q);
+    cout<<"! " <<res+1<<endl;
 }
 
 int main() {
@@ -419,7 +416,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -389,19 +389,59 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
+struct union_find {
+    vector<int> parent;
+    vector<int> size;
+    int components = 0;
 
+    union_find(int n = -1) {
+        if (n >= 0)
+            init(n);
+    }
+
+    void init(int n) {
+        parent.resize(n + 1);
+        size.assign(n + 1, 1);
+        components = n;
+
+        for (int i = 0; i <= n; i++)
+            parent[i] = i;
+    }
+
+    int find(int x) {
+        return x == parent[x] ? x : parent[x] = find(parent[x]);
+    }
+
+    bool unite(int x, int y) {
+        x = find(x);
+        y = find(y);
+
+        if (x == y)
+            return false;
+
+        if (size[x] < size[y])
+            swap(x, y);
+
+        parent[y] = x;
+        size[x] += size[y];
+        components--;
+        return true;
+    }
+};
 
 
 void solve() {
-    
-
-
-
-
+    int n,m; re(n,m); union_find uf(n);
+    f0r(i,m){int x,y; re(x,y); uf.unite(x,y);}
+    vpi r;
+    f1r(i,2,n){
+        if(uf.unite(i,i-1)) r.pb({i,i-1});
+    }
+    ps(sz(r)); ps(r);
 }
 
 int main() {
@@ -419,7 +459,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -397,7 +397,13 @@ vl c;
 
 
 void solve() {
-    
+    int n; re(n); str s; re(s); s.erase(unique(all(s)), end(s));
+    vi v(26,0);
+    each(c,s){
+        if(v[c-'A']){ps("NO");return;}
+        v[c-'A']++;
+    }
+    ps("YES");
 
 
 

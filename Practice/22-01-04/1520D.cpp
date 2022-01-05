@@ -397,8 +397,14 @@ vl c;
 
 
 void solve() {
-    
-
+    ll n; re(n); rv(n,a);
+    hash_map<ll,ll> m;
+    f0r(i,n) m[a[i]-i]++;
+    ll ans = 0;
+    each(i,m){
+        ans+=i.ss*(i.ss-1)/2;
+    }
+    ps(ans);
 
 
 

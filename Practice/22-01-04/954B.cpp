@@ -389,19 +389,31 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
 
+vector<int> z_function(string s) {
+    int n = (int) s.length();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; ++i) {
+        if (i <= r)
+            z[i] = min (r - i + 1, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+            ++z[i];
+        if (i + z[i] - 1 > r)
+            l = i, r = i + z[i] - 1;
+    }
+    return z;
+}
 
-
-
-void solve() {
-    
-
-
-
-
+// O(n) using Z-Algo
+void solve(){
+    int n; str s; re(n,s);
+    int best = 0;
+    vi v2 = z_function(s);
+    f0r(i,n){
+        if(v2[i]>=i)ckmax(best,min(v2[i],i));
+    }
+    if(best) best--;
+    ps(sz(s) - best);
 }
 
 int main() {
@@ -419,7 +431,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

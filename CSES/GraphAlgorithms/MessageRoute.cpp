@@ -389,19 +389,34 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
+    int n, m; re(n,m); vvi g(n);
+    f0r(i,m){int x,y; re(x,y); x--,y--; g[x].pb(y); g[y].pb(x);}
+
+    Q<int> q; q.push(0); vb vis(n); vi p(n); vis[0] = 1;
+    while(!q.empty()){
+        int v = q.front(); q.pop();
+        if(v==n-1) break;
+        each(u,g[v]) if(!vis[u]) q.push(u), vis[u] = 1, p[u] = v;
+    }
+
+    if(!vis[n-1]){ ps("IMPOSSIBLE");return;}
     
-
-
-
-
+    vi path; path.pb(n-1); int curr = n - 1;
+    while(p[curr]!=0){
+        path.pb(p[curr]); curr = p[curr];
+    }
+    path.pb(0); reverse(all(path));
+    n = sz(path);
+    ps(n);
+    f0r(i,n) cout<<path[i]+1<<" \n"[i==n-1];    
 }
 
 int main() {
@@ -419,7 +434,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

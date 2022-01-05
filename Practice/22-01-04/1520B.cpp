@@ -397,8 +397,13 @@ vl c;
 
 
 void solve() {
-    
-
+    int n; re(n); int ans = 0;
+    f1r(i,1,9){
+        str s = "";
+        while(stoll(s+ts(i))<=n)s+=ts(i);
+        ans+=sz(s);
+    }
+    ps(ans);
 
 
 

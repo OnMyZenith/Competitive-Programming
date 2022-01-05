@@ -398,9 +398,27 @@ int day[_];
 
 void solve() {
     int n; re(n); V<P> p(n); f0r(i,n) cin>>p[i].s>>p[i].e>>p[i].r;
-    vi days; f0r(i,n) days.pb(p[i].s), days.pb(p[i].e); sor(days);
+    sort(all(p), [](P i, P j){return i.e < j.e;});
     
+    // map<int,int> cmp; f0r(i,n) {cmp[p[i].s], cmp[p[i].e];}
+    // int idx = 1; each(i,cmp) i.ss = idx++;
+    // vvl dp(n,vl(idx));
+    // f0r(i,idx){
+    //     dp[i][] = dp[i-1]
+    // }
 
+    V<pair<ld,pi>> q; f0r(i,n){ q.push_back({(ld)p[i].r/p[i].e,{p[i].r, i}});}
+    soR(q);
+    int bookedTill = 0; ll ans = 0;
+    dbg(q);
+    f0r(i,n){
+        int j = q[i].ss.ss;
+        if(bookedTill < p[j].s){
+            ans += p[j].r;
+            bookedTill = p[j].e;
+        }
+    }
+    ps(ans);
 
 
 

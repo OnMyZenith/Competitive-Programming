@@ -397,11 +397,20 @@ vl c;
 
 
 void solve() {
-    
-
-
-
-
+    int n; re(n); vvi res(n,vi(n,0)); int cnt = 1;
+    f0r(i,n){
+        res[i][i] = cnt++;
+    }
+    f1r(off,1,n-1){
+        f1r(i,off,n-1){
+            res[i][i-off] = cnt++;
+        }
+        f1r(i,off,n-1){
+            res[i-off][i] = cnt++;
+        }
+    }
+    if(n==2){ps(-1);return;}
+    each(i,res) ps(i);
 }
 
 int main() {

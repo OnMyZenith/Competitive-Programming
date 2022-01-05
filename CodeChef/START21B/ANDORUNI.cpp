@@ -388,16 +388,29 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
-// vi adj[400007];
+// // vi adj[400007];
 vl a;
-vl b;
-vl c;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
+    int n; re(n); rv(n,a);
+    vi c(32);
+    f0r(i,n){
+        f0r(j,31){
+            if(a[i]&(1<<j)) c[j]++;
+        }
+    }
+    ll ans = 0;
+
+    f0r(i,31){
+        if(c[i]>1) ans|=(1<<i);
+    }
+
+    ps(ans);
 
 
 

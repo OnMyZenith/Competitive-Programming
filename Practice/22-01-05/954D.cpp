@@ -389,19 +389,31 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
-
+// vl a;
+// vl b;
+// vl c;
 
 void solve() {
-    
+    int n, m, s, t; re(n, m, s, t); set<pi> h; s--,t--; vvi g(n); V<vb> con(n,vb(n));
+    f0r(i,m){int x, y; re(x,y); x--,y--; con[y][x]=con[x][y]=1; g[x].pb(y); g[y].pb(x);}
 
-
-
-
+    vi ds(n,iINF), dt(n,iINF); ds[s] = 0, dt[t] = 0;
+    auto dfs = y_combinator([&](auto self, int v, bool sss) -> void{
+        each(u, g[v]) if(sss){
+            if(ckmin(ds[u],ds[v] + 1)) self(u,sss);
+        }else {
+            if(ckmin(dt[u],dt[v] + 1)) self(u,sss);
+        }
+    });
+    dfs(s,1); dfs(t,0);
+    int ans = 0;
+    f0r(i,n){
+        f1r(j,i+1,n-1){
+            if(con[i][j]) continue;
+            if(ds[i]+dt[j] + 1 >= ds[t] && ds[j]+dt[i] +1 >= ds[t]) ans++;
+        }
+    }
+    ps(ans);
 }
 
 int main() {
@@ -419,7 +431,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

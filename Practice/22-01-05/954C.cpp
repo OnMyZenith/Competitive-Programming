@@ -389,15 +389,30 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
+    ll n; re(n); vl a(n); re(a);
+    ll col = 1;
+    ll mx = *max_element(all(a));
+    f0r(i,n-1){
+        if(abs(a[i]-a[i+1])!=1) {col = abs(a[i]-a[i+1]); break;}
+    }
+    dbg(col);
+    if(col==1){ps("YES");ps(mx,1);return;}
+    if(!col) {ps("NO");return;}
+    f0r(i,n-1){
+        if(a[i+1]-a[i]==1&&(a[i]%col==0)){ps("NO");return;}
+        if(a[i+1]-a[i]==-1&&(a[i+1]%col==0)){ps("NO");return;}
+        if(abs(a[i]-a[i+1])!=1 && abs(a[i]-a[i+1])!=col) {ps("NO");return;}
+    }
+    ps("YES");
+    ps(((mx+col-1)/col),col);
 
 
 
@@ -419,7 +434,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -397,7 +397,9 @@ vl c;
 
 
 void solve() {
-    
+    int n,x,y; re(n,x,y);
+    if((x+y)&1){ps(1);}
+    else ps(0);
 
 
 

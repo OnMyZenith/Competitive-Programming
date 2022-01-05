@@ -389,15 +389,87 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
+vi primeFactors(int n) 
+{ 
+    vi res;
+    // Print the number of 2s that divide n 
+    while (n % 2 == 0) 
+    { 
+        res.pb(2);
+        // cout << 2 << " "; 
+        n = n/2; 
+    } 
 
+    // n must be odd at this point. So we can skip 
+    // one element (Note i = i +2) 
+    for (int i = 3; i <= sqrt(n); i = i + 2) 
+    { 
+        // While i divides n, print i and divide n 
+        while (n % i == 0) 
+        { 
+            res.pb(i);
+            // cout << i << " "; 
+            n = n/i; 
+        } 
+    } 
 
+    // This condition is to handle the case when n 
+    // is a prime number greater than 2 
+    if (n > 2) {
+        res.pb(n);
+        // cout << n << " "; 
+    }
+    return res;
+} 
+vi printDivisors(int n)
+{
+    // Vector to store half of the divisors
+    vector<int> v;
+    for (int i = 1; i <= sqrt(n); i++) {
+        if (n % i == 0) {
+
+            // check if divisors are equal
+            if (n / i == i) {
+                v.pb(i);
+                // printf("%d ", i);
+            }
+            else {
+                // printf("%d ", i);
+                v.push_back(i);
+
+                // push the second divisor in the vector
+                v.push_back(n / i);
+            }
+        }
+    }
+    return v;
+    // The vector will be printed in reverse
+    // for (int i = v.size() - 1; i >= 0; i--)
+    //     printf("%d ", v[i]);
+}
 
 void solve() {
+    int n,m; re(n,m);
+
+    vi f = primeFactors(m); remDup(f); int x =sz(f);
+    dbg(f);
     
+    if(n<=x){ps(n);return;}
+
+    f= printDivisors(n); sor(f);
+    dbg(f);
+    int i  = 0;
+    while(i<sz(f)&&n/f[i]>x) i++;
+    if(i==sz(f)){ps(0);return;}
+    ps(n/f[i]);
+
+    // int ans = x;
+
+    // ps(ans,);
 
 
 

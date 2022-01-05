@@ -389,18 +389,33 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
+    int n; re(n); str s; re(s); vvi g(n);
+    f0r(i,n-1) {int x,y; re(x,y); x--,y--; if((s[x]=='R'&&s[y]=='G')||(s[y]=='R'&&s[x]=='G'))continue; g[x].pb(y); g[y].pb(x); }
 
-
-
+    vi start; f0r(i,n) if(s[i]=='B'){start.pb(i);}
+    vb vis(n); bool kill = 0;
+    each(si,start){
+        y_combinator([&](auto self, int v, int cnt = 0)->void{
+            if(kill) return;
+            if(s[v]=='B') cnt++;
+            if(cnt>1){ps("NO");kill=1;return;}
+            vis[v] = 1;
+            each(u,g[v])if(!vis[u]){
+                self(u,cnt);
+                if(kill) return;
+            }
+        })(si,0);
+    }
+    if(kill) return;
+    ps("YES");
 
 }
 

@@ -392,17 +392,95 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 vl a;
 vl b;
 vl c;
+ll mid;
+int n;
+ll tot;
 
-
-
+bool f(ll nm){
+    ll extra = nm*n - tot;
+    extra-=(nm-a[mid]);
+    f1r(i,mid+1,n-1) {
+        extra -= max(0LL,nm-a[i]);
+    }
+    return extra>=0;
+}
 
 void solve() {
-    
-
-
-
-
+    re(n); rv(n,a); sor(a);
+    tot = accumulate(all(a),0LL);
+    mid = n/2-1;
+    if(n&1) mid++;
+    ll nm = fstTrue(a[mid],(ll)iINF,f);
+    ps(nm*n-tot);
 }
+
+
+// bool f(ll nm){
+//     ll d1 = 0, d2= 0;
+//     dbg(nm);
+//     f0r(i,mid){
+//         dbg(nm - a[i]);
+//         // if(nm - a[i] < 0) return false;
+//         d1 += nm - a[i];
+//     }
+//     f1r(i,mid+1,n-1){
+//         dbg(a[i] - nm);
+//         // if(a[i] - nm < 0) return false;
+//         d2 += a[i] - nm;
+//     }
+//     ll nsum = nm*n;
+//     dbg(nm,nsum,d1,d2);
+//     return abs(d1-d2) + nm - a[mid] <= nsum - tot;
+// }
+
+
+// void solve() {
+//     re(n); rv(n,a); sor(a); int x =a[0];
+//     tot = accumulate(all(a),0LL);
+//     each(i,a) i-=x;
+//     mid = n/2-1;
+//     if(n&1) mid++;
+//     ll m = a[mid];
+
+//     ll nm = fstTrue(a[mid],10LL,f);
+//     ps(nm);
+
+
+// }
+// void solve() {
+//     int n; re(n); rv(n,a); sor(a); int x =a[0];
+//     each(i,a) i-=x;
+//     ll mid = n/2-1;
+//     if(n&1) mid++;
+//     ll m = a[mid];
+//     ll d1 = 0, d2= 0;
+//     dbg(mid);
+//     f0r(i,mid){
+//         d1 += a[i+1] - a[i];
+//     }
+//     f1r(i,mid,n-2){
+//         d2 += a[i+1] - a[i];
+//     }
+//     dbg(d1,d2);
+
+// }
+
+
+
+// void solve() {
+//     int n; re(n); rv(n,a); sor(a);
+//     ll mid = n/2-1;
+//     if(n&1) mid++;
+//     ll m = a[mid];
+//     ll c1 = 0, c2= 0;
+//     f0r(i,mid){
+//         c1 += m - a[i];
+//     }
+//     f1r(i,mid+1,n-1){
+//         c2 += a[i] - m;
+//     }
+//     ps(abs(c1-c2));
+// }
 
 int main() {
 

@@ -389,19 +389,25 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
-
+vi a;
+vi b;
 
 void solve() {
-    
-
-
-
-
+    int n; re(n); rv(n,a); b = a; sor(b); hash_map<int,pi> m;
+    f0r(i,n) 
+        if(i&1) m[a[i]].ff++;
+        else m[a[i]].ss++;
+    bool f = 1;
+    each(i,m){
+        int idxl = lwb(b,i.ff);
+        int idxr = upb(b,i.ff);
+        int space = idxr-idxl;
+        int even = (space)/2 + int((space&1)&&(idxl&1));
+        int odd = (space)/2 + int((space&1)&&(!(idxl&1)));
+        if(i.ss.ff != even) f = 0;
+        if(i.ss.ss != odd) f = 0;
+    }
+    ps((f?"YES":"NO"));
 }
 
 int main() {

@@ -32,7 +32,7 @@ using namespace std;
 #define f1rd(i, l, r) for (int i = (l); i >= (r); --i)
 #define each(i, a) for (auto &i : a)
 
-// for array type I/O, for other types use INPUT/OUTPUT section
+// for pure array I/O, for other types use INPUT/OUTPUT section
 #define ai(a, n) f0r(i, n) cin >> a[i];
 #define ain(a, l, r) f1r(i, l, r) cin >> a[i];
 #define ao(a, n) f0r(i, n) cout << a[i] << " \n"[i == n - 1];
@@ -55,17 +55,10 @@ using namespace std;
 
 #define all(v) v.begin(), v.end()
 #define rall(v) v.rbegin(), v.rend()
-#define sor(v) sort(all(v))
-#define soR(v) sort(rall(v))
+#define sor(v) sort(v.begin(), v.end())
+#define soR(v) sort(v.rbegin(), v.rend())
 #define sz(v) ((int)v.size())
 #define bg(v) v.begin()
-
-tcT > using V = vector<T>;
-tcT > using Q = queue<T>;
-tcTU > using P = pair<T, U>;
-tcT, size_t SZ > using AR = array<T, SZ>;
-tcT > using pqdec = std::priority_queue<T>;
-tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
 
 using ll = long long;
 using db = double;
@@ -73,28 +66,34 @@ using ld = long double;
 using ull = unsigned long long;
 using str = string;
 
-using vs = V<string>;
-using vb = V<bool>;
+using vs = vector<string>;
+using vb = vector<bool>;
 
-using vi = V<int>;
-using vd = V<db>;
-using vl = V<ll>;
-using vld = V<ld>;
+using vi = vector<int>;
+using vd = vector<double>;
+using vl = vector<long long>;
+using vld = vector<long double>;
 
-using vvi = V<vi>;
-using vvl = V<vl>;
-using vvd = V<vd>;
-using vvld = V<vld>;
+using vvi = vector<vector<int>>;
+using vvl = vector<vector<long long>>;
+using vvd = vector<vector<double>>;
+using vvld = vector<vector<long double>>;
 
-using pi = P<int, int>;
-using pl = P<ll, ll>;
-using pd = P<db, db>;
-using pld = P<ld, ld>;
+using pi = pair<int, int>;
+using pl = pair<long long, long long>;
+using pd = pair<double, double>;
+using pld = pair<long double, long double>;
 
-using vpi = V<pi>;
-using vpl = V<pl>;
-using vpd = V<pd>;
-using vpld = V<pld>;
+using vpi = vector<pair<int, int>>;
+using vpl = vector<pair<long long, long long>>;
+using vpd = vector<pair<double, double>>;
+using vpld = vector<pair<long double, long double>>;
+
+tcT > using V = vector<T>;
+tcT, size_t SZ > using AR = array<T, SZ>;
+tcT > using pqdec = std::priority_queue<T>;
+tcT > using pqinc = std::priority_queue<T, V<T>, greater<T>>;
+tcT > using Q = queue<T>;
 
 tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
@@ -141,10 +140,11 @@ public:
 template <class Fun>
 decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
 
-constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
-constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
-constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
-constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }           // Ceil of log_2(x);
+constexpr int pct(int x) { return __builtin_popcount(x); } // # of bits set
+constexpr int p2(int x) { return 1 << x; }
+constexpr int msk2(int x) { return p2(x) - 1; }
+constexpr int log_2(int a) { return a ? (8 * (int)sizeof(a)) - 1 - __builtin_clz(a) : -1; } // Floor of log_2(a); index of highest 1-bit
+constexpr int next_pow_2(int a) { return a > 0 ? 1 << log_2(2 * a - 1) : 0; }          // 16->16, 13->16, (a<=0)->0
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -371,8 +371,8 @@ Note on using less_equal as comparison function to use it as a multiset:
 tcT > using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
-// e.g. shuffle(permutation.begin(), permutation.end(), rng);
-
+// shuffle(permutation.begin(), permutation.end(), rng);
+const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 //these are checked at (1 + eps == 1) on CF, accuracy gets better near zero
 const float epsf = 1e-7F;
 const long double epsld = 1e-19L;
@@ -381,27 +381,54 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
-const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
-const char dir[4] = {'U', 'R', 'D', 'L'};
-const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int __ = 1e6 + 007;   // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
+// vl a;
+// vl b;
+// vl c;
 
 
 void solve() {
-    
+    int n,m; re(n,m); vs g(n); re(g);
+    int ans = 0; auto valid = [&](int x, int y) -> bool{ return x>=0 && x<n && y>=0 && y<m;};
 
-
-
-
+    f0r(i,n){
+        f0r(j,m){
+            if(g[i][j]=='.'){
+                ans++;
+                y_combinator([&](auto self, int r, int c)->void{
+                    g[r][c] ='#';
+                    int nr, nc;
+                    f0r(k,4){
+                        nr = r + dr[k]; nc = c + dc[k];
+                        if(valid(nr,nc) && g[nr][nc]=='.') self(nr,nc);
+                    }
+                })(i,j);
+            }
+        }
+    }
+    // Q<pi> q;
+    // f0r(i,n){
+    //     f0r(j,m){
+    //         if(g[i][j]=='.'){
+    //             q.push({i,j}); ans++;
+    //             while(!q.empty()){
+    //                 int r = q.front().ff; int c = q.front().ss; q.pop();
+    //                 g[r][c] ='#';
+    //                 int nr, nc;
+    //                 f0r(k,4){
+    //                     nr = r + dr[k]; nc = c + dc[k];
+    //                     if(valid(nr,nc) && g[nr][nc]=='.') q.push({nr,nc});
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    ps(ans);
 }
 
 int main() {
@@ -412,14 +439,14 @@ int main() {
 
     vamos;
 
-    // #ifndef asr_debug
+// #ifndef asr_debug
     cin.tie(nullptr);
-    // #endif
+// #endif
 
     fix(15);
 
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
