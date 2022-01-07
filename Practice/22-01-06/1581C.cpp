@@ -395,39 +395,47 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
 
 
-void solve() {
-    int n,m; re(n,m); vvi g(n);
-    f0r(i,m) {int x,y; re(x,y); x--,y--; g[x].pb(y); g[y].pb(x);}
 
-    vi vis(n); vi path; bool kill = 0; vi pa(n);
-    auto cycle = y_combinator([&](auto self, int v, int p)->bool{
-        pa[v] = p;
-        vis[v] = 1;
-        each(u,g[v]){
-            if(!vis[u]){self(u, v); if(kill) return true;}
-            else{
-                if(u!=p){
-                    int curr = v;
-                    path.pb(u);
-                    while(curr!=u){path.pb(curr);curr=pa[curr];}
-                    path.pb(u);
-                    kill = 1;
-                    return true;
+void solve() {
+    int n,m; re(n,m); vs s(n); re(s);
+    vvi pre(n+1, vi(m+1)); f1r(i,1,n) f1r(j,1,m) pre[i][j] = pre[i][j-1] + pre[i-1][j] - pre[i-1][j-1] + (s[i-1][j-1]=='1');
+
+    auto sum = [&](int R, int C, int r, int c)->int{
+        return (pre[R+1][C+1] - pre[r][C+1] - pre[R+1][c] + pre[r][c]);
+    };
+
+    auto cost = [&](int R, int C, int r, int c)->int{
+        return sum(R-1,C-1,r+1,c+1) + 2*(R - r - 1 + C - c - 1) - sum(R,C-1,R,c+1)- sum(r,C-1,r,c+1)- sum(R-1,C,r+1,C)- sum(R-1,c,r+1,c);
+    };
+
+    int c = n*m;
+    // vi f(m), tmp;
+    // f0r(i,n){
+    //     f1r(j,i+4,n-1){
+    //         f1r(k,3,m-1){
+    //             f[k] = cost(j,k,i,0);
+    //         }
+    //         tmp = f;
+    //         f1rd(k,m-2,4){
+    //             ckmin(f[k],f[k+1]);
+    //         }
+    //         f1r(k,)
+    //     }
+    // }
+    f0r(i,n){
+        f0r(j,m){
+            f1r(k,i+4,n-1){
+                f1r(l,j+3,m-1){
+                    int x = sum(k-1,l-1,i+1,j+1);
+                    if(x>=c)break;
+                    x+= (k - i - 1 + l - j - 1) - sum(k,l-1,k,j+1)- sum(k-1,j,i+1,j);
+                    if(x>=c)break;
+                    ckmin(c, x+(k - i - 1 + l - j - 1)- sum(i,l-1,i,j+1)- sum(k-1,l,i+1,l));
                 }
             }
         }
-        return false;
-    });
-    f0r(j,n){
-        if(!vis[j]){
-            if(cycle(j,-1)){
-                ps(sz(path));
-                f0r(i,sz(path)) cout << path[i] + 1 << " \n"[i==sz(path)-1];
-                return;
-            }
-        }
     }
-    ps("IMPOSSIBLE");
+    ps(c);
 }
 
 int main() {
@@ -445,7 +453,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

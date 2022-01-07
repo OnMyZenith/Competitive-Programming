@@ -389,45 +389,41 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-// vl a;
+vb a;
 // vl b;
 // vl c;
 
 
 
-void solve() {
-    int n,m; re(n,m); vvi g(n);
-    f0r(i,m) {int x,y; re(x,y); x--,y--; g[x].pb(y); g[y].pb(x);}
 
-    vi vis(n); vi path; bool kill = 0; vi pa(n);
-    auto cycle = y_combinator([&](auto self, int v, int p)->bool{
-        pa[v] = p;
-        vis[v] = 1;
-        each(u,g[v]){
-            if(!vis[u]){self(u, v); if(kill) return true;}
-            else{
-                if(u!=p){
-                    int curr = v;
-                    path.pb(u);
-                    while(curr!=u){path.pb(curr);curr=pa[curr];}
-                    path.pb(u);
-                    kill = 1;
-                    return true;
-                }
-            }
+void solve() {
+    ll n, d; re(n,d); a.rsz(n); f0r(i,n){int x; re(x); a[i] = x;}
+    vi cnt(n, iINF);
+    
+    auto idx = [&](ll i){i%=n; if(i<0) i+=n; return i;};
+
+    for (ll i = 0; i < n; i++){
+        ll j = i;
+        if(!a[i]){
+            cnt[i] = 0;
+            i+=d;
+            while(a[idx(i)]) {ckmin(cnt[idx(i)], (cnt[idx(i-d)] + 1)); i+=d;}
         }
-        return false;
-    });
-    f0r(j,n){
-        if(!vis[j]){
-            if(cycle(j,-1)){
-                ps(sz(path));
-                f0r(i,sz(path)) cout << path[i] + 1 << " \n"[i==sz(path)-1];
-                return;
-            }
+        i = j;
+    }
+    int mx = -iINF;
+    f0r(i,n){
+        if(cnt[i]!=iINF) ckmax(mx, cnt[i]);
+        else {
+            ps(-1); return;
         }
     }
-    ps("IMPOSSIBLE");
+    ps(mx);
+
+
+
+
+
 }
 
 int main() {
@@ -445,7 +441,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

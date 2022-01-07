@@ -394,24 +394,36 @@ const int _ = 2e5 + 007;    // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // Works in 500 ms
 // Brought a machine gun to a fist fight
 // Will use dp and improve...later
-void solve() {
-    int n; re(n); vi a; rv(n,a); ord_set<int> lst, len; lst.ins(0); len.ins(0); // {lstEle, len}
-    each(i,a) {
-        auto it = lst.lb(i);
-        if(*it == i) continue;
+// void solve() {
+//     int n; re(n); vi a; rv(n,a); ord_set<int> lst, len; lst.ins(0); len.ins(0); // {lstEle, len}
+//     each(i,a) {
+//         auto it = lst.lb(i);
+//         if(*it == i) continue;
 
-        it--; // appending to this
-        int l = *len.find_by_order(lst.order_of_key(*it));
-        auto itrem = len.lb(l+1);
-        if(itrem==len.end() || *itrem > l + 1){
-            len.ins(l+1); lst.ins(i);
-        }else{
-            auto itrem2 = lst.find_by_order(len.order_of_key(l+1));
-            lst.erase(itrem2);
-            lst.ins(i);
-        }
+//         it--; // appending to this
+//         int l = *len.find_by_order(lst.order_of_key(*it));
+//         auto itrem = len.lb(l+1);
+//         if(itrem==len.end() || *itrem > l + 1){
+//             len.ins(l+1); lst.ins(i);
+//         }else{
+//             auto itrem2 = lst.find_by_order(len.order_of_key(l+1));
+//             lst.erase(itrem2);
+//             lst.ins(i);
+//         }
+//     }
+//     ps((*len.find_by_order(sz(len)-1)));
+// }
+
+// Works in 50 ms
+void solve() {
+    int n; re(n); vi a; rv(n,a);
+    vi dp; // dp[x] : minimum ending val of sequence ending at x
+    f0r(i,n){
+        auto it = lb(all(dp),a[i]);
+        if(it==dp.end())dp.pb(a[i]);
+        else *it = a[i];
     }
-    ps((*len.find_by_order(sz(len)-1)));
+    ps(sz(dp));
 }
 
 int main() {

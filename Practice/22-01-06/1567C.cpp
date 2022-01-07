@@ -389,45 +389,19 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-// vl a;
-// vl b;
-// vl c;
+vl a;
+vl b;
+vl c;
+
 
 
 
 void solve() {
-    int n,m; re(n,m); vvi g(n);
-    f0r(i,m) {int x,y; re(x,y); x--,y--; g[x].pb(y); g[y].pb(x);}
-
-    vi vis(n); vi path; bool kill = 0; vi pa(n);
-    auto cycle = y_combinator([&](auto self, int v, int p)->bool{
-        pa[v] = p;
-        vis[v] = 1;
-        each(u,g[v]){
-            if(!vis[u]){self(u, v); if(kill) return true;}
-            else{
-                if(u!=p){
-                    int curr = v;
-                    path.pb(u);
-                    while(curr!=u){path.pb(curr);curr=pa[curr];}
-                    path.pb(u);
-                    kill = 1;
-                    return true;
-                }
-            }
-        }
-        return false;
-    });
-    f0r(j,n){
-        if(!vis[j]){
-            if(cycle(j,-1)){
-                ps(sz(path));
-                f0r(i,sz(path)) cout << path[i] + 1 << " \n"[i==sz(path)-1];
-                return;
-            }
-        }
-    }
-    ps("IMPOSSIBLE");
+    str s; re(s); int n =sz(s); str n1,n2;
+    f0rd(i,n-1) if(i&1) {n1 =s[i]+n1;} else {n2=s[i]+n2;}
+    if(n1.empty()) ps(stoll(n2)-1);
+    else if(n2.empty()) ps(stoll(n1)-1);
+    else ps((stoll(n1)+1)*(stoll(n2)+1)-2);
 }
 
 int main() {
@@ -445,7 +419,7 @@ int main() {
     fix(15);
 
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
