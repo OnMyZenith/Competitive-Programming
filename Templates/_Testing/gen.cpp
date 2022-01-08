@@ -341,6 +341,21 @@ void genComb(int SZ) {
         scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
 }
 
+mi fact[(int)1e6];
+bool factorialsPrepared;
+int nCr(int n, int r) {
+    assert(factorialsPrepared);
+    if (r > n) return 0;
+    assert(n > 0 && r >= 0);
+    mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
+    return res.v;
+}
+void prepareFact(int n) {
+    fact[0] = 1;
+    f1r(i, 1, n) fact[i] = fact[i - 1] * i;
+    factorialsPrepared = 1;
+}
+
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c

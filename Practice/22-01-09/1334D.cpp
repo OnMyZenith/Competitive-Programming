@@ -144,7 +144,7 @@ decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t
 constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
 constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
 constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
-constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }           // Ceil of log_2(x);
+constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -393,15 +393,30 @@ vl a;
 vl b;
 vl c;
 
-
-
-
 void solve() {
-    
-
-
-
-
+    ll n, l, r;
+    re(n, l, r);
+    ll curr = 1;
+    f1r(i, 1, n) {
+        if (curr + 2 * (n - i) < l) {
+            curr += 2 * (n - i);
+            continue;
+        }
+        f1r(j, i + 1, n) {
+            if (curr == l - 1) {
+                cout << j << " ";
+            } else if (curr >= l && curr <= r - 1) {
+                cout << i << " " << j << " ";
+            } else if (curr == r) {
+                cout << i << " ";
+            }
+            curr += 2;
+            if(curr>r) i = n;
+        }
+    }
+    // dbg(curr);
+    if (curr <= r) cout << 1;
+    cout << '\n';
 }
 
 int main() {

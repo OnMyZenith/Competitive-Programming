@@ -144,7 +144,7 @@ decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t
 constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
 constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
 constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
-constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }           // Ceil of log_2(x);
+constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
 
 // INPUT
 tcT > void re(complex<T> &c);
@@ -341,6 +341,21 @@ void genComb(int SZ) {
         scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
 }
 
+mi fact[(int)1e6];
+bool factorialsPrepared;
+int nCr(int n, int r) {
+    assert(factorialsPrepared);
+    if (r > n) return 0;
+    assert(n > 0 && r >= 0);
+    mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
+    return res.v;
+}
+void prepareFact(int n) {
+    fact[0] = 1;
+    f1r(i, 1, n) fact[i] = fact[i - 1] * i;
+    factorialsPrepared = 1;
+}
+
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -412,12 +427,12 @@ int main() {
 
     vamos;
 
-    // #ifndef asr_debug
+// #ifndef asr_debug
     cin.tie(nullptr);
-    // #endif
+// #endif
 
     fix(15);
-
+    // prepareFact(_);
     int TT = 1;
     cin >> TT;
     f1r(TC, 1, TT)
