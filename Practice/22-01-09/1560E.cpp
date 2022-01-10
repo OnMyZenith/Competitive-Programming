@@ -404,19 +404,55 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
-
-
-
-
+    str s; re(s); vb seen(26); int n = sz(s);
+    str t; reverse(all(s));
+    each(c, s){
+        if(seen[c-'a']) continue;
+        seen[c-'a'] = 1; t+=c;
+    }
+    int tz = sz(t);
+    reverse(all(s)); reverse(all(t));
+    vi f(26), cnt(26);
+    f0r(i,n){
+        cnt[s[i]-'a']++;
+    }
+    auto valid = [&](str S, str t1){
+        str res = S; 
+        each(cc,t1){
+            str nn;
+            each(c, S){
+                if(c!=cc) nn+=c;
+            }
+            S = nn; res+=S;
+        }
+        return res == s;
+    };
+    // dbg(t);
+    // dbg(cnt);
+    f0r(i,n){
+        f[s[i]-'a']++;
+        bool poss = 1;
+        f0r(j,tz) {
+            // dbg(cnt[t[j]-'a'], f[t[j]-'a'],t[j],j,i);
+            if(cnt[t[j]-'a']!=f[t[j]-'a']*(j+1)){poss=0;break;}
+        }
+        if(poss){
+            str tt = s.substr(0,i+1);
+            if(valid(tt,t)) {
+                ps(tt,t);
+                return;
+            }
+        }
+    }
+    ps(-1);
 }
 
 int main() {

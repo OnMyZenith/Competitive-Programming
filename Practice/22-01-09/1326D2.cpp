@@ -404,19 +404,84 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
-
+str LongestPalindromicPrefix(string sss)
+{
+ 
+    // Create temporary string
+    string temp = sss + '?';
+ 
+    // Reverse the string str
+    reverse(sss.begin(), sss.end());
+ 
+    // Append string str to temp
+    temp += sss;
+ 
+    // Find the length of string temp
+    int n = temp.length();
+ 
+    // lps[] array for string temp
+    int lps[n];
+ 
+    // Initialise every value with zero
+    fill(lps, lps + n, 0);
+ 
+    // Iterate the string temp
+    for (int i = 1; i < n; i++) {
+ 
+        // Length of longest prefix
+        // till less than i
+        int len = lps[i - 1];
+ 
+        // Calculate length for i+1
+        while (len > 0
+               && temp[len] != temp[i]) {
+            len = lps[len - 1];
+        }
+ 
+        // If character at current index
+        // len are same then increment
+        // length by 1
+        if (temp[i] == temp[len]) {
+            len++;
+        }
+ 
+        // Update the length at current
+        // index to len
+        lps[i] = len;
+    }
+ 
+    // Print the palindromic string of
+    // max_len
+    // ps(temp.substr(0, lps[n - 1]));
+    return temp.substr(0, lps[n - 1]);
+}
 
 
 void solve() {
-    
-
-
-
-
+    str s; re(s); int n = sz(s);
+    if(n==1) {ps(s); return;}
+    int i = 0, j = n-1;
+    while(i<j){
+        if(s[i]==s[j]) i++,j--;
+        else break;
+    }
+    // dbg(i,j);
+    str pre = s.substr(0,i);
+    str s1 = LongestPalindromicPrefix(s.substr(i,n-2*i));
+    reverse(all(s));
+    str suff = pre;
+    reverse(all(suff));
+    str s2 = LongestPalindromicPrefix(s.substr(i,n-2*i));
+    reverse(all(s2));
+    if(sz(s1)>sz(s2)){
+        ps(pre+s1+suff);
+    }else {
+        ps(pre+s2+suff);
+    }
 }
 
 int main() {

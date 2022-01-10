@@ -302,7 +302,8 @@ struct mint {
         return *this;
     }
     mint &operator*=(const mint &m) {
-        v = (ll)v * m.v % MOD;
+        ll t = (ll)v * m.v % MOD;
+        v = (int)t;
         return *this;
     }
     mint &operator/=(const mint &m) { return (*this) *= inv(m); }
@@ -341,20 +342,21 @@ void genComb(int SZ) {
         scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
 }
 
-// mi fact[(int)1e6];
-// bool factorialsPrepared;
-// int nCr(int n, int r) {
-//     assert(factorialsPrepared);
-//     if (r > n) return 0;
-//     assert(n > 0 && r >= 0);
-//     mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
-//     return res.v;
-// }
-// void prepareFact(int n) {
-//     fact[0] = 1;
-//     f1r(i, 1, n) fact[i] = fact[i - 1] * i;
-//     factorialsPrepared = 1;
-// }
+mi fact[(int)1e6];
+bool factorialsPrepared;
+int nCr(int n, int r) {
+    assert(factorialsPrepared);
+    if (r > n) return 0;
+    assert(n > 0 && r >= 0);
+    mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
+    return res.v;
+}
+
+void prepareFact(int n) {
+    fact[0] = 1;
+    f1r(i, 1, n) fact[i] = fact[i - 1] * i;
+    factorialsPrepared = 1;
+}
 
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -400,23 +402,31 @@ const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
-
 
 void solve() {
-    
-
-
-
-
+    int n; re(n); vi a(n); re(a);
+    vi b = a; remDup(b); if(sz(b)<=2) {ps(n); return;}
+    int M = n; int N = accumulate(all(a),0); int mx = *max_element(all(a));
+    vi f(N+1); each(i, a) f[i]++;
+    V<vmi> cnt(N+1,vmi(M+1)); // cnt(n,k) -> ways of getting the sum n using exactly k items
+    int ans = 1; cnt[0][0] = 1;
+    f1r(i,1,n){
+        f1rd(j,N,a[i-1]){
+            f1rd(k,M,1){
+                cnt[j][k] += cnt[j-a[i-1]][k-1];
+            }
+        }
+    }
+    f1r(i, 1, mx) {
+        for (int j = 1; f[i] - j + 1 > ans; j++) {
+            int target = (f[i] - j + 1) * i;
+            if(cnt[target][f[i] - j + 1]==nCr(f[i],f[i] - j + 1)){
+                ckmax(ans, f[i] - j + 1);
+                break;
+            }
+        }
+    }
+    ps(ans);
 }
 
 int main() {
@@ -427,14 +437,14 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
-    // prepareFact(_);
+    prepareFact(100);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

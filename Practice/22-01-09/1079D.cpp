@@ -341,20 +341,20 @@ void genComb(int SZ) {
         scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
 }
 
-// mi fact[(int)1e6];
-// bool factorialsPrepared;
-// int nCr(int n, int r) {
-//     assert(factorialsPrepared);
-//     if (r > n) return 0;
-//     assert(n > 0 && r >= 0);
-//     mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
-//     return res.v;
-// }
-// void prepareFact(int n) {
-//     fact[0] = 1;
-//     f1r(i, 1, n) fact[i] = fact[i - 1] * i;
-//     factorialsPrepared = 1;
-// }
+mi fact[(int)1e6];
+bool factorialsPrepared;
+int nCr(int n, int r) {
+    assert(factorialsPrepared);
+    if (r > n) return 0;
+    assert(n > 0 && r >= 0);
+    mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
+    return res.v;
+}
+void prepareFact(int n) {
+    fact[0] = 1;
+    f1r(i, 1, n) fact[i] = fact[i - 1] * i;
+    factorialsPrepared = 1;
+}
 
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -404,19 +404,48 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 
 void solve() {
-    
+    ld a, b, c, x1, y1, x2, y2; re(a, b, c, x1, y1, x2, y2);
 
+    ld xa = -(y1*b+c)/a;
+    ld ya = -(x1*a+c)/b;
+    ld xb = -(y2*b+c)/a;
+    ld yb = -(x2*a+c)/b;
 
+    ld ans = abs(x1-x2) + abs(y1-y2); ld poss = 0;
 
+    poss+=abs(ya-y1);
+    poss+=abs(yb-y2);
+    poss+=sqrt(pow(abs(x2-x1),2) + pow(abs(ya-yb),2));
+    ckmin(ans,poss);
 
+    poss = 0;
+    poss+=abs(xa-x1);
+    poss+=abs(xb-x2);
+    poss+=sqrt(pow(abs(y2-y1),2) + pow(abs(xa-xb),2));
+    ckmin(ans,poss);
+
+    poss = 0;
+    poss+=abs(xa-x1);
+    poss+=abs(yb-y2);
+    poss+=sqrt(pow(abs(x2-xa),2) + pow(abs(yb-y1),2));
+    ckmin(ans,poss);
+
+    poss = 0;
+    poss+=abs(xb-x2);
+    poss+=abs(ya-y1);
+    poss+=sqrt(pow(abs(x1-xb),2) + pow(abs(ya-y2),2));
+    ckmin(ans,poss);
+
+    cout<<ans<<'\n';
+    // ps(ans);
 }
 
 int main() {
@@ -434,7 +463,7 @@ int main() {
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

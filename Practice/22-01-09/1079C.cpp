@@ -302,7 +302,8 @@ struct mint {
         return *this;
     }
     mint &operator*=(const mint &m) {
-        v = (ll)v * m.v % MOD;
+        ll t = (ll)v * m.v % MOD;
+        v = (int)t;
         return *this;
     }
     mint &operator/=(const mint &m) { return (*this) *= inv(m); }
@@ -341,20 +342,20 @@ void genComb(int SZ) {
         scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
 }
 
-// mi fact[(int)1e6];
-// bool factorialsPrepared;
-// int nCr(int n, int r) {
-//     assert(factorialsPrepared);
-//     if (r > n) return 0;
-//     assert(n > 0 && r >= 0);
-//     mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
-//     return res.v;
-// }
-// void prepareFact(int n) {
-//     fact[0] = 1;
-//     f1r(i, 1, n) fact[i] = fact[i - 1] * i;
-//     factorialsPrepared = 1;
-// }
+mi fact[(int)1e6];
+bool factorialsPrepared;
+int nCr(int n, int r) {
+    assert(factorialsPrepared);
+    if (r > n) return 0;
+    assert(n > 0 && r >= 0);
+    mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
+    return res.v;
+}
+void prepareFact(int n) {
+    fact[0] = 1;
+    f1r(i, 1, n) fact[i] = fact[i - 1] * i;
+    factorialsPrepared = 1;
+}
 
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
@@ -403,21 +404,101 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
 // ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
-
+// // vi adj[400007];
+// vl a;
+// vl b;
+// vl c;
 
 void solve() {
+    int n; re(n); vi a(n); re(a);
     
-
-
-
-
+    V<bitset<5>> dp(n); f0r(i,5) dp[0].set();
+    f1r(i,1,n-1){
+        if(a[i]>a[i-1]){
+            auto t = dp[i-1]<<1;
+            f1r(j,1,3){
+                t|=t<<j;
+            }
+            dp[i] = t;
+        }else if(a[i]<a[i-1]){
+            auto t = dp[i-1]>>1;
+            f1r(j,1,3){
+                t|=t>>j;
+            }
+            dp[i] = t;
+        }else{
+            auto t1 = dp[i-1]>>1;
+            f1r(j,1,3){
+                t1|=t1>>j;
+            }
+            dp[i] |= t1;
+            auto t = dp[i-1]<<1;
+            f1r(j,1,3){
+                t|=t<<j;
+            }
+            dp[i] |= t;
+        }
+    }
+    f0r(i,n)dbg(dp[i]);
+    vi res;
+    auto path = y_combinator([&](auto self, int i, int f)->void{
+        res.pb(f+1);
+        if(!i) return;
+        if(a[i]>a[i-1]){
+            f1r(j,0,f-1) if(dp[i-1][j]) {self(i-1,j); break;}
+        } else if(a[i]<a[i-1]){
+            f1r(j,f+1,4) if(dp[i-1][j]) {self(i-1,j); break;}
+        }else {
+            f1r(j,0,4) if(j!=f && dp[i-1][j]) {self(i-1,j); break;}
+        }
+    });
+    f0r(i,5) if(dp[n-1][i]){path(n-1,i); break;}
+    reverse(all(res));
+    if(res.empty()) ps(-1);
+    else ps(res);
 }
+
+
+// void solve() {
+//     int n; re(n); vi a(n); re(a);
+//     vvi dp(n,vi(5,-1)); f0r(i,5) dp[0][i] = 0;
+//     f1r(i,1,n-1){
+//         if(a[i]>a[i-1]){
+//             f0r(j,5){
+//                 if(dp[i-1][j]!=-1){
+//                     f1r(k,j+1,4) dp[i][k] = j;
+//                 }
+//             }
+//         }else if(a[i]<a[i-1]){
+//             f0r(j,5){
+//                 if(dp[i-1][j]!=-1){
+//                     f1r(k,0,j-1) dp[i][k] = j;
+//                 }
+//             }
+//         }else {
+//             f0r(j,5){
+//                 if(dp[i-1][j]!=-1){
+//                     f1r(k,0,4) if(k!=j) dp[i][k] = j;
+//                 }
+//             }
+//         }
+//     }
+//     vi res; int curr = -1;
+//     f0r(i,5){
+//         if(dp[n-1][i]!=-1){
+//             curr = i;
+//             break;
+//         }
+//     }
+//     if(curr==-1){ps(-1); return;}
+//     f0rd(i,n-1){
+//         res.pb(curr+1);
+//         curr = dp[i][curr];
+//     }
+//     // dbg(dp);
+//     reverse(all(res));
+//     ps(res);
+// }
 
 int main() {
 
@@ -434,7 +515,7 @@ int main() {
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
