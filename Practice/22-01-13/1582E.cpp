@@ -404,76 +404,34 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vi a;
-// vl b;
+vl a;
 // vl c;
 
-#ifndef asr_debug
-const int AMX = 501;
-const int P2 = 512;
-#else
-const int AMX = 14;
-const int P2 = 16;
-#endif
 
-void solve(){
-    int n; re(n); rv(n,a);
-    vi dp(P2,iINF); dp[0] = 0;  // dp[this] = largest no. req. to create this XOR
-    each(i,a){
-        f0r(j,P2){
-            if(dp[j]>i) continue;
-            ckmin(dp[i^j], i);
+
+
+void solve() {
+    int n; re(n); rv(n,a); int k = (int)sqrt(2*n); vl pref(n);
+    f0r(i,n) pref[i] = (i?pref[i-1]:0) + a[i];
+
+    vvl dp(n+1, vl(k+1,0));   // dp[startingAt][segmentSize] = MAX_SumOfSegment;
+    dp[n][0] = iINF;
+    dp[n][0] = iINF;
+    // dbg(dp);
+    f1rd(i,n-1,0){
+        f1r(j,0,k){
+            dp[i][j] = dp[i+1][j];
+            // dbg(i, j);
+            if(j && i + j - 1 < n && pref[i+j-1] - (i?pref[i-1]:0) < dp[i+j][j-1]){
+                // dbg(i, j);
+                ckmax(dp[i][j], pref[i+j-1] - (i?pref[i-1]:0));
+            }
         }
     }
     dbg(dp);
-    vi ans;
-    f0r(i,P2) if(dp[i]<iINF) ans.pb(i);
-    ps(sz(ans));
+    int ans = -1; f0r(i,k+1) if(dp[0][i]) ckmax(ans,i);
     ps(ans);
 }
-
-// void solve() {
-//     int n; re(n); rv(n,a);
-//     V<bitset<P2>> dp(AMX);   // dp[i] = XORs possible to achieve with i being the greatest term
-//     each(i,dp) i.reset();
-//     f0r(i,AMX) dp[i][0] = 1;
-//     map<int,bitset<P2>> mp;
-//     bitset<P2> tmp; tmp.reset(); tmp[0]=1;
-//     mp[-1] = tmp;
-//     f1r(i,1,n){
-//         auto it = mp.lb(a[i-1]);
-//         if(it==mp.end()){
-//             it--;
-//             assert(it->ff<a[i-1]);
-//             dp[a[i-1]] |= it->ss;
-//         }
-//         else if(it!=mp.end()){
-//             if(it->ff>=a[i-1]) it--;
-//             assert(it->ff<a[i-1]);
-//             dp[a[i-1]] |= it->ss;
-//         }
-//         // dbg(a[i-1],it->ff,it->ss);
-//         // dp[a[i-1]] |= (tmp<<a[i-1]);
-//         // f0r(j,a[i-1]){
-//         //     f0r(k,next_pow_2(a[i-1]))
-//         //         dp[a[i-1]][k^a[i-1]] = max(dp[a[i-1]][k^a[i-1]], dp[j][k]);
-//         // }
-//         f0r(k,next_pow_2(a[i-1])){
-//             dbg(k,a[i-1],dp[a[i-1]]);
-//             dp[a[i-1]][k^a[i-1]] = max(dp[a[i-1]][k^a[i-1]], dp[a[i-1]][k]);
-//             dbg(dp[a[i-1]]);
-//         }
-//         mp[a[i-1]] |= dp[a[i-1]];
-//         auto tt = mp.begin()->ss;
-//         each(i,mp) {i.ss|=tt; tt|=i.ss;}
-//     }
-//     each(i,dp) dbg(i);
-//     bitset<P2> res; res.reset();
-//     each(i,dp)res|=i;
-//     ps(res.count());
-//     f0r(i,P2) if(res[i]) cout<<i<<" ";
-//     ps();
-// }
 
 int main() {
 
@@ -490,7 +448,7 @@ int main() {
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 
