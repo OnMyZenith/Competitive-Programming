@@ -364,11 +364,14 @@ struct splitmix64_hash {
         x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
         return x ^ (x >> 31);
     }
-
-    size_t operator()(uint64_t x) const {
+    size_t operator()(P<pl,ll> p) const {
         static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
+        return splitmix64(p.ff.ff + FIXED_RANDOM)^splitmix64(p.ff.ss + FIXED_RANDOM)^splitmix64(p.ss + FIXED_RANDOM);
     }
+    // size_t operator()(uint64_t x) const {
+    //     static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+    //     return splitmix64(x + FIXED_RANDOM);
+    // }
 };
 
 tcTU, typename Hash = splitmix64_hash > using hash_map = gp_hash_table<T, U, Hash>;
@@ -400,27 +403,25 @@ const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
-
-
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
-        }
+    ll n; re(n); vpl a(n); re(a); vvl g(n);
+    f0r(i, n - 1) {
+        ll x, y; re(x, y); x--, y--;
+        g[x].pb(y); g[y].pb(x);
     }
-    
-
-
+    hash_map<P<pl,ll>, ll> mem;
+    auto dfs = y_combinator([&](auto sum, ll v, ll p, ll av) -> ll {
+        auto it = mem.find({{v,p},av});
+        if(it!=mem.end()) return it->ss;
+        ll s = 0;
+        each(u, g[v]) if (u != p) {
+            s += max(abs(a[u].ss-av)+sum(u,v,a[u].ss), abs(a[u].ff-av)+sum(u,v,a[u].ff));
+        }
+        mem[{{v,p},av}] = s;
+        return s;
+    });
+    ps(max(dfs(0, -1, a[0].ff), dfs(0, -1, a[0].ss)));
 }
 
 int main() {
@@ -431,9 +432,9 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
     // prepareFact(_);

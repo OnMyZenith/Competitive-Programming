@@ -406,21 +406,18 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // vi adj[400007];
 vl a;
 vl b;
-vl c;
+// vl c;
+
 
 
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
-        }
-    }
-    
-
-
+    int n; re(n); rv(n,a); rv(n,b);
+    f0r(i,n) if(a[i]>b[i]) swap(a[i],b[i]);
+    sor(b);
+     sor(a);
+    // dbg(a);
+    ps(b[n-1]*a[n-1]);
 }
 
 int main() {

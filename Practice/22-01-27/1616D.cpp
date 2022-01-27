@@ -405,22 +405,29 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll c[_];
 // vi adj[400007];
 vl a;
-vl b;
-vl c;
+// vl b;
+// vl c;
+
 
 
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
+    int n; re(n); rv(n,a); int x; re(x); each(i,a) i-=x;
+    vvl dp(n+1, vl(4));
+    f1r(i,1,n){
+        dp[i][0] = max(dp[i-1][0], dp[i-1][2]);
+        dp[i][2] = max(dp[i-1][1], dp[i-1][3]);
 
+        dp[i][1] = max(dp[i-1][0]+1, dp[i-1][2]+1);
+
+        if(i-2>=0 && a[i-1]+a[i-2]>=0){
+            ckmax(dp[i][3], dp[i-1][1]+1);
+        }
+        if(i-3>=0 && a[i-1]+a[i-2]>=0 && a[i-1]+a[i-2]+a[i-3]>=0){
+            ckmax(dp[i][3], dp[i-1][3]+1);
         }
     }
-    
-
-
+    ps(*max_element(all(dp[n])));
 }
 
 int main() {

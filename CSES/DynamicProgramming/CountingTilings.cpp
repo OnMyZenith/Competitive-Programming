@@ -396,31 +396,24 @@ const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
 
-const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
-const char dir[4] = {'U', 'R', 'D', 'L'};
-const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
+// const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
+// const char dir[4] = {'U', 'R', 'D', 'L'};
+// const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+// const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+// // ll a[_];
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
-
+// {0, 1, 2, 3} = {U, D, L, R};
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
-        }
-    }
-    
-
-
+    int n, m;
+    re(n, m);
+    vvi 
 }
 
 int main() {
@@ -431,14 +424,14 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

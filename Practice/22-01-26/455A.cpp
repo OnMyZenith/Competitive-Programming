@@ -399,28 +399,26 @@ const int iINF = 2e9 + 007;
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int _ = 1e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll a[_];
 // ll b[_];
-// ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
-
+ll c[_];
+ll dp[_][2];
+int N = (int)1e5;
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
-        }
+    int n; re(n);
+    f0r(i, n) { int x; re(x); c[x]++; }
+    f1r(i, 1, N) {
+        dp[i][0] = max(dp[i - 1][0], dp[i - 1][1]);
+        dp[i][1] = max(((i - 1) ? dp[i - 2][0] : 0) + i * c[i], ((i - 1) ? dp[i - 2][1] : 0) + i * c[i]);
     }
-    
-
-
+    ps(max(dp[N][0], dp[N][1]));
 }
 
 int main() {
@@ -431,14 +429,14 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

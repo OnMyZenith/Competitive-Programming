@@ -400,27 +400,18 @@ const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
 
-
-
+vi a;
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
-        }
+    int n; re(n); rv(n, a); pqinc<int> neg; int ans = 0; ll curr = 0;
+    f0r(i, n) if (curr + a[i] >= 0) {
+        ans++, curr += a[i];
+        if (a[i] < 0) neg.push(a[i]);
+    } else {
+        if(neg.empty() || neg.top() >= a[i]) continue;
+        curr -= neg.top(); neg.pop(); curr += a[i]; neg.push(a[i]);
     }
-    
-
-
+    ps(ans);
 }
 
 int main() {
@@ -431,14 +422,14 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -405,22 +405,35 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll c[_];
 // vi adj[400007];
 vl a;
-vl b;
-vl c;
+// vl b;
+// vl c;
+
 
 
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
-        }
-    }
+    int n; re(n); rv(n,a);
+    ll b = a.back();
+    reverse(all(a));
+    while(!a.empty()&&a.back()==b)a.pop_back();
+    n = sz(a); reverse(all(a));
+    if(!n){ps(0);return;}
     
 
-
+    int i = n - 1, ans = 0;
+    // dbg(i);
+    while(i){
+        ans++;
+        int j = 0;
+        f0rd(k,i) if(a[k]==a.back()) j = k; else break;
+        dbg(j);
+        i = max(n - 2*(n - j),0);
+        a[i] = b;
+        dbg(i);
+    }
+    // int ans = 0;
+    // while(cnt<n) cnt*=2, ans++;
+    ps(ans);
 }
 
 int main() {

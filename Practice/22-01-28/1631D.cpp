@@ -400,27 +400,40 @@ const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
 
-
+vi a;
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
+    int n,k; re(n,k); rv(n,a);
+    vi fr(n+1); each(i,a) fr[i]++;
+    vi preFr(n+1); f0r(i,n+1) preFr[i] = (i?preFr[i-1]:0) + fr[i];
+    int x = 0, y = iINF;
+    f1r(x1, 1, n) {
+        int y1 = lwb(preFr, (n+k+1)/2 + preFr[x1-1]);
+        if (y1 > n) break;
+        if (y1 - x1 < y - x) x = x1, y = y1;
+    }
+    vpi ans;
+    f0r(i, n) {
+        if (k == 1) {
+            ans.pb({i + 1, n});
+            break;
+        }
+        if (x <= a[i] && a[i] <= y) ans.pb({i + 1, i + 1}), k--;
+        else {
+            int cntGood = 0, cntBad = 0;
+            f1r(j, i, n - 1) {
+                if (x <= a[j] && a[j] <= y) cntGood++;
+                else
+                    cntBad++;
+                if (cntGood > cntBad) {
+                    ans.pb({i + 1, j + 1});
+                    k--; i = j; break;
+                }
+            }
         }
     }
-    
-
-
+    ps(x,y); ps(ans);
 }
 
 int main() {

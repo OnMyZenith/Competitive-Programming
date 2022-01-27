@@ -400,27 +400,31 @@ const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 const int __ = 1e6 + 007; // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
-// ll a[_];
-// ll b[_];
-// ll c[_];
-// vi adj[400007];
-vl a;
-vl b;
-vl c;
 
+/*
+n-1 n-2             -->n-2
+001 011=3           -->  1
 
+000 100=((n-1)^3)   -->  0
+*/
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
+    int n, k; re(n, k); vpi ans; vb used(n);
+    if(k!=n-1){
+        ans.pb({k,n-1});
+        if(k) ans.pb({0, k^(n-1)});
+        used[k] = used[k^(n-1)] = used[0] = used[n-1] = 1;
+        f0r(i,n/2) if(!used[i]) ans.pb({i,i^(n-1)});
+    }else{
+        if(n==4){ps(-1); return;}
 
-        }
+        ans.pb({n-1,n-2});
+        ans.pb({1,3});
+        ans.pb({0,(n-1)^3});
+        used[0] = used[(n-1)^3] = used[1] = used[3] = used[n-1] = used[n-2] = 1;
+        f0r(i,n/2) if(!used[i]) ans.pb({i,i^(n-1)});
     }
-    
-
-
+    ps(ans);
 }
 
 int main() {
@@ -431,9 +435,9 @@ int main() {
 
     vamos;
 
-// #ifndef asr_debug
+    // #ifndef asr_debug
     cin.tie(nullptr);
-// #endif
+    // #endif
 
     fix(15);
     // prepareFact(_);

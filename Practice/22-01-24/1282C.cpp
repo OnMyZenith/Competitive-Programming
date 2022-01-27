@@ -404,23 +404,31 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll b[_];
 // ll c[_];
 // vi adj[400007];
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
+
 
 
 
 void solve() {
-    int n, x; re(n,x); vi w(n); re(w);
-    int mn = n;
-    f1r(i,1,20){
-        f1r(j,1,(1<<n)){
-
-        }
+    ll n,T,a,b; re(n,T,a,b); V<P<ll,bool>> p(n); ll h = 0;
+    f0r(i,n){ cin>>p[i].ss; if(p[i].ss) h++;} f0r(i,n) cin>>p[i].ff; sor(p);
+    ll preSumManTime = 0; ll best = 0; ll e = n - h;
+    f0r(i,n+1){ // i ques mandatory (from 0...N)
+        preSumManTime += (i?(p[i-1].ss?b:a):0);
+        if(i){if(p[i-1].ss) h--; else e--;}
+        ll t = (i<n?p[i].ff - 1:T);
+        t-=preSumManTime;
+        if(t < 0) continue;
+        ll solved = i;
+        ll E = min(t/a,e);
+        t -= E*a;
+        ll H = min(t/b,h);
+        solved += E+H;
+        ckmax(best,solved);
     }
-    
-
-
+    ps(best);
 }
 
 int main() {
