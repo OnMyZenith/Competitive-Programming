@@ -1,6 +1,3 @@
-#include <bits/extc++.h>
-using namespace __gnu_pbds;
-
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -16,7 +13,5 @@ struct splitmix64_hash {
     }
 };
 
-template <class T, class U, typename Hash = splitmix64_hash>
-using hash_map = gp_hash_table<T, U, Hash>;
-template <class T, typename Hash = splitmix64_hash>
-using hash_set = hash_map<T, null_type, Hash>;
+tcTU, typename Hash = splitmix64_hash> using hash_map = gp_hash_table<T, U, Hash>;
+tcT, typename Hash = splitmix64_hash> using hash_set = hash_map<T, null_type, Hash>;

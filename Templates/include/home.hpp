@@ -3,19 +3,11 @@
 using namespace std;
 using namespace __gnu_pbds;
 
-#ifndef asr_debug
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
 // #pragma GCC optimize("Ofast")
-// Can casuse floating point errors, assumes associativeness for instance
-
 #pragma GCC target("avx2")
 #pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
-// #pragma GCC target("avx,fma")
-// #pragma GCC target("sse4.2,fma")
-// run custom tests with stuff like assert(__builtin_cpu_supports("avx2"))
-// or use avx instead of sse4.2, leave fma in as it was covered in avx2
-#endif
 
 #define vamos ios_base::sync_with_stdio(false);
 #define fix(prec) cout << setprecision(prec) << fixed;
@@ -230,47 +222,3 @@ const int __ = 1e6 + 007;  // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
-
-
-
-vl a;
-vl b;
-vl c;
-
-
-
-void solve() {
-    
-
-
-
-
-}
-
-int main() {
-
-#ifdef asr_time
-    auto begin = chrono::high_resolution_clock::now();
-#endif
-
-    vamos;
-
-    // #ifndef asr_debug
-    cin.tie(nullptr);
-    // #endif
-
-    fix(15);
-    // prepareFact(_);
-    int TT = 1;
-    cin >> TT;
-    f1r(TC, 1, TT)
-        solve();
-
-#ifdef asr_time
-    auto end = chrono::high_resolution_clock::now();
-    cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
-#endif
-
-    return 0;
-}

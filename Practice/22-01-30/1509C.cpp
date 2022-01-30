@@ -232,19 +232,67 @@ const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
 
+vi a;
+vi b;
+// vl c;
 
-vl a;
-vl b;
-vl c;
-
-
+template <class T, class U>
+bool erase(T &t, const U &u) {
+    auto it = t.find(u);
+    if (it == end(t)) return false;
+    else
+        t.erase(it);
+    return true;
+}
 
 void solve() {
-    
+    int n; re(n); rv(n,a);
 
-
-
-
+    ll ans = lINF;
+    sor(a);
+    f0r(i,n){
+        b = a; ll c = 0;
+        int x = a[i];
+        multiset<int> s(all(a)); assert(erase(s, x));
+        dbg(s);
+        int l = x, r = x;
+        while(!s.empty()){
+            auto left = s.lower_bound(l);
+            auto right = s.lower_bound(r);
+            int l1, r1;
+            if(right == s.end()){
+                dbg(s);
+                if(left == s.end() || *left != l){
+                    assert(left!=s.begin());
+                    left--;
+                }
+                l1 = *left;
+                ckmin(l,l1);
+            
+                s.erase(left);
+            }else if(left == s.begin()){
+                dbg(s);
+                r1 = *right;
+                ckmax(r,r1);
+            
+                s.erase(right);
+            }else {
+                dbg(s);
+                r1 = *right;
+                if(*left != l) left--;
+                l1 = *left;
+                if(r1 - r < l - l1){
+                    s.erase(right); ckmax(r,r1);
+                }else{
+                    s.erase(left); ckmin(l,l1);
+                }
+            }
+            c += r - l;
+        }
+        ckmin(ans, c);
+        dbg(c);
+    }
+    ps(ans);
 }
 
 int main() {
@@ -262,7 +310,7 @@ int main() {
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

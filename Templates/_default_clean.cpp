@@ -1,5 +1,6 @@
-#include <bits/stdc++.h>
+#include <bits/extc++.h>
 using namespace std;
+using namespace __gnu_pbds;
 
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
@@ -14,11 +15,8 @@ using namespace std;
 #define lb lower_bound
 #define ub upper_bound
 #define ins insert
-#define ft front()
-#define bk back()
 #define rsz resize
 #define ass assign
-#define eq equal_range
 #define ts to_string
 #define nl '\n'
 
@@ -27,7 +25,6 @@ using namespace std;
 #define sor(v) sort(all(v))
 #define soR(v) sort(rall(v))
 #define sz(v) ((int)v.size())
-#define bg(v) v.begin()
 
 template <class T>
 using V = vector<T>;
@@ -48,7 +45,6 @@ using ld = long double;
 using ull = unsigned long long;
 using str = string;
 
-
 template <class T>
 bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 template <class T>
@@ -63,54 +59,14 @@ template <class T>
 int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
 template <class T>
 void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
-
-template <class T, class U>
-bool erase(T &t, const U &u) {
-    auto it = t.find(u);
-    if (it == end(t)) return false;
-    else
-        t.erase(it);
-    return true;
-}
-template <class T, class U>
-T fstTrue(T lo, T hi, U f) {
-    ++hi, assert(lo <= hi);
-    while (lo < hi) {
-        T mid = lo + (hi - lo) / 2;
-        f(mid) ? hi = mid : lo = mid + 1;
-    }
-    return lo;
-}
-template <class T, class U>
-T lstTrue(T lo, T hi, U f) {
-    --lo, assert(lo <= hi);
-    while (lo < hi) {
-        T mid = lo + (hi - lo + 1) / 2;
-        f(mid) ? lo = mid : hi = mid - 1;
-    }
-    return lo;
-}
-
-template <class Fun>
-class y_combinator_result {
-    Fun fun_;
-
-public:
-    template <class T>
-    explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
-    template <class... Args>
-    decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
-};
-template <class Fun>
-decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
-
-constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
-constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
-constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
-constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
+template <class T>
+T pow(T a, ll b) { T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r; }
 
 void solve() {
     
+
+
+
 }
 
 int main() {
@@ -119,6 +75,7 @@ int main() {
     cin.tie(nullptr);
     cout << setprecision(15) << fixed;
 
+    // prepareFact(_);
     int TT = 1;
     cin >> TT;
     while(TT--)

@@ -1,5 +1,3 @@
-#pragma once
-
 template <class Fun>
 class y_combinator_result {
     Fun fun_;

@@ -240,9 +240,17 @@ vl c;
 
 
 void solve() {
-    
+    int n,k; re(n,k);
+    if(k<2&&n>1){ps(-1);return;}
 
+    f0r(i,k-1){
+        cout<<i+1<<" ";
+    }
+    f1rd(i,n,k){
+        cout<<i<<" ";
+    }
 
+ps();
 
 
 }

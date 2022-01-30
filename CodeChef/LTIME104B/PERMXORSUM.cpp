@@ -231,20 +231,27 @@ const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
+constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
+constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
+constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
+constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
 
 
-vl a;
-vl b;
-vl c;
+ll f(int n){
+    if(n==1 || n ==0) return 0;
+    int N = next_pow_2(n) - 1;
+    if(pct(n)==1) N = 2*n-1;
+    if(pct(n+1)==1) N = n;
 
-
+    int left = max((N^n),1) - 1;
+    ll ans = (ll)(n - left) * N;
+    if(pct(n+1)==1) ans -=N;
+    return ans + f(left);
+}
 
 void solve() {
-    
-
-
-
-
+    int n; re(n);
+    ps(f(n));
 }
 
 int main() {

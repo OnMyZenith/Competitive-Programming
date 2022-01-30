@@ -1,6 +1,7 @@
 /* Author: OnMyZenith - https://github.com/OnMyZenith */
-#include <bits/stdc++.h>
+#include <bits/extc++.h>
 using namespace std;
+using namespace __gnu_pbds;
 
 #ifndef asr_debug
 #pragma GCC optimize("O3")
@@ -42,11 +43,8 @@ using namespace std;
 #define lb lower_bound
 #define ub upper_bound
 #define ins insert
-#define ft front()
-#define bk back()
 #define rsz resize
 #define ass assign
-#define eq equal_range
 #define ts to_string
 #define nl '\n'
 
@@ -213,9 +211,10 @@ tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
-tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
-tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - begin(a)); }
+tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - begin(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
+tcT > T pow(T a, ll b) { T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r; }
 
 //these are checked at (1 + eps == 1) on CF, accuracy gets better near zero
 const float epsf = 1e-7F;
@@ -232,12 +231,30 @@ const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
-vl a;
-vl b;
-vl c;
+
+
+// vl a;
+// vl b;
+// vl c;
+
+
 
 void solve() {
-    
+    ll n,k;re(n,k); str s; re(s);
+    vl req(n), pref(n);
+    f0r(i,n) req[i] = (10 - (s[i]-'0'))%10;
+    ll curr = pref[0] = req[0];
+    f1r(i,1,n-1){
+        if(req[i]<=curr){
+            pref[i] = pref[i-1];
+        }else{
+            pref[i] = pref[i-1] + 10;
+        }
+        curr = req[i];
+    }
+    ps(upb(pref,k));
+    dbg(pref);
+    dbg(req);
 
 
 

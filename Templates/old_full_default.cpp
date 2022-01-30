@@ -373,7 +373,6 @@ struct splitmix64_hash {
 
 tcTU, typename Hash = splitmix64_hash > using hash_map = gp_hash_table<T, U, Hash>;
 tcT, typename Hash = splitmix64_hash > using hash_set = hash_map<T, null_type, Hash>;
-
 tcT > using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 /*
 Source : https://codeforces.com/blog/entry/11080
@@ -406,21 +405,13 @@ const int _ = 2e5 + 007;  // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 // ll c[_];
 // vi adj[400007];
 vl a;
-// vl b;
-// vl c;
+vl b;
+vl c;
 
 
 
 
 void solve() {
-    // int n; re(n); rv(n,a);
-    double f = 0.08;
-    pr(f); ps();
-    to_string(f);
-    cout<<f<<nl;
-    
-    
-    
     
 
 
@@ -443,7 +434,7 @@ int main() {
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    // cin >> TT;
+    cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -1,6 +1,6 @@
 template <class T, class U>
 // Check result <= hi
-T fstTrue(T lo, T hi, U f) {
+T ft(T lo, T hi, U f) {
     ++hi, assert(lo <= hi);
     while (lo < hi) {
         T mid = lo + (hi - lo) / 2;

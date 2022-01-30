@@ -214,7 +214,15 @@ tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
 tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
 tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
-tcT > T pow(T a, ll b) { T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r; }
+tcT > T pow(T a, ll b) {
+    T r = 1;
+    while (b) {
+        if (b & 1) r *= a;
+        b >>= 1;
+        a *= a;
+    }
+    return r;
+}
 
 //these are checked at (1 + eps == 1) on CF, accuracy gets better near zero
 const float epsf = 1e-7F;
@@ -226,25 +234,158 @@ const int iINF = 2e9 + 007;
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // e.g. shuffle(permutation.begin(), permutation.end(), rng);
 
-const int __ = 1e6 + 007;  // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+const int __ = 1e6 + 007;                               // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
+const int _ = 2e5 + 007;                                // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
+constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
+constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
+constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
+constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
 
+tcT > struct minsegtree {
+    // ALL INPUT FROM THE USER IS 0 BASED.
+    int SZ;
+    V<T> v;
 
-vl a;
-vl b;
-vl c;
+    static constexpr T NEUTRAL_VAL = iINF; // Change this
+    T f(T a, T b) { return min(a, b); };   // Change this
+
+    // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
+    void build(V<T> &a) {
+        SZ = 2 * next_pow_2(sz(a));
+        v.ass(SZ, NEUTRAL_VAL);
+        f0r(i, sz(a)) v[SZ / 2 + i] = a[i];
+        f1rd(i, SZ / 2 - 1, 1) v[i] = f(v[2 * i], v[2 * i + 1]);
+    }
+
+    // idx is 0 based
+    void update(int idx, T x) {
+        int i = SZ / 2 + idx;
+        v[i] = x;
+        for (i /= 2; i > 0; i /= 2)
+            v[i] = f(v[2 * i], v[2 * i + 1]);
+    }
+
+    // ql, qr, lx and rx are 0 based, node is 1 based
+    T q(int ql, int qr, int lx, int rx, int node) {
+        if (ql <= lx && rx <= qr) return v[node];
+        if (qr < lx || rx < ql) return NEUTRAL_VAL;
+        return f(q(ql, qr, lx, (lx + rx) / 2, node * 2), q(ql, qr, (lx + rx) / 2 + 1, rx, node * 2 + 1));
+    }
+
+    // ql and qr are inclusive and 0 based
+    T q(int ql, int qr) { return q(ql, qr, 0, SZ / 2 - 1, 1); }
+
+    void printWillTLE() {
+#ifdef asr_debug
+        int nodes = 1, spaces = SZ, idx = 1;
+        while (idx < SZ) {
+            f0r(j, nodes) {
+                cout << setw(j ? 2 * spaces : spaces);
+                if (v[idx] != NEUTRAL_VAL) pr(v[idx]);
+                else
+                    pr('_');
+                idx++;
+            }
+            cout << '\n';
+            nodes *= 2;
+            spaces /= 2;
+        }
+        f0r(k, 2 * SZ) cout << "-\n"[k == 2 * SZ - 1];
+#else
+        return;
+#endif
+    }
+};
+
+tcT > struct maxsegtree {
+    // ALL INPUT FROM THE USER IS 0 BASED.
+    int SZ;
+    V<T> v;
+
+    static constexpr T NEUTRAL_VAL = -iINF; // Change this
+    T f(T a, T b) { return max(a, b); };    // Change this
+
+    // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
+    void build(V<T> &a) {
+        SZ = 2 * next_pow_2(sz(a));
+        v.ass(SZ, NEUTRAL_VAL);
+        f0r(i, sz(a)) v[SZ / 2 + i] = a[i];
+        f1rd(i, SZ / 2 - 1, 1) v[i] = f(v[2 * i], v[2 * i + 1]);
+    }
+
+    // idx is 0 based
+    void update(int idx, T x) {
+        int i = SZ / 2 + idx;
+        v[i] = x;
+        for (i /= 2; i > 0; i /= 2)
+            v[i] = f(v[2 * i], v[2 * i + 1]);
+    }
+
+    // ql, qr, lx and rx are 0 based, node is 1 based
+    T q(int ql, int qr, int lx, int rx, int node) {
+        if (ql <= lx && rx <= qr) return v[node];
+        if (qr < lx || rx < ql) return NEUTRAL_VAL;
+        return f(q(ql, qr, lx, (lx + rx) / 2, node * 2), q(ql, qr, (lx + rx) / 2 + 1, rx, node * 2 + 1));
+    }
+
+    // ql and qr are inclusive and 0 based
+    T q(int ql, int qr) { return q(ql, qr, 0, SZ / 2 - 1, 1); }
+
+    void printWillTLE() {
+#ifdef asr_debug
+        int nodes = 1, spaces = SZ, idx = 1;
+        while (idx < SZ) {
+            f0r(j, nodes) {
+                cout << setw(j ? 2 * spaces : spaces);
+                if (v[idx] != NEUTRAL_VAL) pr(v[idx]);
+                else
+                    pr('_');
+                idx++;
+            }
+            cout << '\n';
+            nodes *= 2;
+            spaces /= 2;
+        }
+        f0r(k, 2 * SZ) cout << "-\n"[k == 2 * SZ - 1];
+#else
+        return;
+#endif
+    }
+};
 
 
 
 void solve() {
-    
+    int n, m;
+    str s;
+    re(n, m, s);
+    vpi q(m);
+    re(q);
+    vi pre(n);
+    f0r(i, n) pre[i] = (i ? pre[i - 1] : 0) + (s[i] == '+' ? 1 : -1);
 
+    minsegtree<int> MN;
+    MN.build(pre);
+    maxsegtree<int> MX;
+    MX.build(pre);
+    // MN.printWillTLE();
+    // MX.printWillTLE();
 
-
-
+    for (auto &[l, r] : q) {
+        l--, r--;
+        int mn = 0, mx = 0;
+        if (l) ckmin(mn, MN.q(0, l - 1)), ckmax(mx, MX.q(0, l - 1));
+        if (r != n - 1) {
+            ckmin(mn, MN.q(r + 1, n - 1) - (pre[r] - (l ? pre[l - 1] : 0)));
+            ckmax(mx, MX.q(r + 1, n - 1) - (pre[r] - (l ? pre[l - 1] : 0)));
+        }
+        if (r == n - 1 && !l) mn = 0, mx = 0;
+        // dbg(mn,mx);
+        ps(abs((ll)mx - mn + 1));
+    }
 }
 
 int main() {
