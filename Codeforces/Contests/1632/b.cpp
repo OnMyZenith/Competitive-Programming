@@ -223,7 +223,6 @@ const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
-const int MOD = 1e9 + 007; // 998244353;
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // e.g. shuffle(permutation.begin(), permutation.end(), rng);
 
@@ -232,6 +231,10 @@ const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
+constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
+constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
+constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
+constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
 
 
 vl a;
@@ -241,7 +244,18 @@ vl c;
 
 
 void solve() {
-    
+    int n; re(n);
+    int N = (1<<log_2(n-1));
+    // dbg(n,N);
+    f1r(i,1,n-1){
+        if(i==N) break;
+        cout<<i<<" ";
+    }
+    cout<<"0 ";
+    f1r(i,N,n-1){
+        cout<<i<<" \n"[i==n-1];
+    }
+
 
 
 

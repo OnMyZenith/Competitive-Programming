@@ -223,7 +223,6 @@ const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
-const int MOD = 1e9 + 007; // 998244353;
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // e.g. shuffle(permutation.begin(), permutation.end(), rng);
 
@@ -234,14 +233,24 @@ const char dir[4] = {'U', 'R', 'D', 'L'};
 
 
 
-vl a;
-vl b;
-vl c;
+// vl a;
+// vl b;
+// vl c;
 
 
 
 void solve() {
-    
+    int a,b; re(a,b);
+    int mn = b-a; int d = mn;
+
+    f0r(i,d){
+        if(((b+i)|a)==(b+i)) ckmin(mn,i+1);
+    }
+    f0r(i,d){
+        if(((a+i)|b)==(b)) ckmin(mn,i+1);
+    }
+    ps(mn);
+
 
 
 

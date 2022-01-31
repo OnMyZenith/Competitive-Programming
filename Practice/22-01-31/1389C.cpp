@@ -234,18 +234,38 @@ const char dir[4] = {'U', 'R', 'D', 'L'};
 
 
 
-vl a;
-vl b;
-vl c;
-
-
-
 void solve() {
-    
+    str s; re(s); int n = sz(s);
+    vvi pos(10); f0r(i,n) pos[s[i]-'0'].pb(i);
 
+    auto inter = [&](vi &a, vi &b)->int{
+        int curr = -1;
+        int i = 0, j = 0; int cnt = 0;
+        if(a.empty()||b.empty()) return cnt;
+        bool atA = 1;
+        while(1){
+            if(atA){
+                while(i<sz(a) && curr > a[i]) i++; 
+                if(i>=sz(a)) break;
+                curr = a[i++]; atA = 0; cnt++;
+            }else{
+                while(j<sz(b) && curr > b[j]) j++; 
+                if(j>=sz(b)) break;
+                curr = b[j++]; atA = 1; cnt++;
+            }
+        }
+        return cnt - (!atA);
+    };
 
-
-
+    int ans = n-2;
+    f0r(i,10) ckmin(ans, n - sz(pos[i]));
+    f0r(i,10){
+        f1r(j,i+1,9){
+            ckmin(ans, n - inter(pos[i],pos[j]));
+            ckmin(ans, n - inter(pos[j],pos[i]));
+        }
+    }
+    ps(ans);
 }
 
 int main() {

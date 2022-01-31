@@ -223,7 +223,6 @@ const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
-const int MOD = 1e9 + 007; // 998244353;
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // e.g. shuffle(permutation.begin(), permutation.end(), rng);
 
@@ -232,20 +231,104 @@ const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
+struct splitmix64_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
 
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = std::chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
 
-vl a;
-vl b;
-vl c;
+tcTU, typename Hash = splitmix64_hash> using hash_map = gp_hash_table<T, U, Hash>;
+tcT, typename Hash = splitmix64_hash> using hash_set = hash_map<T, null_type, Hash>;
+constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
+constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
+constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
+constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
 
+tcT > struct segtree {
+    // ALL INPUT FROM THE USER IS 0 BASED.
+    int SZ;
+    V<T> v;
 
+    static constexpr T NEUTRAL_VAL = 0; // Change this
+    T f(T a, T b) { return gcd(a, b); };   // Change this
 
+    // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
+    void build(V<T> &a) {
+        SZ = 2 * next_pow_2(sz(a));
+        v.ass(SZ, NEUTRAL_VAL);
+        f0r(i, sz(a)) v[SZ / 2 + i] = a[i];
+        f1rd(i, SZ / 2 - 1, 1) v[i] = f(v[2 * i], v[2 * i + 1]);
+    }
+
+    // idx is 0 based
+    void update(int idx, T x) {
+        int i = SZ / 2 + idx;
+        v[i] = x;
+        for (i /= 2; i > 0; i /= 2)
+            v[i] = f(v[2 * i], v[2 * i + 1]);
+    }
+
+    // ql, qr, lx and rx are 0 based, node is 1 based
+    T q(int ql, int qr, int lx, int rx, int node) {
+        if (ql <= lx && rx <= qr) return v[node];
+        if (qr < lx || rx < ql) return NEUTRAL_VAL;
+        return f(q(ql, qr, lx, (lx + rx) / 2, node * 2), q(ql, qr, (lx + rx) / 2 + 1, rx, node * 2 + 1));
+    }
+
+    // ql and qr are inclusive and 0 based
+    T q(int ql, int qr) { return q(ql, qr, 0, SZ / 2 - 1, 1); }
+
+    void printWillTLE() {
+#ifdef asr_debug
+        int nodes = 1, spaces = SZ, idx = 1;
+        while (idx < SZ) {
+            f0r(j, nodes) {
+                cout << setw(j ? 2 * spaces : spaces);
+                if (v[idx] != NEUTRAL_VAL) pr(v[idx]);
+                else
+                    pr('_');
+                idx++;
+            }
+            cout << '\n';
+            nodes *= 2;
+            spaces /= 2;
+        }
+        f0r(k, 2 * SZ) cout << "-\n"[k == 2 * SZ - 1];
+#else
+        return;
+#endif
+    }
+};
+
+const int MOD = 1e9 + 007; // 998244353;
+vi a;
 void solve() {
-    
-
-
-
-
+    int n; re(n); int ans = 0; rv(n,a);
+    segtree<int> s; s.build(a);
+    for (int i = 0; i < n; i++){
+        int l = 1, r = i+1;
+        while (l <= r) {
+            int len = (l + r) / 2;
+            int g = s.q(i-len+1, i);
+            if (g == (len)) {
+                s.update(i, MOD);
+                ans++;
+                break;
+            }
+            if (g < (len)) r = len - 1;
+            else l = len + 1;
+        }
+        cout << ans << " \n"[i == n - 1];
+    }
 }
 
 int main() {
@@ -263,7 +346,7 @@ int main() {
     fix(15);
     // prepareFact(_);
     int TT = 1;
-    cin >> TT;
+    // cin >> TT;
     f1r(TC, 1, TT)
         solve();
 

@@ -232,15 +232,32 @@ const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
+/*
+1.) already overlapped
 
+2.) cost 1 overlap:
+    i.) full intersection
+    i.) partial inersection
 
-vl a;
-vl b;
-vl c;
+3.) cost 2 : expand two complete intersections
 
+4.) fill gap to achieve one of the above conditions : COST 1 but no gain
+*/
 
-
+// NOT FINISHED
 void solve() {
+    int n,k; re(n,k); pi a,b; re(a,b);
+
+    auto overlap = [](pi a, pi b)->int{
+        if(a.ss<=b.ff || a.ff>= b.ss) return 0;
+        if(a.ff<=b.ff && b.ss <= a.ss) return min(a.ss-a.ff, b.ss-b.ff);
+        if(a.ff<=b.ff && a.ss <= b.ff) return a.ss-b.ff;
+        return b.ss-a.ff;
+    };
+
+
+
+
     
 
 

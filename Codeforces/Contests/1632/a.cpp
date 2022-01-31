@@ -223,7 +223,6 @@ const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
 const long long lINF = 2e18L + 007;
 const int iINF = 2e9 + 007;
-const int MOD = 1e9 + 007; // 998244353;
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // e.g. shuffle(permutation.begin(), permutation.end(), rng);
 
@@ -241,7 +240,11 @@ vl c;
 
 
 void solve() {
-    
+    int n; str s; re(n,s);
+    int o = count(all(s),'0');
+    int x = count(all(s),'1');
+    if(o<=1&&x<=1) ps("YES");
+    else ps("NO");
 
 
 

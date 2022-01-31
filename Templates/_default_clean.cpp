@@ -61,6 +61,7 @@ template <class T>
 void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 template <class T>
 T pow(T a, ll b) { T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r; }
+const int MOD = 1e9 + 007; // 998244353;
 
 void solve() {
     
