@@ -1,15 +1,15 @@
-tcT > struct segtree {
+template <class T> struct segtree {
     // ALL INPUT FROM THE USER IS 0 BASED.
-    int SZ;  V<T> v;
+    int SZ; vector<T> v;
 
-    static constexpr T NEUTRAL_VAL = iINF; // Change this
+    static constexpr T NEUTRAL_VAL = IINF; // Change this
     T f(T a, T b) { return min(a, b); };   // Change this
 
     // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
-    void build(V<T> &a) {
-        SZ = 2 * next_pow_2(sz(a)); v.ass(SZ, NEUTRAL_VAL);
-        f0r(i, sz(a)) v[SZ / 2 + i] = a[i];
-        f1rd(i, SZ / 2 - 1, 1) v[i] = f(v[2 * i], v[2 * i + 1]);
+    void build(vector<T> &a) {
+        SZ = 2 * next_pow_2(sz(a)); v.assign(SZ, NEUTRAL_VAL);
+        for (int i = 0; i < sz(a); i++) v[SZ / 2 + i] = a[i];
+        for (int i = SZ / 2 - 1; i >= 1; i--) v[i] = f(v[2 * i], v[2 * i + 1]);
     }
 
     // idx is 0 based
@@ -29,16 +29,18 @@ tcT > struct segtree {
     // ql and qr are inclusive and 0 based
     T q(int ql, int qr) { return q(ql, qr, 0, SZ / 2 - 1, 1); }
 
-    void printWillTLE() {
+    void print() {
+#ifdef asr_debug
         int nodes = 1, spaces = SZ, idx = 1;
         while (idx < SZ) {
-            f0r(j, nodes) {
+            for (int j = 0; j < nodes; j++) {
                 cout << setw(j ? 2 * spaces : spaces);
-                if (v[idx] != NEUTRAL_VAL) pr(v[idx]); else pr('_');
+                if (v[idx] != NEUTRAL_VAL) cout << (v[idx]); else cout << ('_');
                 idx++;
             }
             cout << '\n'; nodes *= 2; spaces /= 2;
         }
-        f0r(k, 2 * SZ) cout << "-\n"[k == 2 * SZ - 1];
+        for (int k = 0; k < 2 * SZ; k++) cout << "-\n"[k == 2 * SZ - 1];
+#endif
     }
 };

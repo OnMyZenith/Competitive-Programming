@@ -1,6 +1,6 @@
 void DBG() { cerr << "]" << endl; }
-tcTUU > void DBG(const T &t, const U &...u) {
-    cerr << ts(t);
+template <class T, class... U > void DBG(const T &t, const U &...u) {
+    cerr << to_string(t);
     if (sizeof...(u)) cerr << ", ";
     DBG(u...);
 }

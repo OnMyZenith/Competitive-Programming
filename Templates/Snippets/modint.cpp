@@ -13,11 +13,10 @@ struct mint {
     friend bool operator!=(const mint &a, const mint &b) { return !(a == b); }
     friend bool operator<(const mint &a, const mint &b) { return a.v < b.v; }
     friend void re(mint &a) {
-        ll x;
-        re(x);
+        ll x; cin >> x;
         a = mint(x);
     }
-    friend str ts(mint a) { return ts(a.v); }
+    friend string to_string(mint a) { return to_string(a.v); }
 
     mint &operator+=(const mint &m) {
         if ((v += m.v) >= MOD) v -= MOD;
@@ -55,17 +54,16 @@ struct mint {
 
 // const int MOD = 1e9 + 007; // 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
-typedef vector<mi> vmi;
-typedef pair<mi, mi> pmi;
-typedef vector<pmi> vpmi;
 
-vector<vmi> scmb; // small combinations
-void genComb(int SZ) {
-    scmb.assign(SZ, vmi(SZ));
-    scmb[0][0] = 1;
-    f1r(i, 1, SZ - 1) f0r(j, i + 1)
-        scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
-}
+// vector<vmi> scmb; // small combinations
+// void genComb(int SZ) {
+//     scmb.assign(SZ, vmi(SZ));
+//     scmb[0][0] = 1;
+//     for (int i = 1; i < SZ; i++) {
+//         for (int j = 0; j <= i; j++)
+//             scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
+//     }
+// }
 
 // mi fact[(int)1e6];
 // bool factorialsPrepared;
@@ -78,6 +76,6 @@ void genComb(int SZ) {
 // }
 // void prepareFact(int n) {
 //     fact[0] = 1;
-//     f1r(i, 1, n) fact[i] = fact[i - 1] * i;
-//     factorialsPrepared = 1;
+//     for (int i = 1; i <= n; i++) fact[i] = fact[i - 1] * i;
+//     factorialsPrepared = true;
 // }
