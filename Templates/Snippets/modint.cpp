@@ -1,11 +1,11 @@
-template <int MOD, int RT>
-struct mint {
+// ModInt Library
+template <int MOD, int RT> struct mint {
     static const int mod = MOD;
     static constexpr mint rt() { return RT; } // primitive root for FFT
     int v;
     explicit operator int() const { return v; } // explicit -> don't silently convert to int
     mint() { v = 0; }
-    mint(ll _v) {
+    mint(long long _v) {
         v = int((-MOD < _v && _v < MOD) ? _v : _v % MOD);
         if (v < 0) v += MOD;
     }
@@ -13,7 +13,7 @@ struct mint {
     friend bool operator!=(const mint &a, const mint &b) { return !(a == b); }
     friend bool operator<(const mint &a, const mint &b) { return a.v < b.v; }
     friend void re(mint &a) {
-        ll x; cin >> x;
+        long long x; cin >> x;
         a = mint(x);
     }
     friend string to_string(mint a) { return to_string(a.v); }
@@ -27,11 +27,11 @@ struct mint {
         return *this;
     }
     mint &operator*=(const mint &m) {
-        v = (ll)v * m.v % MOD;
+        v = (long long)v * m.v % MOD;
         return *this;
     }
     mint &operator/=(const mint &m) { return (*this) *= inv(m); }
-    friend mint pow(mint a, ll p) {
+    friend mint pow(mint a, long long p) {
         mint ans = 1;
         assert(p >= 0);
         for (; p; p /= 2, a *= a)
@@ -55,7 +55,7 @@ struct mint {
 // const int MOD = 1e9 + 007; // 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 
-// vector<vmi> scmb; // small combinations
+// vector<vmi> scmb; // smalong long combinations
 // void genComb(int SZ) {
 //     scmb.assign(SZ, vmi(SZ));
 //     scmb[0][0] = 1;

@@ -1,3 +1,4 @@
+// Segment Tree without Lazy propagation
 template <class T> struct segtree {
     // ALL INPUT FROM THE USER IS 0 BASED.
     int SZ; vector<T> v;

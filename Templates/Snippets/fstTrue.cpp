@@ -1,6 +1,6 @@
-template <class T, class U>
+// First true from left, assumes function is increasing
 // Check result <= hi
-T ft(T lo, T hi, U f) {
+template <class T, class U> T ft(T lo, T hi, U f) {
     ++hi, assert(lo <= hi);
     while (lo < hi) {
         T mid = lo + (hi - lo) / 2;

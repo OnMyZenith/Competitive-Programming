@@ -23,14 +23,7 @@ const int MOD = 1e9 + 007; // 998244353;
 const int __ = 1e6 + 007;  // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
-template<typename T_vector>
-void output_vector(const T_vector &v, bool add_one = false, int start = -1, int end = -1) {
-    if (start < 0) start = 0;
-    if (end < 0) end = int(v.size());
- 
-    for (int i = start; i < end; i++)
-        cout << v[i] + (add_one ? 1 : 0) << (i < end - 1 ? ' ' : '\n');
-}
+
 
 void solve() {
     

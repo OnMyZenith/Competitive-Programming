@@ -236,87 +236,24 @@ const char dir[4] = {'U', 'R', 'D', 'L'};
 void solve() {
     int n,m; str s; re(n,s,m);
     vvi pos(26);
-    // f0r(i,n) pos[s[i]-'a'].pb(i);
-    vi ST, E;
-    f0r(i,n) {
-        if(s[i]=='a') ST.pb(i);
-        else if(s[i] == char('a'+(m-1)%26)) E.pb(i);
-    }
-    vi nearestLeft(26,-1);
-    vi nearestRight(26,-1);
+    f0r(i,n) pos[s[i]-'a'].pb(i);
+
     vi next(n,-1);
     f0r(i,n){
-        int c = (s[i]-'a'), b = ((s[i]-'a') + 25)%26;
-        nearestLeft[c] = i;
-        if(nearestLeft[b]!=-1 && next[nearestLeft[b]] ==-1){
-            next[nearestLeft[b]] = i;
-        }
+        int nx = (s[i]-'a'+1)%26;
+        int jmp = lwb(pos[nx],i);
+        if(jmp < sz(pos[nx])){ next[i] = pos[nx][jmp];}
     }
-    f0rd(i,n-1){
-        int c = (s[i]-'a');
-        if(next[i]!=-1){
-            nearestRight[c] = next[i];
-        }else{
-            next[i] = nearestRight[c];
-        }
-    }
-    // f0r(i,n){
-    //     int nx = (s[i]-'a'+1)%26;
-    //     int idx = lwb(pos[nx],i);
-    //     if(idx < sz(pos[nx])) next[i] = pos[nx][idx];
-    // }
-    int best = iINF;
-    dbg(E,ST);
-    auto c = [&](int i, int j)->int{
-        if(i<0||i>=sz(ST)||j<0||j>=sz(E)) return iINF;
-        int start = ST[i]; int cnt = 1;
-        if(start == -1){ return iINF;}
-        int idx = start, prev = start;
-        while(idx!=-1&&cnt < m)prev = idx, idx = next[prev], cnt++;
-        if(cnt==m){
-            return idx - start + 1 - m;
-        }
-    };
-    for (int i = 0, j = sz(E) - 1; j >= 0 && i < sz(ST);){
-        int C = c(i,j);
-        if(C!=iINF){
-            int PI = i, PJ = j;
-            ckmin(best, C);
-            C = c(i+1,j);
-            if(ckmin(best,C)) i++;
-            C = c(PI,j-1);
-            if(ckmin(best,C)) j--;
-            if(PI!=i||PJ!=j) continue;
+    int prev_beg = 0, prev_end = 0, best = iINF;
+
+    f0r(i,n) {
+        if(s[i]=='a'){
+            int cnt = 1, idx = i;
+            while (idx != -1 && cnt < m) idx = next[idx], cnt++;
+            if(cnt == m) prev_end = idx, ckmin(best, idx - i + 1 - m), prev_beg = i;
             else break;
         }
-        else{
-            break;
-        }
-        // int start = ST[i]; int cnt = 1;
-        // if(start == -1){ i++; continue;}
-        // int idx = start, prev = start;
-        // while(idx!=-1&&cnt < m)prev = idx, idx = next[prev], cnt++;
-        // if(cnt==m){
-        //     ckmin(best, idx - start + 1 - m);
-        //     dbg(idx,best);
-        //     if(idx < E[j])j--;
-        //     else i++;
-        // }else
-        //     break;
     }
-
-
-    // dbg(next);
-    // each(i,ST){
-    //     int start = i; int cnt = 1;
-    //     if(start == -1) continue;
-    //     int idx = start, prev = start;
-    //     // while(idx!=-1&&cnt < m)idx = next[idx], cnt++;
-    //     while(idx!=-1&&cnt < m)prev = idx, idx = next[prev], cnt++;
-    //     dbg(prev,idx,start,cnt);
-    //     if(cnt==m){ckmin(best, idx - start + 1 - m);}
-    // }
-    ps((best==iINF?-1:best));
 }
 
 int main() {

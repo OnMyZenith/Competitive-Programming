@@ -1,3 +1,4 @@
+// PRAGMAS make your code faster** lol
 #ifndef asr_debug
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
