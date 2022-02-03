@@ -1,4 +1,4 @@
-// Y_Combinator
+// Y_Combinator :: Recursive Lambda
 template <class Fun>
 class y_combinator_result {
     Fun fun_;
