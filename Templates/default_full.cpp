@@ -91,7 +91,6 @@ using vpd = V<pd>;
 using vpld = V<pld>;
 
 // INPUT
-tcT > void re(complex<T> &c);
 tcTU > void re(P<T, U> &p);
 tcT > void re(V<T> &v);
 tcT, size_t SZ > void re(AR<T, SZ> &a);
@@ -111,11 +110,7 @@ tcTUU > void re(T &t, U &...u) {
     re(t);
     re(u...);
 }
-tcT > void re(complex<T> &c) {
-    T a, b;
-    re(a, b);
-    c = {a, b};
-}
+
 tcTU > void re(P<T, U> &p) { re(p.ff, p.ss); }
 tcT > void re(V<T> &x) { each(a, x) re(a); }
 tcT, size_t SZ > void re(AR<T, SZ> &x) { each(a, x) re(a); }
@@ -134,11 +129,6 @@ str ts(bool b) {
 #else
     return ts((int)b);
 #endif
-}
-tcT > str ts(complex<T> c) {
-    stringstream ss;
-    ss << c;
-    return ss.str();
 }
 str ts(V<bool> v) {
     str res = "{";
@@ -211,8 +201,8 @@ tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 tcT > bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 tcT > T cdiv(T &a, T &b) { return a / b + ((a ^ b) > 0 && a % b); }
 tcT > T fdiv(T &a, T &b) { return a / b - ((a ^ b) < 0 && a % b); }
-tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - bg(a)); }
-tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - bg(a)); }
+tcT > int lwb(V<T> &a, const T &b) { return int(lb(all(a), b) - begin(a)); }
+tcT > int upb(V<T> &a, const T &b) { return int(ub(all(a), b) - begin(a)); }
 tcT > void remDup(V<T> &v) { sort(all(v)), v.erase(unique(all(v)), end(v)); }
 tcT > T pow(T a, ll b) { T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r; }
 

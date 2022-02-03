@@ -232,10 +232,12 @@ const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 const int dr[4] = {-1, 0, 1, 0}, dc[4] = {0, 1, 0, -1}; // URDL
 const char dir[4] = {'U', 'R', 'D', 'L'};
 
-
+#include"home.hpp"
 
 void solve() {
     int n, W; re(n, W); vi w(n), v(n); f0r(i,n) re(w[i],v[i]);
+
+
     
 }
 
