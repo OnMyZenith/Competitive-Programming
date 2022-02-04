@@ -17,8 +17,7 @@ using namespace __gnu_pbds;
 // or use avx instead of sse4.2, leave fma in as it was covered in avx2
 #endif
 
-#define vamos ios_base::sync_with_stdio(false);
-#define fix(prec) cout << setprecision(prec) << fixed;
+#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr), cout << setprecision(15) << fixed;
 
 #define tcT template <class T
 #define tcTU tcT, class U
@@ -90,111 +89,127 @@ using vpl = V<pl>;
 using vpd = V<pd>;
 using vpld = V<pld>;
 
-// INPUT
-tcTU > void re(P<T, U> &p);
-tcT > void re(V<T> &v);
-tcT, size_t SZ > void re(AR<T, SZ> &a);
+// EasyIO
+#ifndef ___EASY_IO
+#define ___EASY_IO 1
 
-tcT > void re(T &x) { cin >> x; }
-void re(db &d) {
-    str t;
+// INPUT
+template <class T, class U> void re(pair<T, U> &p);
+template <class T> void re(vector<T> &v);
+template <class T, size_t SZ> void re(array<T, SZ> &a);
+
+template <class T>
+void re(T &x) { cin >> x; }
+void re(double &d) {
+    string t;
     re(t);
     d = stod(t);
 }
-void re(ld &d) {
-    str t;
+void re(long double &d) {
+    string t;
     re(t);
     d = stold(t);
 }
-tcTUU > void re(T &t, U &...u) {
+template <class T, class... U>
+void re(T &t, U &...u) {
     re(t);
     re(u...);
 }
-
-tcTU > void re(P<T, U> &p) { re(p.ff, p.ss); }
-tcT > void re(V<T> &x) { each(a, x) re(a); }
-tcT, size_t SZ > void re(AR<T, SZ> &x) { each(a, x) re(a); }
-tcT > void rv(int n, V<T> &x) {
-    x.rsz(n);
+template <class T, class U>
+void re(pair<T, U> &p) { re(p.ff, p.ss); }
+template <class T>
+void re(vector<T> &x) { for (auto &a : x) re(a); }
+template <class T, size_t SZ>
+void re(array<T, SZ> &x) { for (auto &a : x) re(a); }
+template <class T>
+void rv(int n, vector<T> &x) {
+    x.resize(n);
     re(x);
 }
 
 // TO_STRING
-str ts(char c) { return str(1, c); }
-str ts(const char *s) { return (str)s; }
-str ts(str s) { return s; }
-str ts(bool b) {
+string to_string(char c) { return string(1, c); }
+string to_string(const char *s) { return (string)s; }
+string to_string(string s) { return s; }
+string to_string(bool b) {
 #ifdef asr_debug
     return b ? "true" : "false";
 #else
-    return ts((int)b);
+    return to_string((int)b);
 #endif
 }
-str ts(V<bool> v) {
-    str res = "{";
-    f0r(i, sz(v))
+string to_string(vector<bool> v) {
+    string res = "{";
+    for (int i = 0; i < int(size(v)); i++)
         res += char('0' + v[i]);
     res += "}";
     return res;
 }
 template <size_t SZ>
-str ts(bitset<SZ> b) {
-    str res = "";
-    f0r(i, SZ)
+string to_string(bitset<SZ> b) {
+    string res = "";
+    for (int i = 0; i < SZ; i++)
         res += char('0' + b[i]);
     return res;
 }
-tcTU > str ts(P<T, U> p);
-tcT > str ts(T v) { // containers with begin(), end()
+template <class T, class U>
+string to_string(pair<T, U> p);
+template <class T>
+string to_string(T v) { // containers with begin(), end()
 #ifdef asr_debug
     bool fst = 1;
-    str res = "{";
+    string res = "{";
     for (const auto &x : v) {
         if (!fst) res += ", ";
         fst = 0;
-        res += ts(x);
+        res += to_string(x);
     }
     res += "}";
     return res;
 #else
     bool fst = 1;
-    str res = "";
+    string res = "";
     for (const auto &x : v) {
         if (!fst) res += " ";
         fst = 0;
-        res += ts(x);
+        res += to_string(x);
     }
     return res;
 #endif
 }
 
-tcTU > str ts(P<T, U> p) {
+template <class T, class U>
+string to_string(pair<T, U> p) {
 #ifdef asr_debug
-    return "(" + ts(p.ff) + ", " + ts(p.ss) + ")";
+    return "(" + to_string(p.ff) + ", " + to_string(p.ss) + ")";
 #else
-    return ts(p.ff) + " " + ts(p.ss);
+    return to_string(p.ff) + " " + to_string(p.ss);
 #endif
 }
 
 // OUTPUT
-tcT > void pr(T x) { cout << ts(x); }
-tcTUU > void pr(const T &t, const U &...u) { // print without spaces
+template <class T>
+void pr(T x) { cout << to_string(x); }
+template <class T, class... U>
+void pr(const T &t, const U &...u) { // print without spaces
     pr(t);
     pr(u...);
 }
 
 void ps() { pr("\n"); }
-tcTUU > void ps(const T &t, const U &...u) { // print with spaces, with newline in the end
+template <class T, class... U>
+void ps(const T &t, const U &...u) { // print with spaces, with newline in the end
     pr(t);
     if (sizeof...(u)) pr(" ");
     ps(u...);
 }
+#endif // ___EASY_IO
+
 
 #ifdef asr_debug
 #include "dbg.hpp"
 #else
 #define dbg(...) 007
-#define chk(...) 007
 #endif
 
 tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
@@ -245,12 +260,8 @@ int main() {
 #endif
 
     vamos;
-
-    // #ifndef asr_debug
-    cin.tie(nullptr);
-    // #endif
-
-    fix(15);
+    
+    
     // prepareFact(_);
     int TT = 1;
     cin >> TT;

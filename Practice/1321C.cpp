@@ -24,26 +24,35 @@ const int MOD = 1e9 + 007; // 998244353;
 const int __ = 1e6 + 007;  // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
 
-void ckmax(string &x, const string &y) { if(sz(y) > sz(x)) x = y; }
+template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+
+void solve() {
+    int n, N;
+    string s;
+    cin >> N >> s;
+    while (1) {
+        n = sz(s);
+        int mx = -1, idx = -1;
+        for (int i = 0; i < n; i++) {
+            if ((i && s[i - 1] + 1 == s[i]) || (i < n - 1 && s[i + 1] + 1 == s[i])) {
+                if (ckmax(mx, int(s[i] - 'a'))) idx = i;
+            }
+        }
+        if (idx == -1) break;
+        s.erase(s.begin() + idx);
+    }
+    cout << N - sz(s) << '\n';
+}
 
 int main() {
 
     vamos;
-    cout << PI << "\n" << PI2 << '\n';
-    // string s, t;
-    // cin >> s >> t;
-    // int n = sz(s), m = sz(t);
 
-    // vector<vector<string>> dp(n, vector<string>(m));
-
-    // for (int i = 0; i < n; i++) {
-    //     for (int j = 0; j < m; j++) {
-    //         if(s[i]==t[j]){
-
-    //         }
-    //     }
-    // }
-    // cout << dp[0][0] << '\n';
+    int TT = 1;
+    // cin >> TT;
+    for (int TC = 1; TC <= TT; TC++) {
+        solve();
+    }
 
     return 0;
 }

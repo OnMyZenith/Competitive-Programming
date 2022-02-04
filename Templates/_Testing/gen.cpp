@@ -85,8 +85,7 @@ void ptree(int n_max){ // Max Nodes
 }
 
 int main(int argc, char *argv[]) {
-    vamos; fix(15);
-    cin.tie(nullptr);
+    vamos;
     (void)argc;
     srand(atoi(argv[1]));
     // prepareFact(_);
@@ -96,8 +95,6 @@ int main(int argc, char *argv[]) {
     int n = rand(1, 10);
     ps(n);      // Print n
 
-    
-    
     
 
 

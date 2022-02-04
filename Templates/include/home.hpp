@@ -9,8 +9,7 @@ using namespace __gnu_pbds;
 #pragma GCC target("avx2")
 #pragma GCC target("popcnt,lzcnt,bmi,bmi2,tune=native")
 
-#define vamos ios_base::sync_with_stdio(false);
-#define fix(prec) cout << setprecision(prec) << fixed;
+#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr), cout << setprecision(15) << fixed;
 
 #define tcT template <class T
 #define tcTU tcT, class U
@@ -202,7 +201,6 @@ void ps(const T &t, const U &...u) { // print with spaces, with newline in the e
 #include "dbg.hpp"
 #else
 #define dbg(...) 007
-#define chk(...) 007
 #endif
 
 tcT > bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }

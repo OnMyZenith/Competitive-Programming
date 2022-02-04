@@ -23,27 +23,36 @@ const int IINF = 2e9 + 007;
 const int MOD = 1e9 + 007; // 998244353;
 const int __ = 1e6 + 007;  // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
 const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+template <class T> bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 
-void ckmax(string &x, const string &y) { if(sz(y) > sz(x)) x = y; }
+
+vector<int> _mp[2*__];
+vector<int> *mp = _mp + __;
 
 int main() {
 
     vamos;
-    cout << PI << "\n" << PI2 << '\n';
-    // string s, t;
-    // cin >> s >> t;
-    // int n = sz(s), m = sz(t);
 
-    // vector<vector<string>> dp(n, vector<string>(m));
+    int n; cin >> n;
+    vector<int> b(n);
 
-    // for (int i = 0; i < n; i++) {
-    //     for (int j = 0; j < m; j++) {
-    //         if(s[i]==t[j]){
-
-    //         }
-    //     }
-    // }
-    // cout << dp[0][0] << '\n';
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+        mp[b[i]-i].push_back(i);
+    }
+    ll best = 0;
+    for (int i = -__; i < __; i++) {
+        vector<int> v = mp[i];
+        if(v.empty()) continue;
+        dbg(v);
+        ll curr = 0;
+        for (auto &a : v) {
+            curr+=b[a];
+        }
+        ckmax(best,curr);
+    }
+    cout << best << '\n';
 
     return 0;
 }
