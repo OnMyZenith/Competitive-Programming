@@ -1,7 +1,8 @@
 // EasyIO
 #ifndef ___EASY_IO
 #define ___EASY_IO 1
-
+#include<bits/stdc++.h>
+using namespace std;
 // INPUT
 template <class T, class U> void re(pair<T, U> &p);
 template <class T> void re(vector<T> &v);
@@ -25,7 +26,7 @@ void re(T &t, U &...u) {
     re(u...);
 }
 template <class T, class U>
-void re(pair<T, U> &p) { re(p.ff, p.ss); }
+void re(pair<T, U> &p) { re(p.first, p.second); }
 template <class T>
 void re(vector<T> &x) { for (auto &a : x) re(a); }
 template <class T, size_t SZ>
@@ -90,9 +91,9 @@ string to_string(T v) { // containers with begin(), end()
 template <class T, class U>
 string to_string(pair<T, U> p) {
 #ifdef asr_debug
-    return "(" + to_string(p.ff) + ", " + to_string(p.ss) + ")";
+    return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
 #else
-    return to_string(p.ff) + " " + to_string(p.ss);
+    return to_string(p.first) + " " + to_string(p.second);
 #endif
 }
 

@@ -1,4 +1,4 @@
 // For each element
-for (auto &u : ${1:v}) {
+for (auto &${1:u} : ${2:v}) {
     $0
 }

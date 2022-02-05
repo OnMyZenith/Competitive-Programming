@@ -2,48 +2,57 @@
 #include <bits/extc++.h>
 using namespace std;
 using namespace __gnu_pbds;
-
-#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr), cout << setprecision(15) << fixed;
-#define all(v) v.begin(), v.end()
-#define rall(v) v.rbegin(), v.rend()
-#define sz(v) ((int)v.size())
-
 using ll = long long;
 
+#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr), cout << setprecision(15) << fixed;
 #ifdef asr_debug
 #include "dbg.hpp"
 #else
 #define dbg(...) 007
-#define chk(...) 007
 #endif
 
-const long double PI = 3.14159265358979323846L;
-const long long LINF = 2e18L + 007;
-const int IINF = 2e9 + 007;
-const int MOD = 1e9 + 007; // 998244353;
-const int __ = 1e6 + 007;  // 1e6 + 007 => int arr =   4 MB, ll arr =   8 MB
-const int _ = 2e5 + 007;   // 2e5 + 007 => int arr = 0.8 MB, ll arr = 1.6 MB
+template <class T> bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 
-void ckmax(string &x, const string &y) { if(sz(y) > sz(x)) x = y; }
 
 int main() {
-
     vamos;
-    cout << PI << "\n" << PI2 << '\n';
-    // string s, t;
-    // cin >> s >> t;
-    // int n = sz(s), m = sz(t);
+    
+    string s, t; int n, m;
+    cin >> s >> t;
+    n = ((int)s.size());
+    m = ((int)t.size());
+    vector<vector<pair<int,pair<int,int>>>> dp(n + 1, vector<pair<int, pair<int, int> >>(m + 1, {0, {-1, -1}}));
+    // dp[i][j][0] -> max length of the LCS upto {i - 1, j - 1} <-- 0 based indices
+    // dp[i][j][1] -> indices that gave the last match
 
-    // vector<vector<string>> dp(n, vector<string>(m));
-
-    // for (int i = 0; i < n; i++) {
-    //     for (int j = 0; j < m; j++) {
-    //         if(s[i]==t[j]){
-
-    //         }
-    //     }
-    // }
-    // cout << dp[0][0] << '\n';
-
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if(s[i] == t[j]) {
+                if(ckmax(dp[i + 1][j + 1].first, dp[i][j].first + 1)){
+                    dp[i + 1][j + 1].second = {i, j};
+                }
+            }
+            if(ckmax(dp[i + 1][j].first, dp[i][j].first)){
+                dp[i + 1][j].second = dp[i][j].second;
+            }
+            if(ckmax(dp[i][j + 1].first, dp[i][j].first)){
+                dp[i][j + 1].second = dp[i][j].second;
+            }
+        }
+    }
+    string r;
+    pair<int,int> last = dp[n][m].second; int mx = dp[n][m].first;
+    for (auto &row : dp) {
+        for (auto &val : row) {
+            if(ckmax(mx, val.first)) last = val.second;
+        }
+    }
+    while(last != make_pair(-1, -1)){
+        r += s[last.first];
+        last = dp[last.first][last.second].second;
+    }
+    reverse(r.begin(), r.end());
+    cout << r << '\n';
     return 0;
 }
