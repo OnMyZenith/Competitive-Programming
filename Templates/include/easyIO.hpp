@@ -1,8 +1,7 @@
 // EasyIO
 #ifndef ___EASY_IO
 #define ___EASY_IO 1
-#include<bits/stdc++.h>
-using namespace std;
+
 // INPUT
 template <class T, class U> void re(pair<T, U> &p);
 template <class T> void re(vector<T> &v);
