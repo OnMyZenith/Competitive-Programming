@@ -26,7 +26,7 @@ int main() {
 
     int TT = 1;
     cin >> TT;
-    for (int TC = 1; TC <= TT; TC++) {
+    while(TT--) {
         solve();
     }
 

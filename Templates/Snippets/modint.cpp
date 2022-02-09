@@ -55,15 +55,6 @@ template <int MOD, int RT> struct mint {
 // const int MOD = 1e9 + 007; // 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 
-// vector<vmi> scmb; // smalong long combinations
-// void genComb(int SZ) {
-//     scmb.assign(SZ, vmi(SZ));
-//     scmb[0][0] = 1;
-//     for (int i = 1; i < SZ; i++) {
-//         for (int j = 0; j <= i; j++)
-//             scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
-//     }
-// }
 
 // mi fact[(int)1e6];
 // bool factorialsPrepared;
