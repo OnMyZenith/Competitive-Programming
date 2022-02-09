@@ -20,8 +20,8 @@ int main() {
     for (auto &u : a) {
         cin >> u;
     }
-    vector<long double> dp(n+1);        // dp[heads]
-    dp[0] = 1;
+    vector<long double> dp(n+1);        // dp[h] -> probaility of getting 'h' heads
+    dp[0] = 1;                          // Initially with Zero flips
 
     for (int i = 0; i < n; i++) {
         for (int heads = i + 1; heads >= 0; heads--) {
