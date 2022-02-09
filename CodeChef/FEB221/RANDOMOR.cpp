@@ -67,48 +67,42 @@ template <int MOD, int RT> struct mint {
 const int MOD = 1e9 + 007; // 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 
-// vector<vmi> scmb; // smalong long combinations
-// void genComb(int SZ) {
-//     scmb.assign(SZ, vmi(SZ));
-//     scmb[0][0] = 1;
-//     for (int i = 1; i < SZ; i++) {
-//         for (int j = 0; j <= i; j++)
-//             scmb[i][j] = scmb[i - 1][j] + (j ? scmb[i - 1][j - 1] : 0);
-//     }
-// }
 
-// mi fact[(int)1e6];
-// bool factorialsPrepared;
-// int nCr(int n, int r) {
-//     assert(factorialsPrepared);
-//     if (r > n) return 0;
-//     assert(n > 0 && r >= 0);
-//     mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
-//     return res.v;
-// }
-// void prepareFact(int n) {
-//     fact[0] = 1;
-//     for (int i = 1; i <= n; i++) fact[i] = fact[i - 1] * i;
-//     factorialsPrepared = true;
-// }
+mi fact[(int)1e6];
+bool factorialsPrepared;
+int nCr(int n, int r) {
+    assert(factorialsPrepared);
+    if (r > n || !n) return 0;
+    assert(n > 0 && r >= 0);
+    mi res = fact[n] * inv(fact[n - r]) * inv(fact[r]);
+    return res.v;
+}
+void prepareFact(int n) {
+    fact[0] = 1;
+    for (int i = 1; i <= n; i++) fact[i] = fact[i - 1] * i;
+    factorialsPrepared = true;
+}
 
 
 void solve() {
-    mi n; cin >> n.v;
-    vector<mi> dp(n.v+1);
-    // dp[i] <- Expected time to get to get to i ones
+    int n; cin >> n;
+    vector<mi> dp(n+1);
+    // dp[i] <- Probability of getting i ones
     dp[0] = 1;
-    for (mi i = 0; i < n; ++i) {
-        dp[i.v+1] = dp[i.v] * (n - i) * inv(n+1);
+    for (int y = 1; y <= n; y++) {
+        for (int x = 1; x <= y; x++) {
+            dp[y] += (dp[y - x] * nCr(n - (y - x), x)) / pow(mi(2), n);
+        }
     }
-    cout << dp[n.v].v << '\n';
+    dbg(dp);
+    cout << dp[n].v << '\n';
 }
 
 int main() {
     vamos;
 
 
-
+    prepareFact(3e5+7);
     int TT = 1;
     cin >> TT;
     for (int TC = 1; TC <= TT; TC++) {
