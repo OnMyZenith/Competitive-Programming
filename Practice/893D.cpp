@@ -1,4 +1,19 @@
-// Segment Tree without Lazy propagation
+/* Author: OnMyZenith - https://github.com/OnMyZenith */
+#include <bits/extc++.h>
+using namespace std;
+using namespace __gnu_pbds;
+using ll = long long;
+
+#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr), cout << setprecision(15) << fixed;
+#ifdef asr_debug
+#include "dbg.hpp"
+#else
+#define dbg(...) 007
+#endif
+
+template <class T> bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
+
 template <class T> struct segtree {
     // ALL INPUT FROM THE USER IS 0 BASED.
     int SZ; vector<T> v;
@@ -8,8 +23,8 @@ template <class T> struct segtree {
     constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
     constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
 
-    static constexpr T NEUTRAL_VAL = 1e9;  // Change this
-    T f(T a, T b) { return min(a, b); };   // Change this
+    static constexpr T NEUTRAL_VAL = -1e9;  // Change this
+    T f(T a, T b) { return max(a, b); };   // Change this
 
     // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
     void build(vector<T> &a) {
@@ -50,3 +65,62 @@ template <class T> struct segtree {
 #endif
     }
 };
+
+// Not finished
+int main() {
+    vamos;
+
+    int n, d; cin >> n >> d;
+    vector<int> a(n);
+    for (auto &u : a) {
+        cin >> u;
+    }
+    int cc = 0, bcc = 0;
+    for (int i = 0; i < n && a[i]; i++) {
+        cc += a[i]; ckmax(bcc, cc);
+    }
+    if(bcc > d) {
+        cout << "-1\n";
+        return 0;
+    }
+    
+    vector<int> M, R; // M -> max height of hills
+    for (int i = 0; i < n; i++) {
+        if(!a[i]){
+            int  mx = 0, cur = 0;
+            for (int j = i + 1; j < n && a[j]; i = j++) {
+                cur += a[j]; ckmax(mx, cur);
+            }
+            M.push_back(mx);
+        }
+    }
+    for (auto &u : M) {
+        if(u > d){
+            cout << "-1\n";
+            return 0;
+        }
+    }
+    segtree<int> seg; seg.build(M);
+    for (int i = 0, j = 0, sum = 0; i < n; i++) {
+        if(!a[i]){
+            R.push_back(sum);
+            if(sum < 0) sum = d - seg.q(j, ((int)M.size()) - 1);
+            j++;
+        }else{
+            sum += a[i];
+            if(sum > d){
+                cout << "-1\n";
+                return 0;
+            }
+        }
+    }
+    int res = 0;
+    for (auto &u : R) {
+        if(u < 0) res++;
+    }
+    dbg(a);
+    cout << res << '\n';
+    dbg(M, R);
+
+    return 0;
+}
