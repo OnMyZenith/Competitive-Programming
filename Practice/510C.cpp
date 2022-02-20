@@ -23,6 +23,7 @@ template <class Fun> decltype(auto) y_combinator(Fun &&fun) { return y_combinato
 
 int main() {
     vamos;
+
     int n, mx = 0; cin >> n;
     vector<string> s(n);
     for (auto &u : s) {
@@ -30,18 +31,22 @@ int main() {
         mx = max(mx, (int)u.size());
     }
     vector<set<int>> g(26);
+    vector<int> in(26, 0);
     for (int i = 0; i < n - 1; i++) {
-        string s1 = s[i], s2 = s[i + 1];
-        int m = max((int)s1.size(), (int)s2.size());
-        for (int j = 0; j < m; j++) {
-            if(j == (int)s1.size()) break;
-            if(j == (int)s2.size()) {
-                cout << "Impossible\n";
-                return 0;
+        for (int k = i + 1; k < n; k++) {
+            string s1 = s[i], s2 = s[k];
+            int m = (int) max(s1.size(), s2.size());
+            for (int j = 0; j < m; j++) {
+                if(j == (int)s1.size()) break;
+                if(j == (int)s2.size()) {
+                    cout << "Impossible\n";
+                    return 0;
+                }
+                if(s1[j] == s2[j]) continue;
+                g[s1[j] - 'a'].insert(s2[j] - 'a');
+                in[s2[j] - 'a']++;
+                break;
             }
-            if(s1[j] == s2[j]) continue;
-            g[s1[j] - 'a'].insert(s2[j] - 'a');
-            break;
         }
     }
     vector<bool> vis(26);
@@ -51,15 +56,18 @@ int main() {
         vis[v] = 1;
         temp.push_back(v);
         for (auto u = g[v].begin(); u != g[v].end(); u++) {
-            if(vis[*u]) return false;
-            self(*u);
+            in[*u]--;
+            if(in[*u] == 0) {
+                if(!vis[*u]) self(*u);
+                else return false;
+            } else if(in[*u] < 0) return false;
         }
         return true;
     });
     for (int i = 0; i < 26; i++) {
-        if(!vis[i]){
+        if(in[i] == 0 && !vis[i]) {
             temp.clear();
-            if(!dfs(i)){
+            if(!dfs(i)) {
                 cout << "Impossible\n";
                 return 0;
             }
