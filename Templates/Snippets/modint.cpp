@@ -27,7 +27,10 @@ template <int MOD, int RT> struct mint {
         return *this;
     }
     mint &operator*=(const mint &m) {
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wconversion"
         v = (long long)v * m.v % MOD;
+        #pragma GCC diagnostic pop
         return *this;
     }
     mint &operator/=(const mint &m) { return (*this) *= inv(m); }
