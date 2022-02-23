@@ -6,6 +6,6 @@
 
 #ifdef asr_time
     auto end = chrono::high_resolution_clock::now();
-    cout << setprecision(2) << fixed;
-    cout << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
+    cerr << setprecision(2) << fixed;
+    cerr << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
 #endif
