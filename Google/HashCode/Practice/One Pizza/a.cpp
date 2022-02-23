@@ -54,6 +54,7 @@ mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().co
 
 
 int main(int argc, char **argv) {
+    (void)argc;
 
 #ifdef asr_time
     auto begin = chrono::high_resolution_clock::now();
@@ -165,36 +166,25 @@ int main(int argc, char **argv) {
     iota(ING2.begin(), ING2.end(), 0);
     hash_set<int> bs;
     int best = 0;
-    for (int i = 0; i < 1e9; i++) {
+    for (int i = 0; i < 10; i++) {
         shuffle(ING2.begin(), ING2.end(), rng);
         ll c = (ll)rng() % (tot_ing + 1);
         hash_set<int> poss(ING2.begin(), ING2.begin() + c);
         if(ckmax(best, sim(poss))){
             bs = poss;
             freopen(argv[1], "w", stdout);
-            cout << (int)bs.size() << " ";
-            bool f = 0;
+            cout << (int)bs.size();
             for (auto &in : bs) {
-                if(f) cout << " ";
-                cout << find_by_id[in];
-                f = 1;
+                cout << " " << find_by_id[in];
             }
             cout << endl;
             fclose(stdout);
-            dbg(best);
             dbg(poss);
+            dbg(best);
         }
     }
-
     dbg(best);
-    // cout << (int)bs.size() << " ";
-    // bool f = 0;
-    // for (auto &i : bs) {
-    //     if(f) cout << " ";
-    //     cout << find_by_id[i];
-    //     f = 1;
-    // }
-    // cout << '\n';
+
     // //Rand code
 
 #ifdef asr_time
