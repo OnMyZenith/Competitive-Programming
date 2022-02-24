@@ -48,10 +48,10 @@ template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 
 
 
 int disliked[500007];
+int liked[500007];
 
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // e.g. shuffle(permutation.begin(), permutation.end(), rng);
-
 
 int main(int argc, char **argv) {
     (void)argc;
@@ -85,61 +85,35 @@ int main(int argc, char **argv) {
         find_by_id[tot_ing] = item;
         idx = tot_ing++;
     }
-    vector<pair<hash_set<int>, hash_set<int>>> per(n);
+    vector<pair<hash_set<int>, hash_set<int>>> customers(n);
 
     for (int i = 0; i < n; i++) {
         auto &[likes, dislikes] = p[i];
         for (auto &ing : likes) {
-            per[i].first.insert(mp[ing]);
+            customers[i].first.insert(mp[ing]);
         }
         for (auto &ing : dislikes) {
-            per[i].second.insert(mp[ing]);
+            customers[i].second.insert(mp[ing]);
         }
     }
-    // for (auto &P : per) {
-    //     for (auto it = P.second.begin(); it != P.second.end(); it++){
-    //         disliked[*it]++;
-    //     }
-    // }
-    // vector<int> ING(tot_ing);
-    // iota(ING.begin(), ING.end(), 0);
-    // sort(ING.begin(), ING.end(), [&](int i, int j){return disliked[i] > disliked[j];});
+    for (auto &P : customers) {
+        // rejecting everyone with more than 7 demands
+        // if(P.first.size() + P.second.size() > 7) continue;
+        for (auto it = P.second.begin(); it != P.second.end(); it++){
+            disliked[*it]++;
+        }
+        for (auto it = P.first.begin(); it != P.first.end(); it++){
+            liked[*it]++;
+        }
+    }
+    vector<int> sorted_ING(tot_ing);
+    iota(sorted_ING.begin(), sorted_ING.end(), 0);
+    sort(sorted_ING.begin(), sorted_ING.end(), [&](int i, int j){
+        long double I = (long double) liked[i] / disliked[i];
+        long double J = (long double) liked[j] / disliked[j];
+        return I > J;
+    });
 
-    // auto like_ok = [&](int i, int per_id) ->bool{
-    //     int tot = (int)per[per_id].first.size(), cnt = 0;
-    //     for (int j = i; j < tot_ing; j++) {
-    //         int ing = ING[j];
-    //         if(per[per_id].first.find(ing) != per[per_id].first.end()) cnt++;
-    //     }
-    //     return cnt == tot;
-    // };
-    // auto dislike_ok = [&](int i, int per_id)->bool{
-    //     for (int j = i; j < tot_ing; j++) {
-    //         int ing = ING[j];
-    //         if(per[per_id].second.find(ing) != per[per_id].second.end()) return false;
-    //     }
-    //     return true;
-    // };
-    // auto ok = [&](int i, int per_id) -> bool {
-    //     return like_ok(i, per_id) && dislike_ok(i, per_id);
-    // };
-
-    // int best = 0, res = -1;
-    // for (int i = 0; i < tot_ing; i++) {
-    //     int cnt = 0;
-    //     for (int j = 0; j < n; j++) {
-    //         if(ok(i, j)) cnt++;
-    //     }
-    //     if(ckmax(best, cnt)) res = i;
-    // }
-
-    // cout << tot_ing - res << " ";
-    // for (int j = res; j < tot_ing; j++) {
-    //     int i = ING[j];
-    //     cout << find_by_id[i] << " \n"[j == tot_ing - 1];
-    // }
-
-    //Rand code
     auto oneInsideTwo = [&](hash_set<int> &one, hash_set<int> &two) ->bool{
         for (auto &e : one) {
             if(two.find(e) == two.end()) return false;
@@ -157,35 +131,99 @@ int main(int argc, char **argv) {
     auto sim = [&](hash_set<int> &ing) -> int {
         int cnt = 0;
         for (int i = 0; i < n; i++) {
-            cnt += oneInsideTwo(per[i].first, ing) && oneOutsideTwo(per[i].second, ing);
+            cnt += oneInsideTwo(customers[i].first, ing) && oneOutsideTwo(customers[i].second, ing);
         }
         return cnt;
     };
 
-    vector<int> ING2(tot_ing);
-    iota(ING2.begin(), ING2.end(), 0);
-    hash_set<int> bs;
-    int best = 0;
-    for (int i = 0; i < 10; i++) {
-        shuffle(ING2.begin(), ING2.end(), rng);
-        ll c = (ll)rng() % (tot_ing + 1);
-        hash_set<int> poss(ING2.begin(), ING2.begin() + c);
-        if(ckmax(best, sim(poss))){
-            bs = poss;
-            freopen(argv[1], "w", stdout);
-            cout << (int)bs.size();
-            for (auto &in : bs) {
-                cout << " " << find_by_id[in];
+
+    int highest_satisf = 0;
+    hash_set<int> best_set;
+
+    //Code 3;
+    sort(customers.begin(), customers.end(), [&](auto i, auto j){
+        return int(i.first.size() + i.second.size()) < int(j.first.size() + j.second.size());
+    });
+
+    hash_set<int> bad_ing;
+    for (auto &c : customers){
+        bool f = 1;
+        for (auto &in : c.first) {
+            if(bad_ing.find(in) != bad_ing.end()) {f = 0; break;}
+        }
+        for (auto &in : c.second) {
+            if(best_set.find(in) != best_set.end()) {f = 0; break;}
+        }
+        if(f){
+            for (auto &in : c.first) {
+                best_set.insert(in);
             }
-            cout << endl;
-            fclose(stdout);
-            dbg(poss);
-            dbg(best);
+            for (auto &in : c.second) {
+                bad_ing.insert(in);
+            }
         }
     }
-    dbg(best);
+    if(ckmax(highest_satisf, sim(best_set))){
+        freopen(argv[1], "w", stdout);
+        cout << (int)best_set.size();
+        for (auto &in : best_set) {
+            cout << " " << find_by_id[in];
+        }
+        cout << endl;
+        fclose(stdout);
+        dbg(highest_satisf);
+    }
+    dbg(highest_satisf);
 
-    // //Rand code
+    //Code 3
+
+
+    //Rand code 2 ------------------------
+
+    // for (int i = 0; i < 1e9; i++) {
+    //     ll c = (ll)rng() % (tot_ing + 1);
+    //     hash_set<int> poss(sorted_ING.begin(), sorted_ING.begin() + c);
+    //     if(ckmax(highest_satisf, sim(poss))){
+    //         best_set = poss;
+    //         freopen(argv[1], "w", stdout);
+    //         cout << (int)best_set.size();
+    //         for (auto &in : best_set) {
+    //             cout << " " << find_by_id[in];
+    //         }
+    //         cout << endl;
+    //         fclose(stdout);
+    //         // dbg(poss);
+    //         dbg(highest_satisf);
+    //     }
+    // }
+    // dbg(highest_satisf);
+
+    //Rand code 2 ------------------------
+    
+    //Rand code --------------------------
+
+    // vector<int> ING2(tot_ing);
+    // iota(ING2.begin(), ING2.end(), 0);
+    // for (int i = 0; i < 10; i++) {
+    //     shuffle(ING2.begin(), ING2.end(), rng);
+    //     ll c = (ll)rng() % (tot_ing + 1);
+    //     hash_set<int> poss(ING2.begin(), ING2.begin() + c);
+    //     if(ckmax(highest_satisf, sim(poss))){
+    //         best_set = poss;
+    //         freopen(argv[1], "w", stdout);
+    //         cout << (int)best_set.size();
+    //         for (auto &in : best_set) {
+    //             cout << " " << find_by_id[in];
+    //         }
+    //         cout << endl;
+    //         fclose(stdout);
+    //         // dbg(poss);
+    //         dbg(highest_satisf);
+    //     }
+    // }
+    // dbg(highest_satisf);
+
+    //Rand code --------------------------
 
 #ifdef asr_time
     auto end = chrono::high_resolution_clock::now();
@@ -195,3 +233,61 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
+//------------------------------------------------------
+    // auto like_ok = [&](int i, int per_id) ->bool{
+    //     int tot = (int)customers[per_id].first.size(), cnt = 0;
+    //     for (int j = i; j < tot_ing; j++) {
+    //         int ing = sorted_ING[j];
+    //         if(customers[per_id].first.find(ing) != customers[per_id].first.end()) cnt++;
+    //     }
+    //     return cnt == tot;
+    // };
+    // auto dislike_ok = [&](int i, int per_id)->bool{
+    //     for (int j = i; j < tot_ing; j++) {
+    //         int ing = sorted_ING[j];
+    //         if(customers[per_id].second.find(ing) != customers[per_id].second.end()) return false;
+    //     }
+    //     return true;
+    // };
+    // auto ok = [&](int i, int per_id) -> bool {
+    //     return like_ok(i, per_id) && dislike_ok(i, per_id);
+    // };
+
+    // int highest_satisf = 0, res = -1;
+    // for (int i = 0; i < tot_ing; i++) {
+    //     // int cnt = 0;
+    //     // for (int j = 0; j < n; j++) {
+    //     //     if(ok(i, j)) cnt++;
+    //     // }
+    //     // if(ckmax(highest_satisf, cnt)) res = i;
+    // }
+
+//----------------------------------------------------
+    // int highest_satisf = 0, res = -1;
+    // // sorted_ING in order of decreasing dislikes then select the ones with no dislikes
+    // for (int i = 0; i < tot_ing; i++) {
+    //     if(!disliked[i]) {
+    //         res = i; break;
+    //     }
+    // }
+
+    // hash_set<int> best_set;
+    // hash_set<int> poss;
+    // for (int j = res; j < tot_ing; j++) {
+    //     int i = sorted_ING[j];
+    //     poss.insert(i);
+    // }
+
+    // if(ckmax(highest_satisf, sim(best_set))){
+    //     best_set = poss;
+    //     freopen(argv[1], "w", stdout);
+    //     cout << (int)best_set.size();
+    //     for (auto &in : best_set) {
+    //         cout << " " << find_by_id[in];
+    //     }
+    //     cout << endl;
+    //     fclose(stdout);
+    //     // dbg(poss);
+    //     dbg(highest_satisf);
+    // }
