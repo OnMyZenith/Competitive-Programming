@@ -11,58 +11,10 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
-template <class T> bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
-template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
-
-vector<int> trial_division3(int n) {
-    vector<int> factorization;
-    for (int d : {2, 3, 5}) {
-        while (n % d == 0) {
-            factorization.push_back(d);
-            n /= d;
-        }
-    }
-    static array<int, 8> increments = {4, 2, 4, 2, 4, 6, 2, 6};
-    int i = 0;
-    for (int d = 7; d * d <= n; d += increments[i++]) {
-        while (n % d == 0) {
-            factorization.push_back(d);
-            n /= d;
-        }
-        if (i == 8)
-            i = 0;
-    }
-    if (n > 1)
-        factorization.push_back(n);
-    return factorization;
-}
-
-
-int mp[(int)1e7 + 1];
-
-void solve() {
-    int n; cin >> n;
-    vector<int> f = trial_division3(n);
-    sort(f.begin(), f.end());
-    vector<pair<int,int>> pfn;
-    for (int i = 0; i < (int)f.size(); i++) {
-        int cnt = 0, curr = f[i];
-        while(i < (int)f.size() && f[i] == curr) i++;
-        pfn.push_back({curr, cnt});
-    }
-    
-
-
-
-}
+int res[(int)1e7 + 7];
 
 int main() {
     vamos;
-#ifdef asr_time
-    auto begin = chrono::high_resolution_clock::now();
-#endif
-
-
     int n = 1e7;
     vector<bool> is_prime(n+1, true);
     is_prime[0] = is_prime[1] = false;
@@ -72,30 +24,36 @@ int main() {
                 is_prime[j] = false;
         }
     }
-
-    memset(mp, -1, sizeof(mp));
-    mp[1] = 1;
-    for (int i = 2; i <= n; i++) {
-        if(!is_prime[i]) continue;
-        ll x = i;
-        while(x <= n) {
-            if(mp[(x - 1) / (i - 1)] == -1) mp[(x - 1) / (i - 1)] = 1e9;
-            ckmin(mp[(x - 1) / (i - 1)], i);
-            x *= i;
+    // vector<vector<int>> series(n + 1);
+    map<int, int> mp;
+    vector<int> series;
+    series.reserve(1e7 + 7);
+    for (ll i = 2; i <= 1e7; i++) {
+        if(is_prime[i]) {
+            // series[i].reserve(1e7 / i + 1);
+            int sm = i + 1;
+            for (ll j = i; j < 1e7 && sm <= 1e7; j *= i, sm += j) {
+                series.push_back(sm);
+                mp[sm] = j;
+            }
         }
     }
+    sort(series.begin(), series.end());
+
+    int m = (int)series.size();
+    for (int i = 0; i < m; i++) {
+        for (int j = i + 1; j < n && (ll) series[i] * series[j] <= 1e7; j++) {
+            res[series[i] * series[j]] = mp[series[i]] * mp[series[j]];
+        }
+    }
+
 
     int TT = 1;
     cin >> TT;
     while(TT--) {
-        solve();
+        int c; cin >> c;
+        cout << (res[c] ? res[c] : -1) << '\n';
     }
-
-#ifdef asr_time
-    auto end = chrono::high_resolution_clock::now();
-    cerr << setprecision(2) << fixed;
-    cerr << "Execution time: " << chrono::duration_cast<chrono::duration<double>>(end - begin).count() * 1000 << " ms" << endl;
-#endif
 
     return 0;
 }

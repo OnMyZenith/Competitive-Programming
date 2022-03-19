@@ -11,27 +11,25 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
-
-
-
-void solve() {
-    int n; string s; cin >> n >> s;
-    if(s[0] != s[n - 1]) {
-        cout << "NO\n";
-        return;
-    }
-    
-
-
-}
+int cnt[200007];
+int precnt[200008];
 
 int main() {
     vamos;
 
-    int TT = 1;
-    cin >> TT;
-    while(TT--) {
-        solve();
+    int n, m; cin >> n >> m;
+    vector<int> s(n), t(m);
+    for (auto &i : s) {
+        cin >> i; cnt[i]++;
+    }
+    for (auto &u : t) {
+        cin >> u;
+    }
+    for (int i = 0; i < 200007; i++) {
+        precnt[i + 1] = precnt[i] + cnt[i];
+    }
+    for (int i = 0; i < m; i++) {
+        
     }
 
     return 0;
