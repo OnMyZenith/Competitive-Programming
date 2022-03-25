@@ -17,48 +17,18 @@ template <class T> void remDupf(vector<T> &v) { sort(v.begin(), v.end()), v.eras
 
 void solve() {
     int n; cin >> n;
-    vector<int> a; a.reserve(n);
-    for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        if(!x) continue;
-        a.push_back(x);
+    vector<int> a(n);
+    for (auto &u : a) {
+        cin >> u;
     }
-    n = (int)a.size();
     sort(a.begin(), a.end());
-    if(n < 1) {
-        cout << "YES\n";
-        return;
-    }
-    int aa = a[0]; bool eq = 1;
-    for (int i = 0; i < n; i++) {
-        eq &= a[i] == aa;
-    }
-    if(eq) {
-        cout << "YES\n";
-        return;
-    }
-    if(n == 1) {
+    bool f = 0;
+    for (int i = 0; i < n - 1; i++) f |= a[i + 1] - a[i] == 1;
+    if(f && count(a.begin(), a.end(), 1)) {
         cout << "NO\n";
-        return;
+    } else {
+        cout << "YES\n";
     }
-    if(a[0] == 1) {
-        cout << "NO\n";
-        return;
-    }
-    // int j = 0;
-    // while(j < n - 1){
-    //     int d = a[j], g = 0;
-    //     for (int i = j; i < n; i++) {
-    //         a[i] -= d;
-    //         g = gcd(a[i], g);
-    //     }
-    //     if(g > 1 || g == 0) {
-    //         cout << "YES\n";
-    //         return;
-    //     }
-    //     j++;
-    // }
-    cout << "YES\n";
 }
 
 int main() {
