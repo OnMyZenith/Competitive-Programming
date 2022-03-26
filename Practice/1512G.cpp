@@ -11,48 +11,46 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
-int res[(int)1e7 + 7];
+int sum_of_div[(int)1e7 + 7];
+int fin[(int)1e7 + 7];
+int fact[(int)1e7 + 7];
 
 int main() {
     vamos;
-    int n = 1e7;
-    vector<bool> is_prime(n+1, true);
-    is_prime[0] = is_prime[1] = false;
-    for (int i = 2; i <= n; i++) {
-        if (is_prime[i] && (long long)i * i <= n) {
-            for (int j = i * i; j <= n; j += i)
-                is_prime[j] = false;
-        }
-    }
-    // vector<vector<int>> series(n + 1);
-    map<int, int> mp;
-    vector<int> series;
-    series.reserve(1e7 + 7);
-    for (ll i = 2; i <= 1e7; i++) {
-        if(is_prime[i]) {
-            // series[i].reserve(1e7 / i + 1);
-            int sm = i + 1;
-            for (ll j = i; j < 1e7 && sm <= 1e7; j *= i, sm += j) {
-                series.push_back(sm);
-                mp[sm] = j;
+
+    int n_max = 1e7 + 1;
+
+    fact[1] = 1;
+    for (int i = 4; i < n_max; i += 2) fact[i] = 2;
+    for (int i = 3; i * i < n_max; i += 2) {
+        if(!fact[i]) {
+            for (int j = i * i; j < n_max; j += 2 * i) {
+                fact[j] = i;
             }
         }
     }
-    sort(series.begin(), series.end());
+    sum_of_div[1] = 1;
+    for (int i = 2; i < n_max; i++) {
+        if(!fact[i]) {
+            sum_of_div[i] = i + 1;
+        } else {
+            int j = i;
+            while(j % fact[i] == 0) j /= fact[i];
 
-    int m = (int)series.size();
-    for (int i = 0; i < m; i++) {
-        for (int j = i + 1; j < n && (ll) series[i] * series[j] <= 1e7; j++) {
-            res[series[i] * series[j]] = mp[series[i]] * mp[series[j]];
+            sum_of_div[i] = sum_of_div[i / fact[i]] + sum_of_div[j] * (i / j);
         }
     }
 
+    for (int i = 0; i < n_max; i++) {
+        if(sum_of_div[i] > 1e7) continue;
+        if(!fin[sum_of_div[i]]) fin[sum_of_div[i]] = i;
+    }
 
     int TT = 1;
     cin >> TT;
     while(TT--) {
         int c; cin >> c;
-        cout << (res[c] ? res[c] : -1) << '\n';
+        cout << (fin[c] ? fin[c] : -1) << '\n';
     }
 
     return 0;

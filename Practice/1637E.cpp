@@ -18,7 +18,7 @@ void solve() {
     vector<ll> a(n);
     vector<pair<ll, ll>> bad;
     map<ll, ll> cnt;
-    vector<vector<ll>> ele_of_freq(n + 1); // Key observation -> there can only be sqrt(n) unique frequencies
+    vector<vector<ll>> elements_of_freq(n + 1); // Key observation -> there can only be sqrt(n) unique frequencies
     for (auto &u : a) {
         cin >> u;
         cnt[u]++;
@@ -29,19 +29,20 @@ void solve() {
     }
     sort(bad.begin(), bad.end());
     for (auto &[ele, freq] : cnt) {
-        ele_of_freq[freq].push_back(ele);
+        elements_of_freq[freq].push_back(ele);
     }
     vector<ll> f;
     for (int i = 0; i < n; i++) {
-        if(ele_of_freq[i].empty()) continue;
+        if(elements_of_freq[i].empty()) continue;
         f.push_back(i);
-        sort(ele_of_freq[i].rbegin(), ele_of_freq[i].rend());
+        sort(elements_of_freq[i].rbegin(), elements_of_freq[i].rend());
     }
 
     for (int i = 0; i < (int)f.size(); i++) {
-        for (int j = i; j < (int)f.size(); j++) {
-            for (auto &x : ele_of_freq[f[i]]) {
-                for (auto &y : ele_of_freq[f[j]]) {
+        for (int j = 0; j < (int)f.size(); j++) {
+            if(f[i] < f[j]) continue;
+            for (auto &x : elements_of_freq[f[i]]) {
+                for (auto &y : elements_of_freq[f[j]]) {
                     pair fin{min(x, y), max(x, y)};
                     if(x != y && !binary_search(bad.begin(), bad.end(), fin)) {
                         ckmax(ans, (x + y) * (f[i] + f[j]));
