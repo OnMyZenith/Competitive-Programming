@@ -42,20 +42,24 @@ int main() {
         cout << "2 2\n1 1\n"; return 0;
     }
 
-    // dp[v][0] -> {most_poss_white_in_this_subtree_if_this_is_black, min_weight_sum_req_to_achieve_this_config}
+    // dp[v][0] -> {most_poss_good_in_this_subtree_if_this_is_bad, min_weight_sum_req_to_achieve_this_config}
     vector<vector<pair<int, int>>> dp(n, vector<pair<int, int>>(2));
     y_combinator([&](auto dfs, int v, int p) -> void {
         dp[v][1] = {1, (int)adj[v].size()};
         dp[v][0] = {0, 1};
         for (auto &u : adj[v]) {
-            if(u != p && !dp[u][0].second) {
+            if(u != p) {
                 dfs(u, v);
+
+                // making this vertex good
                 dp[v][1].first += dp[u][0].first;
                 dp[v][1].second += dp[u][0].second;
+
+                // making this vertex bad
                 if(dp[u][0].first < dp[u][1].first) {
                     dp[v][0].first += dp[u][1].first;
                     dp[v][0].second += dp[u][1].second;
-                } else if(dp[u][0].first < dp[u][1].first) {
+                } else if(dp[u][0].first > dp[u][1].first) {
                     dp[v][0].first += dp[u][0].first;
                     dp[v][0].second += dp[u][0].second;
                 } else {
@@ -70,40 +74,40 @@ int main() {
         }
     })(0, -1);
     dbg(dp);
-    vector<bool> white(n), vis(n);
+    vector<bool> good(n), vis(n);
     if(dp[0][0].first != dp[0][1].first) {
-        white[0] = dp[0][1].first > dp[0][0].first;
+        good[0] = dp[0][1].first > dp[0][0].first;
     } else {
-        white[0] = dp[0][0].second > dp[0][1].second;
+        good[0] = dp[0][0].second > dp[0][1].second;
     }
-    y_combinator([&](auto dfs, int v, bool is_white) -> void {
-        vis[v] = 1; white[v] = is_white;
+    y_combinator([&](auto dfs, int v, bool is_good) -> void {
+        vis[v] = 1; good[v] = is_good;
         for (auto &u : adj[v]) {
             if(!vis[u]) {
-                if(is_white) dfs(u, 0);
+                if(is_good) dfs(u, 0);
                 else {
                     if(dp[u][0].first != dp[u][1].first) {
-                        white[u] = dp[u][1].first > dp[u][0].first;
+                        good[u] = dp[u][1].first > dp[u][0].first;
                     } else {
-                        white[u] = dp[u][0].second > dp[u][1].second;
+                        good[u] = dp[u][0].second > dp[u][1].second;
                     }
-                    dfs(u, white[u]);
+                    dfs(u, good[u]);
                 }
             }
         }
-    })(0, white[0]);
-    dbg(white);
+    })(0, good[0]);
+    dbg(good);
 
-    // if(white[0]) cout << dp[0][1].first << " " << dp[0][1].second << '\n';
+    // if(good[0]) cout << dp[0][1].first << " " << dp[0][1].second << '\n';
     // else cout << dp[0][0].first << " " << dp[0][0].second << '\n';
     int w = 0, sum = 0;
     for (int i = 0; i < n; i++) {
-        if(white[i]) w++, sum += (int)adj[i].size();
+        if(good[i]) w++, sum += (int)adj[i].size();
     }
     cout << w << " " << sum + (n - w) << '\n';
 
     for (int i = 0; i < n; i++) {
-        cout << (white[i] ? (int)adj[i].size() : 1) << " \n"[i == n - 1];
+        cout << (good[i] ? (int)adj[i].size() : 1) << " \n"[i == n - 1];
     }
     return 0;
 }

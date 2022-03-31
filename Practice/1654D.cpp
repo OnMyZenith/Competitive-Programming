@@ -146,7 +146,7 @@ void solve() {
     ll n; cin >> n;
     vector<vector<int>> adj(n);
     hash_map<pair<int, int>, mi> mp;
-    hash_map<
+    // hash_map<
     for (int i = 0; i < n - 1; i++) {
         int u, v, x, y;
         cin >> u >> v >> x >> y;
