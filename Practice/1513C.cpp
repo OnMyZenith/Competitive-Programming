@@ -27,33 +27,42 @@ using ll = long long;
 
 const int MOD = 1e9 + 7;
 
+int cnt(int n, int m) {
+    if(m + n < 10) return 1;
+    return (cnt(1, m + n - 10) + cnt(0, m + n - 10)) % MOD;
+}
+
 void solve() {
-    int n, m;
-    cin >> n >> m;
+    int n, m; cin >> n >> m;
+
     vector<int> f(10);
-    while (n)
-        f[n % 10]++, n /= 10;
+    while (n) f[n % 10]++, n /= 10;
 
-    int i = 0;
-
-    while (m--) {
-        int j = i;
-        i--;
-        if (i < 0) i += 10;
-        f[j] += f[i];
-        if (f[j] >= MOD) f[j] -= MOD;
+    int res = 0;
+    for (int i = 0; i < 10; i++) {
+        res += (ll) f[i] * cnt(i, m) % MOD;
     }
-    cout << accumulate(f.begin(), f.end(), 0LL) % MOD << '\n';
+    cout << res << '\n';
+
+    // int i = 0;
+    // while (m--) {
+    //     int j = i;
+    //     i--;
+    //     if (i < 0) i += 10;
+    //     f[j] += f[i];
+    //     if (f[j] >= MOD) f[j] -= MOD;
+    // }
+    // cout << accumulate(f.begin(), f.end(), 0LL) % MOD << '\n';
 }
 
 int main() {
     vamos;
 
-    vector<vector<int>> f(2e5 + 7, vector<int>(10));
+    // vector<vector<int>> f(2e5 + 7, vector<int>(10));
 
-    for (int i = 0; i < 10; i++) {
+    // for (int i = 0; i < 10; i++) {
         
-    }
+    // }
 
     int TT = 1;
     cin >> TT;
