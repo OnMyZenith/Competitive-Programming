@@ -324,7 +324,7 @@ template <int MOD, int RT> struct mint {
     friend mint operator/(mint a, const mint &b) { return a /= b; }
 };
 
-// const int MOD = 1e9 + 007; // 998244353;
+const int MOD = 1e9 + 007; // 998244353;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 
 
@@ -482,7 +482,7 @@ const double epsd = 2e-16;
 const long double PI = 3.14159265358979323846L;
 const long long LINF = 2e18L + 007;
 const int IINF = 2e9 + 007;
-const int MOD = 1e9 + 007; // 998244353;
+// const int MOD = 1e9 + 007; // 998244353;
 mt19937 rng((unsigned int)std::chrono::steady_clock::now().time_since_epoch().count()); // mt19937 rng(61378913);
 // e.g. shuffle(permutation.begin(), permutation.end(), rng);
 
