@@ -19,29 +19,41 @@ int dis(int x1, int y1, int x2, int y2) {
     return abs(x1 - x2) + abs(y1 - y2);
 }
 
+struct point{
+    int x, y;
+    bool operator<(point & p){
+        if(x != p.x) return x < p.x;
+        return y < p.y;
+    }
+};
+
 int main() {
     vamos;
 
-    int x[3], y[3];
-    for (int i = 0; i < 3; i++) cin >> x[i] >> y[i];
-    int best = 0; pair<int, int> extremes; int m;
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if(i == j) continue;
-            if(ckmax(best, dis(x[i], y[i], x[j], y[j]))) {
-                extremes = {i, j};
-                m = 3 - i - j;
-            }
-        }
+    vector<point> p(3);
+    
+    for (int i = 0; i < 3; i++) cin >> p[i].x >> p[i].y;
+    sort(p.begin(), p.end());
+
+    cout << "3\n";
+
+    if(abs(p[1].y - p[0].y) + abs(p[1].y - p[2].y) == abs(p[0].y - p[2].y)) {
+        dbg("2");
+        cout << p[0].x << " " << p[0].y << " " << p[0].x << " " << p[1].y << '\n';
+        cout << p[0].x << " " << p[1].y << " " << p[2].x << " " << p[1].y << '\n';
+        cout << p[2].x << " " << p[2].y << " " << p[2].x << " " << p[1].y << '\n';
+    } else if (abs(p[2].y - p[0].y) + abs(p[2].y - p[1].y) == abs(p[0].y - p[1].y)) {
+        dbg("3");
+        cout << p[0].x << " " << p[0].y << " " << p[0].x << " " << p[2].y << '\n';
+        cout << p[0].x << " " << p[2].y << " " << p[2].x << " " << p[2].y << '\n';
+        cout << p[1].x << " " << p[1].y << " " << p[1].x << " " << p[2].y << '\n';
+    } else {
+        dbg("1");
+        cout << p[1].x << " " << p[1].y << " " << p[1].x << " " << p[0].y << '\n';
+        cout << p[2].x << " " << p[0].y << " " << p[0].x << " " << p[0].y << '\n';
+        cout << p[2].x << " " << p[2].y << " " << p[2].x << " " << p[0].y << '\n';
     }
 
-    cout << "4\n";
-
-    cout << x[extremes.first] << " " << y[extremes.first] << " " << x[extremes.first] << " " << y[m] << '\n';
-    cout << x[m] << " " << y[m] << " " << x[extremes.first] << " " << y[m] << '\n';
-
-    cout << x[extremes.second] << " " << y[extremes.second] << " " << x[extremes.second] << " " << y[m] << '\n';
-    cout << x[m] << " " << y[m] << " " << x[extremes.second] << " " << y[m] << '\n';
 
     return 0;
 }
