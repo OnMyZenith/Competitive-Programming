@@ -328,8 +328,6 @@ int main() {
     int n, k; cin >> n >> k;
     vector<pair<int, int>> mov(n);
     map<int, int> comp;
-    vector<pair<int, bool>> allPoints;
-    allPoints.reserve(2 * n);
     for (auto &[x, y] : mov) {
         cin >> y >> x;
         comp[x], comp[y];
