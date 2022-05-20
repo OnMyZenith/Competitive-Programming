@@ -24,13 +24,15 @@ int main() {
     sort(idx.begin(), idx.end(), [&](int i, int j){return a[i] < a[j];});
 
     for (int i = 0; i < n; i++) {
-        for (int j = i + 1, k = n - 1; j < k;) {
-            int s = a[idx[i]] + a[idx[j]] + a[idx[k]];
-            if(s > x) k--;
-            else if(s < x) j++;
-            else {
-                cout << idx[i] + 1 << " " << idx[j] + 1 << " " << idx[k] + 1 << '\n';
-                return 0;
+        for (int l = i + 1; l < n; l++) {
+            for (int j = l + 1, k = n - 1; j < k;) {
+                ll s = a[idx[i]] + a[idx[l]] + a[idx[j]] + a[idx[k]];
+                if(s > x) k--;
+                else if(s < x) j++;
+                else {
+                    cout << idx[i] + 1 << " " << idx[l] + 1 << " " << idx[j] + 1 << " " << idx[k] + 1 << '\n';
+                    return 0;
+                }
             }
         }
     }
