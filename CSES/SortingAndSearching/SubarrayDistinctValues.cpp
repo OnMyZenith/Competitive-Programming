@@ -11,6 +11,7 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
+
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -29,21 +30,25 @@ struct splitmix64_hash {
 template <class T, class U, typename Hash = splitmix64_hash> using hash_map = gp_hash_table<T, U, Hash>;
 template <class T, typename Hash = splitmix64_hash> using hash_set = hash_map<T, null_type, Hash>;
 
+
 int main() {
     vamos;
 
-    int n; cin >> n;
-
-    ll sum = 0, ans = 0;
-    hash_map<ll, int> f;
-    f[0] = 1;
-    for (int i = 0, y; i < n; i++) {
-        cin >> y; sum += y;
-        sum %= n; sum += n; sum %= n;
-        auto it = f.find(sum);
-        if(it != f.end()) ans += it->second;
-        f[sum]++;
+    int n, k; cin >> n >> k;
+    vector<int> a(n);
+    hash_map<int, int> mp;
+    ll ans = 0;
+    for (int i = 0, lo = 0; i < n; i++) {
+        cin >> a[i];
+        mp[a[i]]++;
+        while ((int)mp.size() > k) {
+            mp[a[lo]]--;
+            if (!mp[a[lo]]) mp.erase(a[lo]);
+            lo++;
+        }
+        ans += i - lo + 1;
     }
+
     cout << ans << '\n';
 
     return 0;
