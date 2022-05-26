@@ -33,33 +33,45 @@ template <class T> using ord_multiset = tree<T, null_type, less_equal<T>, rb_tre
 int main() {
     vamos;
 
-    int n, k; cin >> n >> k;
-    vector<int> a(n), med(n - k + 1);
+    int n, k, med; cin >> n >> k;
+    vector<int> a(n);
     ord_multiset<int> s;
-    for (int i = 0, j = -k + 1; i < n; i++, j++) {
+    ll cost = 0;
+
+    auto erase = [&](int x) {
+        auto it = s.upper_bound(x);
+        assert(*it == x);
+        s.erase(it);
+    };
+
+    for (int i = 0; i < n; i++) {
         cin >> a[i];
         s.insert(a[i]);
-        if(j >= 0) {
-            med[j] = *s.find_by_order((k + 1) / 2 - 1);
-            auto it = s.upper_bound(a[j]);
-            assert(*it == a[j]);
-            s.erase(it);
-        }
-    }
-    dbg(med);
-    ll cost = 0;
-    for (int i = 0; i < n; i++) {
-        if(i < k) cost += abs(a[i] - med[0]);
-        else {
-            cout << cost << " ";
-            cost += abs(a[i] - med[i - k + 1]) - abs(a[i - k] - med[i - k]);
-            ll diff = abs(med[i - k + 1] - med[i - k]);
-            if (k % 2 == 0 && !((a[i] >= med[i - k + 1] && a[i - k] >= med[i - k]) || (a[i] <= med[i - k + 1] && a[i - k] <= med[i - k]))) {
-                cost -= diff;
+        if(i == k - 1) {
+            med = *s.find_by_order((k + 1) / 2 - 1);
+            for (int j = 0; j < k; j++) {
+                cost += abs(a[j] - med);
             }
+            cout << cost;
+        } else if (i >= k) {
+            erase(a[i - k]);
+
+            int newmed = *s.find_by_order((k + 1) / 2 - 1);
+            erase(a[i]);
+            s.insert(a[i - k]);
+
+            int lar = k - (int)s.order_of_key(newmed + 1);
+            int smol = (int)s.order_of_key(newmed);
+            erase(a[i - k]);
+            s.insert(a[i]);
+            dbg(med, newmed, lar, smol);
+            cost += (ll) abs(newmed - med) * abs(lar - smol);
+            cost += (abs(a[i] - newmed) ? abs(a[i] - newmed) - abs(newmed - med) : 0) - abs(a[i - k] - newmed);
+
+            cout << " " << cost;
+            med = newmed;
         }
     }
-    cout << cost << '\n';
-
+    cout << '\n';
     return 0;
 }
