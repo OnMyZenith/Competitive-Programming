@@ -11,66 +11,97 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
-template <class T> using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-/*
-Source : https://codeforces.com/blog/entry/11080
-Note on using less_equal as comparison function to use it as a multiset:
-    _GLIBCXX_DEBUG must not be defined, otherwise some internal check will fail.
-    find will always return end.
-    lower_bound works like upper_bound in normal set (to return the first element > it)
-    upper_bound works like lower_bound in normal set (to return the first element >= it)
-    find_by_order and order_of_key works properly (unlike the 2 functions above).
-
-Some more observations:
-    erase(ord_mul_set.find(ele)); <-- doesn't work
-    use this instead:
-    auto it = ord_mul_set.upper_bound(ele); <-- actually gives lower_bound
-    if(*it == ele) ord_mul_set.erase(it);
-*/
-template <class T> using ord_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
-
 
 int main() {
     vamos;
 
-    int n, k, med; cin >> n >> k;
+    ll n, k; cin >> n >> k;
     vector<int> a(n);
-    ord_multiset<int> s;
-    ll cost = 0;
+    for (auto &u : a) {
+        cin >> u;
+    }
 
-    auto erase = [&](int x) {
-        auto it = s.upper_bound(x);
-        assert(*it == x);
-        s.erase(it);
+    auto _less = [&](int i, int j) -> bool {
+        return a[i] < a[j];
+    };
+    auto _greater = [&](int i, int j) -> bool {
+        return a[i] > a[j];
     };
 
-    for (int i = 0; i < n; i++) {
-        cin >> a[i];
-        s.insert(a[i]);
-        if(i == k - 1) {
-            med = *s.find_by_order((k + 1) / 2 - 1);
-            for (int j = 0; j < k; j++) {
-                cost += abs(a[j] - med);
+    multiset<int, decltype(_less)> right(_less);
+    multiset<int, decltype(_greater)> left(_greater);
+
+    for (int i = 0; i < (k + 1) / 2; i++) left.insert(i);
+
+    for (int i = (k + 1) / 2; i < k; i++) {
+        auto it = left.begin();
+        if(a[i] < a[*it]) {
+            right.insert(*it);
+            left.erase(it);
+            left.insert(i);
+        } else right.insert(i);
+    }
+    ll med = a[*left.begin()];
+    ll sleft = 0;
+    ll sright = 0;
+    for (auto &u : left) {
+        sleft += a[u];
+    }
+    for (auto &u : right) {
+        sright += a[u];
+    }
+    cout << ((k + 1) / 2) * med - sleft + sright - med * (k / 2);
+    for (int i = k; i < n; i++) {
+
+        auto itl = left.begin();
+        auto itr = right.begin();
+        if(a[i - k] <= a[*itl]) {
+            auto f = left.find(i - k);
+            left.erase(f);
+            sleft -= a[i - k];
+            if(!(k & 1)) {
+                left.insert(*itr);
+                sleft += a[*itr];
+                sright -= a[*itr];
+                right.erase(itr);
             }
-            cout << cost;
-        } else if (i >= k) {
-            erase(a[i - k]);
-
-            int newmed = *s.find_by_order((k + 1) / 2 - 1);
-            erase(a[i]);
-            s.insert(a[i - k]);
-
-            int lar = k - (int)s.order_of_key(newmed + 1);
-            int smol = (int)s.order_of_key(newmed);
-            erase(a[i - k]);
-            s.insert(a[i]);
-            dbg(med, newmed, lar, smol);
-            cost += (ll) abs(newmed - med) * abs(lar - smol);
-            cost += (abs(a[i] - newmed) ? abs(a[i] - newmed) - abs(newmed - med) : 0) - abs(a[i - k] - newmed);
-
-            cout << " " << cost;
-            med = newmed;
+        } else {
+            auto f = right.find(i - k);
+            right.erase(f);
+            sright -= a[i - k];
+            if(k & 1) {
+                right.insert(*itl);
+                sleft -= a[*itl];
+                sright += a[*itl];
+                left.erase(itl);
+            }
         }
+
+        itl = left.begin();
+        if(a[i] < a[*itl]) {
+            left.insert(i);
+            sleft += a[i];
+            if(!(k & 1)) {
+                itl = left.begin();
+                right.insert(*itl);
+                sleft -= a[*itl];
+                sright += a[*itl];
+                left.erase(itl);
+            }
+        } else {
+            right.insert(i);
+            sright += a[i];
+            if(k & 1) {
+                itr = right.begin();
+                left.insert(*itr);
+                sleft += a[*itr];
+                sright -= a[*itr];
+                right.erase(itr);
+            }
+        }
+
+        med = a[*left.begin()];
+        cout << " " << ((k + 1) / 2) * med - sleft + sright - med * (k / 2);
     }
     cout << '\n';
     return 0;
