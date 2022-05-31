@@ -16,43 +16,33 @@ template <class T> using pqinc = std::priority_queue<T, vector<T>, greater<T>>;
 
 template <class T> bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
 template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
-template <typename T_vector> void ov(const T_vector &v, bool add_one = false, int start = -1, int end = -1) {
-    if (start < 0) start = 0;
-    if (end < 0) end = int(v.size());
-
-    for (int i = start; i < end; i++)
-        cout << v[i] + (add_one ? 1 : 0) << " \n"[i == end - 1];
-}
-
 
 int main() {
     vamos;
 
-    int n, m; cin >> n >> m;
-    vector<vector<pair<int, int>>> adj(n);
+    int n, m, Q; cin >> n >> m >> Q;
+    vector<vector<ll>> dis(n, vector<ll>(n, 4e18));
     for (int i = 0; i < m; i++) {
         int u, v, e; cin >> u >> v >> e;
         u--, v--;
-        adj[u].push_back({e, v});
+        ckmin(dis[u][v], (ll)e);
+        dis[v][u] = dis[u][v];
     }
+    for (int i = 0; i < n; i++) dis[i][i] = 0;
 
-    vector<ll> to(n, 4e18);
-    to[0] = 0;
-
-    pqinc<pair<ll, int>> q; q.push({0, 0});
-    while(!q.empty()) {
-        auto [d_v, v] = q.top(); q.pop();
-
-        if(d_v > to[v]) continue;
-
-        for (auto &[len, u] : adj[v]) {
-            if (ckmin(to[u], d_v + len)) {
-                q.push({to[u], u});
+    for (int k = 0; k < n; k++) {
+        for (int j = 0; j < n; j++) {
+            for (int i = j + 1; i < n; i++) {
+                ckmin(dis[i][j], dis[i][k] + dis[j][k]);
+                dis[j][i] = dis[i][j];
             }
         }
     }
 
-    ov(to);
+    while(Q--) {
+        int u, v; cin >> u >> v; u--, v--;
+        cout << (dis[u][v] != (ll)4e18 ? dis[u][v] : -1) << '\n';
+    }
 
     return 0;
 }

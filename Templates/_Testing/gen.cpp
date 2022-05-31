@@ -84,6 +84,35 @@ void ptree(int n_max){ // Max Nodes
     }
 }
 
+void connectedGraph(int n, int m, bool e = 0, int e_l = -5, int e_r = 5) {
+    vector<int> ord(n - 1);
+    iota(ord.begin(), ord.end(), 2);
+    random_shuffle(ord.begin(), ord.end());
+    ord_set<int> connected; connected.insert(1);
+
+    for (int i = 0; i < n - 1; i++) {
+        int u = *connected.find_by_order(rand(0, i));
+        int v = ord[i];
+        connected.insert(v);
+        cout << u << " " << v;
+        if(e) {
+            cout << " " << rand(e_l, e_r);
+        }
+        cout << '\n';
+    }
+
+    for (int i = 0; i < m - (n - 1); i++) {
+        int u = rand(1, n);
+        int v = rand(1, n);
+        while(u == v) v = rand(1, n);
+        cout << u << " " << v;
+        if(e) {
+            cout << " " << rand(e_l, e_r);
+        }
+        cout << '\n';
+    }
+}
+
 int main(int argc, char *argv[]) {
     vamos;
     (void)argc;
