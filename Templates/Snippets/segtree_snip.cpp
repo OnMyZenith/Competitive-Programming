@@ -11,6 +11,12 @@ template <class T> struct segtree {
     static constexpr T NEUTRAL_VAL = 1e9;  // Change this
     T f(T a, T b) { return min(a, b); };   // Change this
 
+    segtree(vector<int>&_v) {
+        if(!_v.empty()) {
+            build(_v);
+        }
+    }
+
     // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
     void build(vector<T> &a) {
         SZ = 2 * contained_pow_2(((int)a.size())); v.assign(SZ, NEUTRAL_VAL);
