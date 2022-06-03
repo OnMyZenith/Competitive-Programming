@@ -1,17 +1,13 @@
 /* Author: OnMyZenith - https://github.com/OnMyZenith */
-#include <bits/extc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-using namespace __gnu_pbds;
 using ll = long long;
 
-#define vamos ios_base::sync_with_stdio(false), cin.tie(nullptr), cout << setprecision(15) << fixed;
 #ifdef asr_debug
 #include "dbg.hpp"
 #else
 #define dbg(...) 007
 #endif
-
-
 
 
 void solve() {
@@ -22,7 +18,8 @@ void solve() {
 }
 
 int main() {
-    vamos;
+    cin.tie(nullptr)->sync_with_stdio(false);
+    cout << setprecision(15) << fixed;
 
     int TT = 1;
     cin >> TT;

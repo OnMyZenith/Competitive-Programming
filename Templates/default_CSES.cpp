@@ -1,7 +1,6 @@
 /* Author: OnMyZenith - https://github.com/OnMyZenith */
-#include <bits/extc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-using namespace __gnu_pbds;
 using ll = long long;
 
 #ifdef asr_debug
@@ -10,12 +9,13 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
+
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(nullptr)->sync_with_stdio(false);
     cout << setprecision(15) << fixed;
 
     
+
 
 
     return 0;

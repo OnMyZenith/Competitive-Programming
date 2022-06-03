@@ -5,15 +5,15 @@ template <class T> struct segtree {
 
     constexpr int pct(int x) { return __builtin_popcount(x); }                                  // # of bits set
     constexpr int log_2(int x) { return x ? (8 * (int)sizeof(x)) - 1 - __builtin_clz(x) : -1; } // Floor of log_2(x); index of highest 1-bit
-    constexpr int next_pow_2(int x) { return x > 0 ? 1 << log_2(2 * x - 1) : 0; }               // 16->16, 13->16, (x<=0)->0
     constexpr int log_2_ceil(int x) { return log_2(x) + int(__builtin_popcount(x) != 1); }      // Ceil of log_2(x);
+    constexpr int contained_pow_2(int x) { return x > 0 ? 1 << log_2_ceil(x) : 0; }             // 16->16, 13->16, (x<=0)->0; Smallest number that's a power of 2, that's not smaller than x
 
     static constexpr T NEUTRAL_VAL = 1e9;  // Change this
     T f(T a, T b) { return min(a, b); };   // Change this
 
     // v i.e. the tree is indexed 1 based & a i.e. input data is indexed 0 based.
     void build(vector<T> &a) {
-        SZ = 2 * next_pow_2(((int)a.size())); v.assign(SZ, NEUTRAL_VAL);
+        SZ = 2 * contained_pow_2(((int)a.size())); v.assign(SZ, NEUTRAL_VAL);
         for (int i = 0; i < ((int)a.size()); i++) v[SZ / 2 + i] = a[i];
         for (int i = SZ / 2 - 1; i >= 1; i--) v[i] = f(v[2 * i], v[2 * i + 1]);
     }

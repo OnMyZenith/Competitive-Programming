@@ -9,15 +9,10 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
-
-void solve(int _TC) {
+void solve() {
     
 
 
-
-
-
-    cout << "Case #" << _TC << ": ";
 
 }
 
@@ -27,8 +22,8 @@ int main() {
 
     int TT = 1;
     cin >> TT;
-    for (int TC = 1; TC <= TT; TC++) {
-        solve(TC);
+    while(TT--) {
+        solve();
     }
 
     return 0;

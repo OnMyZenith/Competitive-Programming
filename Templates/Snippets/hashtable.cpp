@@ -1,4 +1,7 @@
 // PBDS hash table with custom hash, faster than unordered map and set by 3x, uses 1.5x more memory
+#include <bits/extc++.h>
+using namespace __gnu_pbds;
+
 struct splitmix64_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
