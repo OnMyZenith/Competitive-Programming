@@ -1,0 +1,39 @@
+/* Author: OnMyZenith - https://github.com/OnMyZenith */
+#include "bits/stdc++.h"
+using namespace std;
+using ll = long long;
+
+#ifdef asr_debug
+#include "dbg.hpp"
+#else
+#define dbg(...) 007
+#endif
+
+
+void solve() {
+    string s; cin >> s;
+    vector<int> mp(200, 1e8);
+    int n = (int)s.size();
+    int ans = 1e9;
+    for (int i = 0; i < n; i++) {
+        mp[s[i]] = i;
+        ans = min(ans, (max({mp['1'], mp['2'], mp['3']}) - min({mp['1'], mp['2'], mp['3']})));
+    }
+
+    cout << (ans <= n ? ans + 1 : 0) << '\n';
+
+
+}
+
+int main() {
+    cin.tie(nullptr)->sync_with_stdio(false);
+    cout << setprecision(15) << fixed;
+
+    int TT = 1;
+    cin >> TT;
+    while(TT--) {
+        solve();
+    }
+
+    return 0;
+}
