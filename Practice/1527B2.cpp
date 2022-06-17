@@ -15,9 +15,9 @@ using ll = long long;
 bitset<1007> s;
 
 void solve() {
-    int n; string t; cin >> n >> t; s.reset();
+    int n; string t; cin >> n >> t;
     for (int i = 0; i < n; i++) {
-        if(t[i] == '1') s[i] = 1;
+        s[i] = t[i] == '1';
     }
     int c0 = 0, cp = 0, odd = 0;
     for (int i = 0, j = n - 1; i <= j; i++, j--) {

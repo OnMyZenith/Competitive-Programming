@@ -29,7 +29,6 @@ void solve() {
     if(curr > n) {
         cout << "-1\n";
         return;
-    }
 
 
 
