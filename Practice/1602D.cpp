@@ -18,24 +18,38 @@ int main() {
     vamos;
 
     int n; cin >> n;
-    vector<int> height(n), slip(n), jumpPoints, potential(n);
+    vector<int> height(n), slip(n), potential(n);
     for (int i = 0; i < n; i++) {
         cin >> height[i];
-        potential[i] = i + 1 - height[i];
+        potential[i] = i - height[i];
     }
     for (int i = 0; i < n; i++) {
         cin >> slip[i];
-        jumpPoints.push_back(slip[i] + i + 1);
     }
 
-    remDupf(jumpPoints);
+    queue<int> q, q1; q.push(n - 1);
+    int curr_enqueued = n - 1, cnt = 0;
+    vector<int> p(n);
+    p[n - 1] = -1; int l = -1;
+    while (!q.empty()) {
+        int v = q.front(); q.pop();
+        if(v < 0) break;
 
-    vector<int> idx(jumpPoints);
-    sort(idx.begin(), idx.end(), [&](int i, int j) {return potential[i - 1] < potential[j - 1];});
+        int real_v = v + slip[v];
+        for (int i = min(real_v - 1, curr_enqueued - 1); i >= potential[real_v]; i--) {
+            q1.push(i); (i >= 0 ? p[i] = v : l = v); curr_enqueued = min(curr_enqueued, i);
+        }
 
-    
-
-
-
+        if(q.empty()) cnt++, swap(q1, q);
+    }
+    if (curr_enqueued >= 0) {
+        cout << "-1\n";
+    } else {
+        cout << cnt << '\n';
+        vector<int> path = {-1};
+        while (p[l] != -1) path.push_back(l), l = p[l];
+        reverse(path.begin(), path.end());
+        for (int i = 0; i < (int)path.size(); i++) cout << path[i] + 1 << " \n"[i == (int)path.size() - 1];
+    }
     return 0;
 }
