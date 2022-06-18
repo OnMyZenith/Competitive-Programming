@@ -11,42 +11,32 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
-
+const int N = 2e5 + 7;
+int h[N];
+int a[N];
 
 int main() {
     vamos;
 
     int n, k; cin >> n >> k;
-    vector<int> a(n);
+
     for (int i = 0; i < n; i++) cin >> a[i];
+    sort(a, a + n);
 
-    sort(a.rbegin(), a.rend());
-    int stop = n - 1;
-    for (int i = n - 2; i >= 0; i--) {
-        if(a[i] != a[i + 1]) {
-            stop = i; break;
+    for (int i = a[0] + 1; i <= a[n - 1]; i++) {
+        h[i] = n - (lower_bound(a, a + n, i) - a);
+    }
+
+    int ans = 0, curr = 0;
+    for (int i = a[n - 1]; i > a[0]; i--) {
+        if (curr + h[i] <= k) curr += h[i];
+        else {
+            ans++;
+            curr = h[i];
         }
     }
 
-    int ans = 0, carry = 0, height = a[n - 1];
-    int idx = n - 1;
+    cout << ans + (curr > 0) << '\n';
 
-    while(idx > stop) {
-        if(a[idx] == height) {idx--; continue;}
-
-        int max_can_take = (k - carry) / (n - idx);
-
-        if (max_can_take > height - a[idx]) {
-            carry += (height - a[idx]) * (n - idx);
-            height = a[idx++];
-        } else if (max_can_take < height - a[idx]) {
-            height += max_can_take;
-            carry = 0; ans++;
-        } else {
-            height = a[idx++];
-            carry = 0; ans++;
-        }
-    }
-    cout << ans + (carry > 0) << '\n';
     return 0;
 }
