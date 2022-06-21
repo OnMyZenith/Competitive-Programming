@@ -55,7 +55,8 @@ template <int MOD, int RT> struct mint {
     friend mint operator/(mint a, const mint &b) { return a /= b; }
 };
 
-// const int MOD = 1e9 + 007; // 998244353;
+// const int MOD = 998244353;
+// const int MOD = 1e9 + 007;
 typedef mint<MOD, 5> mi;   // 5 is primitive root for both common mods
 
 

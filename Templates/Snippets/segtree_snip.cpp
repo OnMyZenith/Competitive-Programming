@@ -3,7 +3,7 @@ template <class T, class Fun> struct segtree {
     int N; vector<T> v; Fun fun; T NEUTRAL_VAL;
 
     // v i.e. the tree is indexed 1 based & arr i.e. input data is indexed 0 based.
-    segtree(vector<T> &arr, Fun &fun, T NEUTRAL_VAL) : fun(fun), NEUTRAL_VAL(NEUTRAL_VAL) {
+    segtree(vector<T> &arr, Fun &_fun, T _NEUTRAL_VAL) : fun(_fun), NEUTRAL_VAL(_NEUTRAL_VAL) {
         N = 1; while (N < (int)arr.size()) N <<= 1;
         v.assign(N << 1, NEUTRAL_VAL);
         for (int i = 0; i < ((int)arr.size()); i++) v[N + i] = arr[i];

@@ -15,9 +15,9 @@ vector<int> eratosthenesSieve(int lim) {
             for (int j = i * i; j < lim; j += i * 2)
                 isprime[j] = 0;
 
-    vector<int> pr;
+    vector<int> primes;
     for (int i = 2; i < lim; i++)
-        if (isprime[i]) pr.push_back(i);
+        if (isprime[i]) primes.push_back(i);
 
-    return pr;
+    return primes;
 }
