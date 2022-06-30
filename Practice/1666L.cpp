@@ -45,7 +45,7 @@ int main() {
     vamos;
 
     int n, m, s; cin >> n >> m >> s; s--;
-    auto adj = reG(n, m);
+    auto adj = reG(n, m, 0);
     vector<int> p(n, -1);
     int t = -1, sec_p = -1;
     for (auto &ss : adj[s]) {
