@@ -102,7 +102,7 @@ struct splitmix64_hash {
     }
     size_t operator()(pair<uint64_t, uint64_t> x) const {
         static const uint64_t FIXED_RANDOM = std::chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x.first + FIXED_RANDOM) ^ splitmix64(x.second + FIXED_RANDOM);
+        return splitmix64(x.first + FIXED_RANDOM) ^ splitmix64(x.second);
     }
 };
 
@@ -118,77 +118,98 @@ public:
 };
 template <class Fun> decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
 
-vector<long long> trial_division3(long long n) {
+// 0.6s for 1e8 (GNU G++17 (64 bit 9.2.0, mysys 2))
+const int MAX_PR = 100'000'000;
+bitset<MAX_PR> isprime;
+vector<int> primes;
+void eratosthenesSieve(int lim) {
+    primes.reserve(lim);
+    isprime.set();
+    isprime[0] = isprime[1] = 0;
+
+    for (int i = 4; i < lim; i += 2)
+        isprime[i] = 0;
+
+    for (int i = 3; i * i < lim; i += 2)
+        if (isprime[i])
+            for (int j = i * i; j < lim; j += i * 2)
+                isprime[j] = 0;
+
+    for (int i = 2; i < lim; i++)
+        if (isprime[i]) primes.push_back(i);
+}
+
+
+vector<long long> trial_division4(long long n) {
     vector<long long> factorization;
-    for (int d : {2, 3, 5}) {
+    for (long long d : primes) {
+        if (d * d > n)
+            break;
         while (n % d == 0) {
             factorization.push_back(d);
             n /= d;
         }
-    }
-    static array<int, 8> increments = {4, 2, 4, 2, 4, 6, 2, 6};
-    int i = 0;
-    for (long long d = 7; d * d <= n; d += increments[i++]) {
-        while (n % d == 0) {
-            factorization.push_back(d);
-            n /= d;
-        }
-        if (i == 8)
-            i = 0;
     }
     if (n > 1)
         factorization.push_back(n);
     return factorization;
 }
-
+template <class T> bool ckmin(T &x, const T &y) { return (y < x) ? (x = y, 1) : 0; }
+template <class T> bool ckmax(T &x, const T &y) { return (y > x) ? (x = y, 1) : 0; }
 
 void solve() {
     ll n; cin >> n;
-    vector<vector<int>> adj(n);
-    hash_map<pair<int, int>, mi> mp;
-    // hash_map<
+    vector<vector<array<int, 3>>> adj(n);
     for (int i = 0; i < n - 1; i++) {
         int u, v, x, y;
         cin >> u >> v >> x >> y;
+        int g = gcd(x, y);
+        x /= g;
+        y /= g;
         u--, v--;
-        mp[{u, v}] = x;
-        mp[{v, u}] = y;
-        if(!u) {
-
-        }
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        adj[u].push_back({v, x, y});
+        adj[v].push_back({u, y, x});
     }
 
-    vector<mi> res(n, 1);
+    vector<int> mx_p(n + 1);
+    vector<int> curr_p(n + 1);
+
     y_combinator([&](auto self, int v, int p) -> void {
-        for (auto &u : adj[v]) {
+        for (auto &[u, x, y] : adj[v]) {
             if(u != p) {
-                res[v] *= mp[{v, u}];
+                auto div = trial_division4(x);
+                auto mul = trial_division4(y);
+
+                for (auto &pr : div) {
+                    curr_p[pr]++, ckmax(mx_p[pr], curr_p[pr]);
+                }
+                for (auto &pr : mul) {
+                    curr_p[pr]--;
+                }
                 self(u, v);
-            }
-        }
-        for (auto &u : adj[v]) {
-            if(u != p) {
-                res[u] *= res[v] * mp[{u, v}];
-                res[u] /= mp[{v, u}];
+                for (auto &pr : div) {
+                    curr_p[pr]--;
+                }
+                for (auto &pr : mul) {
+                    curr_p[pr]++;
+                }
             }
         }
     })(0, -1);
+
+    mi res = 1;
+    for (int i = 1; i <= n; i++) if (mx_p[i])  res *= pow(mi(i), mx_p[i]);
+    vector<mi> resa(n); resa[0] = res;
     y_combinator([&](auto self, int v, int p) -> void {
-        for (auto &u : adj[v]) {
+        for (auto &[u, x, y] : adj[v]) {
             if(u != p) {
-                res[u] *= (res[v] * mp[{u, v}]) / (res[u] * mp[{v, u}]);
+                resa[u] = (resa[v] * y) / x;
                 self(u, v);
             }
         }
     })(0, -1);
-    mi ans = 0;
-    for (int i = 0; i < n; i++) {
-        ans += res[i].v;
-        dbg(res[i].v, i);
-    }
-    cout << ans.v << '\n';
+    dbg(resa);
+    cout << accumulate(resa.begin(), resa.end(), mi(0)).v << '\n';
 }
 
 int main() {
@@ -196,6 +217,7 @@ int main() {
 
     int TT = 1;
     cin >> TT;
+    eratosthenesSieve(2e5);
     while(TT--) {
         solve();
     }
