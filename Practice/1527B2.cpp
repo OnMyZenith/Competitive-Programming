@@ -19,34 +19,29 @@ void solve() {
     for (int i = 0; i < n; i++) {
         s[i] = t[i] == '1';
     }
-    int c0 = 0, cp = 0, odd = 0;
+    int c00 = 0, cp = 0, odd = 0;
     for (int i = 0, j = n - 1; i <= j; i++, j--) {
         if(i == j) {
             if(!s[i]) odd = 1;
             break;
         }
         if(s[i] ^ s[j]) cp++;
-        else if(!s[i]) c0 += 2;
+        else if(!s[i]) c00++;
     }
 
-    int bob = cp, alice = 0;
-    if(odd) {
-        alice++;
-        bool a = 0;
-        while(c0) {
-            if(a) alice += 2;
-            else bob += 2;
-            c0 -=2;
-            a = !a;
+    int bob = 0, alice = odd;
+
+    if (cp) {
+        if (c00) {
+            bob += cp - 1 + 2;
+            alice = 1;
+        } else {
+            bob += cp;
         }
     } else {
-        bool a = 1;
-        while(c0) {
-            if(a) alice += 2;
-            else bob += 2;
-            c0 -=2;
-            a = !a;
-        }
+        if (odd) {
+            if (c00) bob += 2;
+        } else if (c00) alice += 2;
     }
 
     if(alice > bob) cout << "BOB\n";
