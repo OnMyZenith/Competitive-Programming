@@ -32,7 +32,7 @@ int par[N];
 int upar[N];
 
 int up[N][18];
-// Not working, break up components
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
