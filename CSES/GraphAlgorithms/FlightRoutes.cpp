@@ -40,24 +40,35 @@ int main() {
 
     int n, m, k; cin >> n >> m >> k;
     auto adj = reGweighted(n, m, 0);
-
+    vector<pqdec<ll>> best(n);
+    best[0].push(0);
     pqinc<pair<ll, int>> q; q.push({0, 0});
-    // vector<ll> dis(n, 4e18); dis[0] = 0;
-    vector<ll> res; res.reserve(n);
+
     while(!q.empty()) {
         auto [d_v, v] = q.top(); q.pop();
-        if(v == n - 1) res.push_back(d_v);
-        if((int)res.size() >= k){
-            dbg(res);
-            break;
-        }
+
+        // if (best[v].top() < d_v) continue;
+        if ((int)best[v].size() == k && best[v].top() < d_v) continue;
 
         for (auto &[u, w] : adj[v]) {
-            q.push({d_v + w, u});
+            if ((int)best[u].size() < k) {
+                best[u].push(d_v + w);
+                q.push({d_v + w, u});
+            } else if (best[u].top() > d_v + w) {
+                best[u].pop();
+                best[u].push(d_v + w);
+                q.push({d_v + w, u});
+            }
         }
     }
-    dbg(res);
-    sort(res.begin(), res.end());
-    ov(res, 0, 0, k);
+    vector<ll> res;
+    while (!best[n - 1].empty()) {
+        res.push_back(best[n - 1].top());
+        best[n - 1].pop();
+    }
+    reverse(res.begin(), res.end());
+    for (int i = 0; i < (int)res.size(); i++) {
+        cout << res[i] << " \n"[i == (int)res.size() - 1];
+    }
     return 0;
 }
