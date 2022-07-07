@@ -11,15 +11,32 @@ using ll = long long;
 #define dbg(...) 007
 #endif
 
-template <class Fun>
-class y_combinator_result {
-    Fun fun_;
-public:
-    template <class T> explicit y_combinator_result(T &&fun) : fun_(std::forward<T>(fun)) {}
-    template <class... Args> decltype(auto) operator()(Args &&...args) { return fun_(std::ref(*this), std::forward<Args>(args)...); }
-};
-template <class Fun> decltype(auto) y_combinator(Fun &&fun) { return y_combinator_result<std::decay_t<Fun>>(std::forward<Fun>(fun)); }
+// Topological Sorting using Kahn’s Algorithm, from Neal's submission https://codeforces.com/contest/1217/submission/66762268
+// Note: if there is a cycle, the size of the return will be less than n.
+vector<int> topological_sort(const vector<vector<int>> &adj) {
+    int n = (int)adj.size();
+    vector<int> in_degree(n, 0);
+    vector<int> order;
 
+    for (int i = 0; i < n; i++)
+        for (int neighbor : adj[i])
+            in_degree[neighbor]++;
+
+    for (int i = 0; i < n; i++)
+        if (in_degree[i] == 0)
+            order.push_back(i);
+
+    int current = 0;
+
+    while (current < (int)order.size()) {
+        int node = order[current++];
+
+        for (int neighbor : adj[node])
+            if (--in_degree[neighbor] == 0)
+                order.push_back(neighbor);
+    }
+    return order;
+}
 
 int main() {
     vamos;
@@ -49,40 +66,20 @@ int main() {
             }
         }
     }
-    vector<bool> vis(26);
-    vector<vector<int>> x;
-    vector<int> temp;
-    auto dfs = y_combinator([&](auto self, int v)->bool{
-        vis[v] = 1;
-        temp.push_back(v);
-        for (auto u = g[v].begin(); u != g[v].end(); u++) {
-            in[*u]--;
-            if(in[*u] == 0) {
-                if(!vis[*u]) self(*u);
-                else return false;
-            } else if(in[*u] < 0) return false;
-        }
-        return true;
-    });
+
+    vector<vector<int>> adj(26);
     for (int i = 0; i < 26; i++) {
-        if(in[i] == 0 && !vis[i]) {
-            temp.clear();
-            if(!dfs(i)) {
-                cout << "Impossible\n";
-                return 0;
-            }
-            x.push_back(temp);
+        for (auto &u : g[i]) {
+            adj[i].push_back(u);
         }
     }
-    fill(vis.begin(), vis.end(), false);
-    for (auto &gp : x) {
-        for (auto &c : gp) {
-            vis[c] = 1;
-            cout << char('a' + c);
-        }
+    auto t = topological_sort(adj);
+    if ((int)t.size() < 26) {
+        cout << "Impossible\n";
+        return 0;
     }
     for (int i = 0; i < 26; i++) {
-        if(!vis[i]) cout << char('a' + i);
+        cout << char(t[i] + 'a');
     }
     cout << '\n';
     return 0;
