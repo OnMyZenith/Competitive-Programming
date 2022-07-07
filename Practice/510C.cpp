@@ -38,6 +38,17 @@ vector<int> topological_sort(const vector<vector<int>> &adj) {
     return order;
 }
 
+bool find_cycle(int v, vector<vector<int>> &adj, vector<int> &color, vector<int> &topsort) {
+    color[v] = 1;
+    for (auto &u : adj[v]) {
+        if (color[u] == 1) return 1;
+        if (color[u] == 0) if (find_cycle(u, adj, color, topsort)) return 1;
+    }
+    topsort.push_back(v);
+    color[v] = 2;
+    return 0;
+}
+
 int main() {
     vamos;
 
@@ -73,11 +84,21 @@ int main() {
             adj[i].push_back(u);
         }
     }
-    auto t = topological_sort(adj);
-    if ((int)t.size() < 26) {
-        cout << "Impossible\n";
-        return 0;
+    vector<int> color(26);
+    vector<int> t;
+    for (int i = 0; i < 26; i++) {
+        if (color[i] == 0 && find_cycle(i, adj, color, t)) {
+            cout << "Impossible\n";
+            return 0;
+        }
     }
+    reverse(t.begin(), t.end());
+
+    // auto t = topological_sort(adj);
+    // if ((int)t.size() < 26) {
+    //     cout << "Impossible\n";
+    //     return 0;
+    // }
     for (int i = 0; i < 26; i++) {
         cout << char(t[i] + 'a');
     }
